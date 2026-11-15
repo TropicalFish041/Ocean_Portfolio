@@ -1,0 +1,98 @@
+[
+  {
+    "id": "about",
+    "image": "/fish/butterflyfish.png",
+    "fishName": "Butterflyfish",
+    "title": "About Me",
+    "items": [
+      {
+        "title": "Hello, I’m Ruoshui.",
+        "text": "I study Computer Science and Classics at the University of Toronto, and enjoy the connections between algorithms, languages, and creative technology."
+      },
+      {
+        "title": "Education",
+        "text": "University of Toronto · Computer Science Specialist · Expected 2029."
+      },
+      {
+        "title": "Interests",
+        "text": "Theoretical computer science · Digital classics · Language technology."
+      }
+    ]
+  },
+  {
+    "id": "projects",
+    "image": "/fish/lionfish.png",
+    "fishName": "Lionfish",
+    "title": "Projects",
+    "items": [
+      {
+        "title": "Bird Species Interaction Network",
+        "text": "Developed weighted-graph algorithms in Python to investigate seasonal bird co-occurrence using observational data."
+      },
+      {
+        "title": "Team Cobalt · VR Game",
+        "text": "Technical lead for a Unity VR game exhibited at VRTO 2026; implemented gameplay, interaction, dialogue, and scene progression."
+      },
+      {
+        "title": "Pattern Recognition Research",
+        "text": "Explored PCA- and SVM-based face recognition with OpenCV, scikit-learn, and NumPy."
+      }
+    ]
+  },
+  {
+    "id": "skills",
+    "image": "/fish/peppermint-angelfish.png",
+    "fishName": "Peppermint Angelfish",
+    "title": "Skills",
+    "items": [
+      {
+        "title": "Programming",
+        "text": "Python · Java · C#"
+      },
+      {
+        "title": "Tools",
+        "text": "Git · Unity · NumPy · pandas · NetworkX · scikit-learn · OpenCV"
+      },
+      {
+        "title": "Foundations",
+        "text": "Algorithms · Proofs · Probability · Linear algebra · Multivariable calculus"
+      },
+      {
+        "title": "Languages",
+        "text": "Mandarin · English"
+      }
+    ]
+  },
+  {
+    "id": "experience",
+    "image": "/fish/opah.png",
+    "fishName": "Opah",
+    "title": "Experience",
+    "items": [
+      {
+        "title": "Zhiyuan Robotics",
+        "text": "Intern · Shanghai · May–July 2026. Supported testing and validation by preparing test sets and documenting results."
+      },
+      {
+        "title": "Peer Academic Support",
+        "text": "Kintore College · Toronto · 2026. Helped peers with programming, mathematics, and debugging."
+      }
+    ]
+  },
+  {
+    "id": "contact",
+    "image": "/fish/shark-and-pilotfish.png",
+    "fishName": "Shark and pilot fish",
+    "title": "Contact",
+    "items": [
+      {
+        "title": "Email",
+        "text": "ruoshui.deng@mail.utoronto.ca"
+      },
+      {
+        "title": "Location",
+        "text": "Toronto, Canada"
+      }
+    ]
+  }
+]

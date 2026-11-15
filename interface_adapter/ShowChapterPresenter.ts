@@ -1,10 +1,7 @@
-import type {
-  ShowChapterOutputBoundary,
-  ShowChapterOutputData,
-} from '../use_case/showChapter';
+import type { ShowChapterOutputBoundary, ShowChapterOutputData } from '../use_case/showChapter';
 import type { ChapterViewModel } from './ChapterViewModel';
 
-/** Formats use-case output for presentation, with no React or DOM dependency. */
+/** Maps use-case output to a view model; knows nothing about React or the DOM. */
 export class ShowChapterPresenter implements ShowChapterOutputBoundary {
   private readonly display: (model: ChapterViewModel | null) => void;
 
@@ -15,11 +12,7 @@ export class ShowChapterPresenter implements ShowChapterOutputBoundary {
   present(output: ShowChapterOutputData): void {
     const chapter = output.chapter;
     this.display(chapter ? {
-      id: chapter.id,
       title: chapter.title,
-      eyebrow: chapter.eyebrow,
-      intro: chapter.intro,
-      fishName: chapter.fishName,
       items: chapter.items.map(({ title, text }) => ({ title, text })),
     } : null);
   }

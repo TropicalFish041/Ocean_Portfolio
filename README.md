@@ -1,17 +1,25 @@
-# Beneath the Surface — Ruoshui Deng
+# Minimal Ocean Portfolio
 
-A minimal, single-page ocean portfolio. Scroll from a **vector sunset** into increasingly deep water; choose one of five **transparent PNG fish paintings** to read more about the person behind the site.
+A one-page Next.js / TypeScript website. Its **visible page contains only a continuously transitioning impasto-oil-paint color field and five transparent PNG artworks**. The oil-paint bristle texture is composited over a single CSS gradient; no extra scenic imagery is added. No headers, navigation, captions, footer, extra images, editor, database, or animation library. Click a fish to see its information panel; press Escape, click outside the panel, or use × to close.
 
-## Run locally
+## Option A — open immediately without installing anything
 
-Requires Node.js 20+ to run the website; **Node.js 22.16+** is needed for the dependency-free TypeScript unit-test command (`npm test`).
+**Double-click `offline-preview.html`**, included in the ZIP. This standalone HTML bundles the same artwork, painted background, and information text; it runs offline in a modern browser without Node.js or a server.
 
-```bash
-npm install
-npm run dev
-```
+## Option B — run the editable Next.js website locally
 
-Open <http://localhost:3000>. To build the deployable static site:
+1. Install [Node.js](https://nodejs.org/) (Node 22 recommended).
+2. Open a terminal in this extracted project folder.
+3. Run:
+
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+4. Open **http://localhost:3000** in a browser.
+
+To stop: `Ctrl+C`. To validate and build:
 
 ```bash
 npm run typecheck
@@ -19,23 +27,31 @@ npm test
 npm run build
 ```
 
-The build produces `out/`. Deploy that folder as a static website. Because `next.config.ts` uses `output: 'export'`, no Node.js server is needed to host the output.
+`npm run build` produces `out/` for static hosting. `npm test` requires Node.js 22.16 or newer.
 
-## Edit the site
+## What to edit
 
-- **Personal information and chapter titles:** `data_access/StaticChapterRepository.ts`
-- **Fish PNGs:** `public/fish/` (five uploaded originals, alpha channel intact)
-- **Colors, gradients, layout and motion:** `app/globals.css`
-- **Vector sunset and waves:** `view/Hero.tsx`
-- **Fish layout / click cue:** `view/ChapterSection.tsx`
-- **Modal design:** `view/ChapterDialog.tsx`
+- **Content shown on fish click:** `data/chapters.json`
+- **Five transparent fish artwork files:** `public/fish/`
+- **Oil-paint relief texture:** `public/textures/impasto-relief.webp` (a grayscale painting-texture layer, tinted by the CSS palette)
+- **Ocean color palette, oil-paint texture and fish positioning:** `app/globals.css`
+- **Clicked-fish interaction:** `view/ChapterSection.tsx`
+- **Panel:** `view/ChapterDialog.tsx`
 
-The chapter order is Butterflyfish → Lionfish → Peppermint Angelfish → Opah → Shark and pilot fish. The five chapters show About Me, Selected Projects, Technical Toolkit, Experience and Let's Connect.
+To regenerate the double-click preview after changing content, CSS, or fish art:
 
-The site is responsive and respects `prefers-reduced-motion`. Fish are buttons (keyboard-operable). The information panel is a native `<dialog>` that supports Escape, backdrop clicking and an explicit close button.
+```bash
+npm run offline
+```
 
-## What was removed
+The offline preview is a convenience artifact, not the source of truth for the application. It uses the same chapter JSON, CSS, and PNGs. No changes are made to your GitHub repository by this ZIP.
 
-The former picture composition editor, drag-and-drop/resize tools, JSON import/export, IndexedDB persistence, baked-in collage hotspots, generated SVG fish, unused ocean assets and GSAP dependency are no longer part of this project.
+## Replacing the existing GitHub working copy
 
-See `docs/ARCHITECTURE.md` for the before/after review, data flow, SOLID trade-offs and test plan.
+Back up the working copy first. To ensure removed old code does not remain, **keep its `.git/` folder**, delete the other old files and folders, then copy the **contents** of this ZIP's `Personal_Website_Minimal/` directory into the repository root. Use `git status` to review additions and deletions before committing. Alternatively, use this extracted folder as an entirely new local project without touching GitHub.
+
+On Windows, `OPEN_OFFLINE_PREVIEW_WINDOWS.bat` opens the offline HTML without installing anything. `START_LOCAL_WINDOWS.bat` installs dependencies and starts the Next.js development server (requires Node.js).
+
+## Oil-paint background design
+
+The only visual change from the previous minimal version is the painted background: `app/globals.css` provides a single continuous warm-coral → peach → seafoam → teal → midnight-blue gradient. A grayscale impasto relief texture (`public/textures/impasto-relief.webp`) is blended into this gradient using `mix-blend-mode: overlay`. The result is a colored, palette-knife / brushstroke surface rather than smooth digital gradients. No extra art objects, sections, labels, or architectural layers are introduced. To recolor the ocean, edit the colors in `.ocean-world`; the painted strokes follow automatically.

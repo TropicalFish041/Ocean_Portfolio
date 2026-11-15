@@ -1,12 +1,13 @@
 {
   "name": "ruoshui-ocean-portfolio",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test tests/*.test.mjs"
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
+    "offline": "node scripts/create-offline-preview.mjs"
   },
   "dependencies": {
     "next": "^15.5.0",

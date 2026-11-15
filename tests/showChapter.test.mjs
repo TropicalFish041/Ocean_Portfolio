@@ -9,71 +9,83 @@ import { ShowChapterController } from '../interface_adapter/ShowChapterControlle
 import { ShowChapterPresenter } from '../interface_adapter/ShowChapterPresenter.ts';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const setup = () => {
-  const received = [];
-  const presenter = new ShowChapterPresenter((model) => received.push(model));
-  const interactor = new ShowChapterInteractor(new StaticChapterRepository(), presenter);
-  const controller = new ShowChapterController(interactor);
-  return { controller, received };
+const pipeline = () => {
+  const output = [];
+  const presenter = new ShowChapterPresenter((model) => output.push(model));
+  const controller = new ShowChapterController(
+    new ShowChapterInteractor(new StaticChapterRepository(), presenter),
+  );
+  return { controller, output };
 };
 
-test('all five chapters exist in the expected underwater order', () => {
-  assert.deepEqual(portfolioChapters.map((chapter) => chapter.id), ['about', 'projects', 'skills', 'experience', 'contact']);
-  assert.equal(new Set(portfolioChapters.map((chapter) => chapter.id)).size, 5);
+test('exactly five scenes ordered from the surface to deep water', () => {
+  assert.deepEqual(portfolioChapters.map(({ id }) => id), ['about', 'projects', 'skills', 'experience', 'contact']);
+  assert.equal(new Set(portfolioChapters.map(({ id }) => id)).size, 5);
 });
 
-test('each chapter points to an included transparent PNG', () => {
-  for (const chapter of portfolioChapters) {
-    assert.ok(chapter.image.startsWith('/fish/'));
-    const filename = resolve(root, 'public', chapter.image.slice(1));
-    assert.ok(existsSync(filename), filename);
-    const signature = readFileSync(filename).subarray(0, 8).toString('hex');
-    assert.equal(signature, '89504e470d0a1a0a');
-    assert.ok(chapter.title && chapter.imageDescription && chapter.items.length > 0);
+test('all artwork references point to bundled transparent PNGs', () => {
+  for (const scene of portfolioChapters) {
+    assert.match(scene.image, /^\/fish\/[a-z-]+\.png$/);
+    const file = resolve(root, 'public', scene.image.slice(1));
+    assert.ok(existsSync(file), file);
+    const image = readFileSync(file);
+    assert.equal(image.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+    assert.equal(image[25], 6, 'PNG color type is RGBA');
+    assert.ok(scene.fishName && scene.items.length > 0);
   }
 });
 
-test('view -> controller -> interactor -> presenter produces the requested view model', () => {
-  const { controller, received } = setup();
+test('controller -> interactor -> presenter maps clicked fish to dialog content', () => {
+  const { controller, output } = pipeline();
   controller.open('projects');
-  assert.equal(received.length, 1);
-  assert.equal(received[0].title, 'Selected Projects');
-  assert.equal(received[0].items.length, 3);
-  assert.equal(received[0].fishName, 'Lionfish');
+  assert.equal(output.length, 1);
+  assert.equal(output[0].title, 'Projects');
+  assert.equal(output[0].items.length, 3);
+  assert.ok(!('eyebrow' in output[0]));
+  assert.ok(!('subtitle' in output[0]));
 });
 
-test('unknown or whitespace-only IDs safely produce no selected chapter', () => {
-  const { controller, received } = setup();
-  controller.open('missing');
+test('invalid and empty chapter identifiers never open a dialog', () => {
+  const { controller, output } = pipeline();
+  controller.open('does-not-exist');
   controller.open('   ');
-  assert.deepEqual(received, [null, null]);
+  assert.deepEqual(output, [null, null]);
 });
 
-test('repository only exposes the narrow findById port and handles unknown IDs', () => {
-  const repository = new StaticChapterRepository();
-  assert.equal(repository.findById('about')?.title, 'About Me');
-  assert.equal(repository.findById('not-a-chapter'), null);
+test('narrow read gateway is substitutable with an injected stub', () => {
+  const fake = { findById: (id) => ({ ...portfolioChapters[0], id }) };
+  let result;
+  new ShowChapterInteractor(fake, { present: (output) => { result = output.chapter; } }).execute({ chapterId: 'test' });
+  assert.equal(result.id, 'test');
 });
 
-test('presenter passes new plain view models instead of mutable source objects', () => {
-  const { controller, received } = setup();
+test('presenter creates a new view model without mutating source entries', () => {
+  const { controller, output } = pipeline();
   controller.open('skills');
-  assert.notEqual(received[0].items, portfolioChapters[2].items);
-  assert.deepEqual(received[0].items, portfolioChapters[2].items);
+  assert.notEqual(output[0].items, portfolioChapters[2].items);
+  assert.deepEqual(output[0].items, portfolioChapters[2].items);
 });
 
-test('dependency rule: inner layers do not import outer layers', () => {
-  const rules = [
-    { path: 'entity/Chapter.ts', forbidden: ['react', 'next', 'view/', 'app/', 'interface_adapter/', 'data_access/', 'use_case/'] },
-    { path: 'use_case/showChapter.ts', forbidden: ['react', 'next', 'view/', 'app/', 'interface_adapter/', 'data_access/'] },
-    { path: 'interface_adapter/ShowChapterController.ts', forbidden: ['react', 'next', 'view/', 'app/', 'data_access/'] },
-    { path: 'interface_adapter/ShowChapterPresenter.ts', forbidden: ['react', 'next', 'view/', 'app/', 'data_access/'] },
-    { path: 'data_access/StaticChapterRepository.ts', forbidden: ['react', 'next', 'view/', 'app/', 'interface_adapter/'] },
+test('no visible headings, navigation, captions, or footer on the main canvas', () => {
+  const files = ['view/OceanJourney.tsx', 'view/Hero.tsx', 'view/ChapterSection.tsx'];
+  const jsx = files.map((file) => readFileSync(resolve(root, file), 'utf8')).join('\n');
+  for (const pattern of [/<header\b/, /<footer\b/, /<nav\b/, /<h[1-6]\b/, /<p\b/, /DISCOVER/, /SCROLL TO DIVE/]) {
+    assert.ok(!pattern.test(jsx), `${pattern} should not appear on the canvas`);
+  }
+});
+
+test('inner source files never depend on outer layers', () => {
+  const disallowed = [
+    ['entity/Chapter.ts', ['react', 'next', 'use_case/', 'data_access/', 'interface_adapter/', 'view/', 'app/']],
+    ['use_case/showChapter.ts', ['react', 'next', 'data_access/', 'interface_adapter/', 'view/', 'app/']],
+    ['data_access/StaticChapterRepository.ts', ['react', 'next', 'interface_adapter/', 'view/', 'app/']],
+    ['interface_adapter/ShowChapterController.ts', ['react', 'next', 'data_access/', 'view/', 'app/']],
+    ['interface_adapter/ShowChapterPresenter.ts', ['react', 'next', 'data_access/', 'view/', 'app/']],
   ];
-  for (const { path, forbidden } of rules) {
-    const source = readFileSync(resolve(root, path), 'utf8');
-    for (const outer of forbidden) {
-      assert.ok(!source.includes(`from '${outer}`) && !source.includes(`from '../${outer}`), `${path} must not import ${outer}`);
+  for (const [filename, forbidden] of disallowed) {
+    const text = readFileSync(resolve(root, filename), 'utf8');
+    for (const dependency of forbidden) {
+      assert.ok(!text.includes(`from '../${dependency}`) && !text.includes(`from '${dependency}`), `${filename}: ${dependency}`);
     }
   }
 });
