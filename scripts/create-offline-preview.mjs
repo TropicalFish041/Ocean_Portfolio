@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const paintTexture = readFileSync(join(root, 'public/textures/impasto-relief.webp')).toString('base64');
 const seaPainting = readFileSync(join(root, 'public/ocean/night-seascape.png')).toString('base64');
-const fireworksScript = readFileSync(join(root, 'public/animations/fireworks.js'), 'utf8');
+const frameSources = Array.from({ length: 5 }, (_, i) => 'data:image/png;base64,' + readFileSync(join(root, 'public/animations/firework-frames', `${i}.png`)).toString('base64'));
 const css = readFileSync(join(root, 'app/globals.css'), 'utf8')
   .replaceAll("url('/textures/impasto-relief.webp')", `url('data:image/webp;base64,${paintTexture}')`);
 const chapters = JSON.parse(readFileSync(join(root, 'data/chapters.json'), 'utf8'));
@@ -71,6 +71,74 @@ for (const button of document.querySelectorAll('.fish-button')) {
   });
 }
 `;
-const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Ruoshui Deng — Ocean Portfolio (Offline)</title><style>${css}</style></head><body><main class="ocean-world" aria-label="Underwater portfolio"><section class="hero" id="surface" aria-label="Oil-painted night sea with fireworks"><img class="hero__seascape" src="data:image/png;base64,${seaPainting}" alt=""/><div class="hero__fade" aria-hidden="true"></div><canvas class="hero__fireworks" id="ocean-fireworks" aria-hidden="true"></canvas></section>${scenes}</main><dialog class="detail-dialog" id="details" aria-labelledby="detail-title"><div class="detail-dialog__content"><button class="detail-dialog__close" id="close-panel" type="button" aria-label="Close information">×</button><h2 id="detail-title"></h2><div id="detail-items"></div></div></dialog><script>${inlineScript}</script><script>${fireworksScript}</script></body></html>`;
+const fireworksJS = `
+(() => {
+  const hero = document.querySelector('.hero');
+  const sea = document.querySelector('.hero__seascape');
+  if (!hero || !sea || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const frames = ${JSON.stringify(frameSources)};
+  const layer = document.createElement('div');
+  layer.className = 'fireworks-layer';
+  hero.appendChild(layer);
+  function updateWaterline() {
+    const width = hero.clientWidth, height = hero.clientHeight;
+    const iw = sea.naturalWidth, ih = sea.naturalHeight;
+    if (!iw || !ih || !width || !height) return;
+    const scale = Math.max(width / iw, height / ih);
+    const croppedTop = (ih * scale - height) / 2;
+    const waterline = ih * .565 * scale - croppedTop;
+    hero.style.setProperty('--sea-horizon', Math.max(0, Math.min(height, waterline)) + 'px');
+  }
+  sea.addEventListener('load', updateWaterline);
+  new ResizeObserver(updateWaterline).observe(hero);
+  updateWaterline();
+  let seq = 0;
+  let bursts = [];
+  const random = () => Math.random();
+  function make(previous) {
+    let x = 16 + random() * 68;
+    if (previous && Math.abs(x - previous.x) < 12) x = 16 + ((x - 16 + 19) % 68);
+    let hue = Math.floor(random() * 360);
+    if (previous && Math.abs(((hue - previous.hue + 540) % 360) - 180) < 38) hue = (hue + 90) % 360;
+    const pair = document.createElement('div');
+    pair.className = 'firework-pair';
+    const sky = document.createElement('div');
+    sky.className = 'gif-firework gif-firework--sky';
+    const reflection = document.createElement('div');
+    reflection.className = 'gif-firework gif-firework--reflection';
+    const a = document.createElement('img'); a.alt = '';
+    const b = document.createElement('img'); b.alt = '';
+    sky.appendChild(a); reflection.appendChild(b); pair.append(sky, reflection); layer.appendChild(pair);
+    const size = 260 + random() * 280;
+    for (const el of [sky, reflection]) {
+      el.style.left = x + '%';
+      el.style.width = 'min(' + size + 'px, 88vw)';
+      el.style.setProperty('--firework-hue', hue + 'deg');
+    }
+    sky.style.top = (2 + random() * 12) + '%';
+    return { id: seq++, x, hue, frame: 1, pair, a, b };
+  }
+  function show(burst) {
+    const url = frames[burst.frame];
+    burst.a.src = url;
+    burst.b.src = url;
+  }
+  const count = 1 + Math.floor(random() * 3);
+  for (let i = 0; i < count; i++) {
+    const burst = make(); show(burst); bursts.push(burst);
+  }
+  setInterval(() => {
+    if (document.hidden) return;
+    bursts = bursts.map(burst => {
+      if (++burst.frame < 5) { show(burst); return burst; }
+      burst.pair.remove();
+      const next = make(burst); show(next); return next;
+    });
+    if (bursts.length < 3 && random() < .12) { const b = make(); show(b); bursts.push(b); }
+    else if (bursts.length > 1 && random() < .08) { const last = bursts.pop(); last.pair.remove(); }
+  }, 220);
+})();
+`;
+const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Ruoshui Deng — Ocean Portfolio (Offline)</title><style>${css}</style></head><body><main class="ocean-world" aria-label="Underwater portfolio"><section class="hero" id="surface" aria-label="Oil-painted night sea with fireworks"><img class="hero__seascape" src="data:image/png;base64,${seaPainting}" alt=""/><div class="hero__fade" aria-hidden="true"></div></section>${scenes}</main><dialog class="detail-dialog" id="details" aria-labelledby="detail-title"><div class="detail-dialog__content"><button class="detail-dialog__close" id="close-panel" type="button" aria-label="Close information">×</button><h2 id="detail-title"></h2><div id="detail-items"></div></div></dialog><script>${inlineScript}</script><script>${fireworksJS}</script></body></html>`;
 writeFileSync(join(root, 'offline-preview.html'), page, 'utf8');
 console.log('Created offline-preview.html (open directly without a server).');

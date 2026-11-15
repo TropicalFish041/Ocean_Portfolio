@@ -68,16 +68,6 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   pointer-events: none;
   z-index: 1;
 }
-.hero__fireworks {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 2;
-}
-
 .chapter-section {
   position: relative; display: flex; align-items: center; justify-content: center;
   height: 100svh; min-height: 480px; padding: 4vh 7vw; isolation: isolate;
