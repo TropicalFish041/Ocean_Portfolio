@@ -1,17 +1,41 @@
-﻿# Ruoshui Deng - painted ocean portfolio
+# Beneath the Surface — Ruoshui Deng
 
-Next.js, React, TypeScript, GSAP ScrollTrigger and CSS ambient animation.
+A minimal, single-page ocean portfolio. Scroll from a **vector sunset** into increasingly deep water; choose one of five **transparent PNG fish paintings** to read more about the person behind the site.
 
-Run npm install, then npm run dev. npm run build exports the website to out/.
+## Run locally
 
-The six supplied paintings in public/paintings are unchanged originals. Order: sunset, complete butterflyfish school, lionfish, peppermint angelfish, opah, shark with all pilot fish. Responsive images preserve their whole compositions. Background colors blend between paintings. Clicking each artwork opens its portfolio panel.
+Requires Node.js 20+ to run the website; **Node.js 22.16+** is needed for the dependency-free TypeScript unit-test command (`npm test`).
 
-The sunset uses a softly masked moving water layer, reflected-light animation and sun glow. Pause and reduced-motion settings stop ambient motion.
+```bash
+npm install
+npm run dev
+```
 
-Edit components/Journey.tsx for interaction, app/globals.css for transitions and animation, and data/portfolio.ts for CV content. Previous assets are retained but no longer displayed. No external deployment was performed.
+Open <http://localhost:3000>. To build the deployable static site:
 
-## Local composition editor
+```bash
+npm run typecheck
+npm test
+npm run build
+```
 
-Use the pencil icon to edit, and the checkmark to return to viewing. Each scene has icon controls: framed square = replace background, plus = add a fish PNG/WebP, down arrow = export composition JSON, up arrow = import. Select a fish to resize with the slider or remove with the cross. Drag to position; arrow keys also move selected fish. Upload fish with a transparent background: their alpha channel determines pointer hit testing. An opaque image is clickable throughout its opaque area.
+The build produces `out/`. Deploy that folder as a static website. Because `next.config.ts` uses `output: 'export'`, no Node.js server is needed to host the output.
 
-Compositions are saved in this browser's IndexedDB, not to the source folder or a hosted service. Export a JSON backup before changing browsers or clearing browser data. Import it into the corresponding scene to restore. Each scene's fish open the existing portfolio content for that scene. Background replacements disable the old painting's outline hotspots. Existing baked-in paintings retain manually traced fish-only SVG hotspots; artwork text labels are removed.
+## Edit the site
+
+- **Personal information and chapter titles:** `data_access/StaticChapterRepository.ts`
+- **Fish PNGs:** `public/fish/` (five uploaded originals, alpha channel intact)
+- **Colors, gradients, layout and motion:** `app/globals.css`
+- **Vector sunset and waves:** `view/Hero.tsx`
+- **Fish layout / click cue:** `view/ChapterSection.tsx`
+- **Modal design:** `view/ChapterDialog.tsx`
+
+The chapter order is Butterflyfish → Lionfish → Peppermint Angelfish → Opah → Shark and pilot fish. The five chapters show About Me, Selected Projects, Technical Toolkit, Experience and Let's Connect.
+
+The site is responsive and respects `prefers-reduced-motion`. Fish are buttons (keyboard-operable). The information panel is a native `<dialog>` that supports Escape, backdrop clicking and an explicit close button.
+
+## What was removed
+
+The former picture composition editor, drag-and-drop/resize tools, JSON import/export, IndexedDB persistence, baked-in collage hotspots, generated SVG fish, unused ocean assets and GSAP dependency are no longer part of this project.
+
+See `docs/ARCHITECTURE.md` for the before/after review, data flow, SOLID trade-offs and test plan.

@@ -1,2 +1,5 @@
-import Journey from '../components/Journey';
-export default function Page(){return <Journey/>;}
+import ClientApp from './ClientApp';
+
+export default function Page() {
+  return <ClientApp />;
+}
