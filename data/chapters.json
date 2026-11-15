@@ -7,7 +7,7 @@
   "items": [
     {
       "title": "Hello, I’m Ruoshui.",
-      "text": "I’m a Computer Science student at the University of Toronto. I’m drawn to problems built around structure, rules, and reasoning — whether that means understanding why an algorithm works, tracing a bug through a system, or figuring out the structure of a language."
+      "text": "I’m a Computer Science student at the University of Toronto. I’m drawn to problems built around structure, rules, and reasoning, whether that means understanding why an algorithm works, tracing a bug through a system, or figuring out the structure of a language."
     },
     {
       "title": "Education",
@@ -120,7 +120,7 @@
       {
         "title": "Github",
         "text": "@TropicalFish041"
-      }
+      },
 	{
         "title": "Bilibili",
         "text": "@ARDEO041"
