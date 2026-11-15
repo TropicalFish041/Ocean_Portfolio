@@ -4,6 +4,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const paintTexture = readFileSync(join(root, 'public/textures/impasto-relief.webp')).toString('base64');
+const seaPainting = readFileSync(join(root, 'public/ocean/night-seascape.png')).toString('base64');
+const fireworksScript = readFileSync(join(root, 'public/animations/fireworks.js'), 'utf8');
 const css = readFileSync(join(root, 'app/globals.css'), 'utf8')
   .replaceAll("url('/textures/impasto-relief.webp')", `url('data:image/webp;base64,${paintTexture}')`);
 const chapters = JSON.parse(readFileSync(join(root, 'data/chapters.json'), 'utf8'));
@@ -69,6 +71,6 @@ for (const button of document.querySelectorAll('.fish-button')) {
   });
 }
 `;
-const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Ruoshui Deng — Ocean Portfolio (Offline)</title><style>${css}</style></head><body><main class="ocean-world" aria-label="Underwater portfolio"><section class="hero" id="surface" aria-label="Sunset at the ocean surface"></section>${scenes}</main><dialog class="detail-dialog" id="details" aria-labelledby="detail-title"><div class="detail-dialog__content"><button class="detail-dialog__close" id="close-panel" type="button" aria-label="Close information">×</button><h2 id="detail-title"></h2><div id="detail-items"></div></div></dialog><script>${inlineScript}</script></body></html>`;
+const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Ruoshui Deng — Ocean Portfolio (Offline)</title><style>${css}</style></head><body><main class="ocean-world" aria-label="Underwater portfolio"><section class="hero" id="surface" aria-label="Oil-painted night sea with fireworks"><img class="hero__seascape" src="data:image/png;base64,${seaPainting}" alt=""/><div class="hero__fade" aria-hidden="true"></div><canvas class="hero__fireworks" id="ocean-fireworks" aria-hidden="true"></canvas></section>${scenes}</main><dialog class="detail-dialog" id="details" aria-labelledby="detail-title"><div class="detail-dialog__content"><button class="detail-dialog__close" id="close-panel" type="button" aria-label="Close information">×</button><h2 id="detail-title"></h2><div id="detail-items"></div></div></dialog><script>${inlineScript}</script><script>${fireworksScript}</script></body></html>`;
 writeFileSync(join(root, 'offline-preview.html'), page, 'utf8');
 console.log('Created offline-preview.html (open directly without a server).');

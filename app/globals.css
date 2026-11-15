@@ -6,26 +6,23 @@ body { margin: 0; background: #08172f; font-family: Arial, Helvetica, sans-serif
 button { font: inherit; -webkit-tap-highlight-color: transparent; }
 button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 
-/* One continuous palette from sunset coral / apricot to deep blue.
-   No horizon, drawn sun, added photographs, or text on the page. */
+/* Match the painted nighttime water at the surface, then deepen gradually.
+   The surface hero fades to --surface-blue, exactly the color at its lower edge. */
+:root { --surface-blue: #0b205b; }
 .ocean-world {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   background: linear-gradient(180deg,
-    #df998e 0%,
-    #efb99f 7%,
-    #e7c09c 11%,
-    #b6c6aa 17%,
-    #80b7a8 24%,
-    #69a99f 33%,
-    #448a91 43%,
-    #397d89 52%,
-    #2b647d 63%,
-    #245476 74%,
-    #193c61 85%,
-    #0d2a4a 94%,
-    #071b35 100%);
+    #090f3d 0%,
+    #0b205b 16.6667%,
+    #0a1d53 27%,
+    #091948 38%,
+    #08163e 49%,
+    #07122f 62%,
+    #050d24 76%,
+    #03091b 88%,
+    #020612 100%);
 }
 /* A lightweight monochrome relief map is used as an actual oil-paint surface.
    Overlay blending tints every bristle ridge from the continuous palette below.
@@ -43,7 +40,86 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   opacity: .62;
 }
 .hero, .chapter-section { position: relative; z-index: 1; }
-.hero { height: 100svh; min-height: 470px; }
+/* The supplied impasto seascape is used only at the surface.
+   A bottom color veil crossfades the painting into the first fish's background,
+   avoiding a visible seam or an abrupt return to the previous sunset palette. */
+.hero {
+  position: relative;
+  height: 100svh;
+  min-height: 470px;
+  overflow: hidden;
+  background-color: var(--surface-blue);
+}
+.hero__seascape {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  user-select: none;
+  pointer-events: none;
+}
+.hero__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 62%, #0b205b0d 76%, #0b205b9c 92%, var(--surface-blue) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.hero__fireworks {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.gif-firework {
+  position: absolute;
+  top: 5%;
+  height: 50%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.gif-firework__sky {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gif-firework__reflection {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  transform: scaleY(-0.55);
+  transform-origin: top center;
+
+  opacity: 0.35;
+  filter: blur(5px);
+
+  mask-image: linear-gradient(
+    to top,
+    transparent 5%,
+    black 90%
+  );
+
+  -webkit-mask-image: linear-gradient(
+    to top,
+    transparent 5%,
+    black 90%
+  );
+}
+
 .chapter-section {
   position: relative; display: flex; align-items: center; justify-content: center;
   height: 100svh; min-height: 480px; padding: 4vh 7vw; isolation: isolate;
@@ -93,8 +169,6 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 @keyframes fish-float { from { translate: 0 7px; rotate: -.5deg; } to { translate: 0 -11px; rotate: .65deg; } }
 @keyframes fish-float-alt { from { translate: 0 -7px; rotate: .45deg; } to { translate: 0 11px; rotate: -.6deg; } }
 @keyframes fish-float-center { from { translate: 0 10px; } to { translate: 0 -9px; } }
-@keyframes sunset-breathe { from { opacity: .82; } to { opacity: 1; } }
-@keyframes water-drift { from { translate: -1.1% 0; } to { translate: 1.1% 0; } }
 @keyframes panel-enter { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
 @media (max-width: 700px) {

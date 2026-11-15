@@ -58,3 +58,7 @@ Application rules do **not** import React, the modal, the concrete JSON reposito
 ## Validation
 
 Run `npm test` to check the five image assets, ordering, dependency direction, selected chapter pipeline, adapter substitution, and absence of visible on-page copy. Browser tests should verify clicking all fish, transparent-area non-activation, Escape/backdrop/close, mobile layout and reduced motion. Run `npm run build` after installing dependencies.
+
+## View-only nighttime surface animation (November 2026)
+
+`view/Hero.tsx` now displays the supplied oil-painted night sea and a decorative `<canvas>` overlay. `public/animations/fireworks.js` owns painterly fireworks and their real-time water reflections; both are derived from a single in-memory set of bursts. The animation contains no portfolio or business logic, uses no APIs or persistence, and does not introduce new cross-layer imports. The gradient and existing impasto texture remain in `app/globals.css`. The five content use cases and their dependency direction remain unchanged.
