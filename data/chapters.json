@@ -111,15 +111,19 @@
     "id": "contact",
     "image": "/fish/shark-and-pilotfish.png",
     "fishName": "Shark and pilot fish",
-    "title": "xxx",
+    "title": "Contact me",
     "items": [
       {
-        "title": "xxx",
-        "text": "xxx"
+        "title": "Email",
+        "text": "ruoshui041@gmail.com"
       },
       {
-        "title": "xxx",
-        "text": "xxx"
+        "title": "Github",
+        "text": "@TropicalFish041"
+      }
+	{
+        "title": "Bilibili",
+        "text": "@ARDEO041"
       }
     ]
   }
