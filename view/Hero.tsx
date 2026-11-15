@@ -9,14 +9,17 @@ type Firework = {
   y: number;
   size: number;
   hue: number;
-  frame: number | null; // null during the 400 ms pause after a burst
+  frame: number; // frames 1–4 play once; each burst then disappears
   nextAt: number;
 };
 
-// The original GIF has five 220ms frames; frame 0 is fully transparent. Start at frame 1 so at least one burst stays visible.
+// The original GIF has five frames; frame 0 is transparent. Play frames 1–4 once.
 const FRAME_COUNT = 5;
 const FRAME_MS = 250;
-const WAIT_MS = 600;
+// Spawn one burst at a time, with varied delays so bursts rarely begin together.
+const SPAWN_GAP_MIN = 450;
+const SPAWN_GAP_SPREAD = 1400;
+const randomSpawnDelay = () => SPAWN_GAP_MIN + Math.random() * SPAWN_GAP_SPREAD;
 const PAINTING_HORIZON = 0.565;
 const framePath = (frame: number) => `/animations/firework-frames/${frame}.png`;
 
@@ -88,41 +91,54 @@ export default function Hero({ onContact }: HeroProps) {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const initialCount = 1 + Math.floor(Math.random() * 3);
-    setFireworks(Array.from({ length: initialCount }, () => createFirework(nextId.current++)));
+    // Only the first burst starts immediately. Never start several in one tick.
+    // Keep at least one active burst, allow occasional overlap, cap at three.
+    let active: Firework[] = [createFirework(nextId.current++)];
+    let lastCreated = active[0];
+    let nextSpawnAt = performance.now() + randomSpawnDelay();
+    setFireworks(active);
 
-    // Each burst shows frames 1–4 once, disappears for 400ms, then respawns.
-    // We check deadlines instead of rounding 400ms to a 220ms frame interval.
     const timer = window.setInterval(() => {
       if (document.hidden) return;
       const now = performance.now();
-      setFireworks(current => {
-        let changed = false;
-        const next = current.map(burst => {
-          if (now < burst.nextAt) return burst;
+      let changed = false;
+      const next: Firework[] = [];
+
+      // Each burst has its own frame deadline; finished bursts are removed.
+      for (const burst of active) {
+        if (now < burst.nextAt) {
+          next.push(burst);
+        } else if (burst.frame < FRAME_COUNT - 1) {
+          next.push({ ...burst, frame: burst.frame + 1, nextAt: now + FRAME_MS });
           changed = true;
-
-          if (burst.frame === null) {
-            return createFirework(nextId.current++, burst, now);
-          }
-          if (burst.frame < FRAME_COUNT - 1) {
-            return { ...burst, frame: burst.frame + 1, nextAt: now + FRAME_MS };
-          }
-          return { ...burst, frame: null, nextAt: now + WAIT_MS };
-        });
-
-        // Vary the number of independently animated slots (1–3) at burst boundaries.
-        const finished = next.some((burst, index) => burst.frame === null && current[index].frame !== null);
-        if (finished && next.length < 3 && Math.random() < 0.12) {
-          next.push(createFirework(nextId.current++, undefined, now));
-        } else if (finished && next.length > 1 && Math.random() < 0.08) {
-          const index = next.findIndex((burst, i) => burst.frame === null && current[i]?.frame !== null);
-          if (index !== -1) next.splice(index, 1);
+        } else {
+          changed = true;
         }
-        return changed ? next : current;
-      });
-    }, 25);
+      }
 
+      if (next.length === 0) {
+        // The last firework ended: immediately start exactly one new burst.
+        const burst = createFirework(nextId.current++, lastCreated, now);
+        next.push(burst);
+        lastCreated = burst;
+        nextSpawnAt = now + randomSpawnDelay();
+        changed = true;
+      } else if (now >= nextSpawnAt) {
+        // Randomly stagger arrivals. One scheduled opportunity = at most one launch.
+        if (next.length < 3) {
+          const burst = createFirework(nextId.current++, lastCreated, now);
+          next.push(burst);
+          lastCreated = burst;
+          changed = true;
+        }
+        nextSpawnAt = now + randomSpawnDelay();
+      }
+
+      if (changed) {
+        active = next;
+        setFireworks(next);
+      }
+    }, 25);
     return () => window.clearInterval(timer);
   }, []);
 
@@ -155,13 +171,13 @@ export default function Hero({ onContact }: HeroProps) {
         <span>Contact</span>
       </button>
 
-      {fireworks.filter(burst => burst.frame !== null).map(burst => {
+      {fireworks.map(burst => {
         const style = {
           left: `${burst.x}%`,
           width: `min(${burst.size}px, 88vw)`,
           '--firework-hue': `${burst.hue}deg`,
         } as CSSProperties;
-        const src = framePath(burst.frame!);
+        const src = framePath(burst.frame);
         return (
           <div className="firework-pair" key={burst.id} aria-hidden="true">
             <div className="gif-firework gif-firework--sky" style={{ ...style, top: `${burst.y}%` }}>

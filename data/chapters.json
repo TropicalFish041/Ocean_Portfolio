@@ -1,65 +1,93 @@
 [
-  {
-    "id": "about",
-    "image": "/fish/butterflyfish.png",
-    "fishName": "Butterflyfish",
-    "title": "About Me",
-    "items": [
-      {
-        "title": "Hello, I’m Ruoshui.",
-        "text": "I study Computer Science and Classics at the University of Toronto, and enjoy the connections between algorithms, languages, and creative technology."
-      },
-      {
-        "title": "Education",
-        "text": "University of Toronto · Computer Science Specialist · Expected 2029."
-      },
-      {
-        "title": "Interests",
-        "text": "Theoretical computer science · Digital classics · Language technology."
-      }
-    ]
-  },
-  {
-    "id": "projects",
-    "image": "/fish/lionfish.png",
-    "fishName": "Lionfish",
-    "title": "Projects",
-    "items": [
-      {
-        "title": "Bird Species Interaction Network",
-        "text": "Developed weighted-graph algorithms in Python to investigate seasonal bird co-occurrence using observational data."
-      },
-      {
-        "title": "Team Cobalt · VR Game",
-        "text": "Technical lead for a Unity VR game exhibited at VRTO 2026; implemented gameplay, interaction, dialogue, and scene progression."
-      },
-      {
-        "title": "Pattern Recognition Research",
-        "text": "Explored PCA- and SVM-based face recognition with OpenCV, scikit-learn, and NumPy."
-      }
-    ]
-  },
+ {
+  "id": "about",
+  "image": "/fish/butterflyfish.png",
+  "fishName": "Butterflyfish",
+  "title": "About Me",
+  "items": [
+    {
+      "title": "Hello, I’m Ruoshui.",
+      "text": "I’m a Computer Science student at the University of Toronto. I’m drawn to problems built around structure, rules, and reasoning — whether that means understanding why an algorithm works, tracing a bug through a system, or figuring out the structure of a language."
+    },
+    {
+      "title": "Education",
+      "text": "University of Toronto · B.Sc., Computer Science Specialist and Classics (Greek and Latin) Major · Expected June 2029 · cGPA 4.0/4.0."
+    },
+    {
+      "title": "What I’m Exploring",
+      "text": "I’m currently exploring theoretical and mathematically oriented computer science, especially algorithms, formal methods, and questions about how computational systems represent structure and rules."
+    },
+    {
+      "title": "Language & Computing",
+      "text": "Alongside computer science, I study Ancient Greek and Latin. That has led me to an interest in computational linguistics, low-resource and historical languages, and questions about morphology, syntax, and systematic reasoning in language models."
+    },
+    {
+      "title": "Research",
+      "text": "I’m interested in learning how to turn broad technical interests into precise research questions, and I hope to pursue research-focused graduate study in computer science in the future."
+    },
+    {
+      "title": "Teaching",
+      "text": "At Kintore College, I regularly support peers and younger students with introductory programming and mathematics, especially proof strategies, problem decomposition, code tracing, and debugging."
+    },
+    {
+      "title": "Award",
+      "text": "International Merit Admission Award, Faculty of Arts & Science · Recipient in 2025–26 and renewed for 2026–27."
+    },
+    {
+      "title": "Languages",
+      "text": "Mandarin (native) · English (fluent) · Ancient Greek and Latin (academic study)."
+    },
+    {
+      "title": "Interests",
+      "text": "Algorithms · Theoretical computer science · Formal methods · Computational linguistics · Historical-language computing."
+    }
+  ]
+},
+ {
+  "id": "projects",
+  "image": "/fish/lionfish.png",
+  "fishName": "Lionfish",
+  "title": "Projects & Experience",
+  "items": [
+    {
+      "title": "AACorn · Visual AAC Communication Board",
+      "text": "Leading a team building an accessible Java application for pictogram-based communication. I work on the communication logic and help coordinate the project’s architecture, integration, and development."
+    },
+    {
+      "title": "Bird Species Interaction Network",
+      "text": "Built and optimized the core weighted-graph algorithm in Python for a four-person project modelling seasonal bird co-occurrence from 6,000 real-world iNaturalist observations."
+    },
+    {
+      "title": "Team Cobalt · VR Game",
+      "text": "Joined as Lead Developer / Technical Lead during the final development week, implementing and integrating core Unity/C# gameplay systems for a VR game exhibited at VRTO 2026."
+    },
+    {
+      "title": "Zhiyuan Robotics · Intern",
+      "text": "Supported robotics testing and validation in Shanghai through test-set preparation, output review, and documentation of discrepancies for engineering follow-up."
+    },
+    {
+      "title": "Pattern Recognition Research",
+      "text": "Worked on PCA- and SVM-based face-recognition experiments using Python, OpenCV, scikit-learn, and NumPy, with a focus on preprocessing and feature extraction."
+    },
+    {
+      "title": "Film Archive & Translation",
+      "text": "Translate and technically edit bilingual subtitles for historical and international films, including timing, encoding, and quality control for releases reaching more than 30,000 downloads."
+    }
+  ]
+},
   {
     "id": "skills",
     "image": "/fish/peppermint-angelfish.png",
     "fishName": "Peppermint Angelfish",
-    "title": "Skills",
+    "title": "xxx",
     "items": [
       {
-        "title": "Programming",
-        "text": "Python · Java · C#"
+        "title": "xxx",
+        "text": "xxx"
       },
       {
-        "title": "Tools",
-        "text": "Git · Unity · NumPy · pandas · NetworkX · scikit-learn · OpenCV"
-      },
-      {
-        "title": "Foundations",
-        "text": "Algorithms · Proofs · Probability · Linear algebra · Multivariable calculus"
-      },
-      {
-        "title": "Languages",
-        "text": "Mandarin · English"
+        "title": "xxx",
+        "text": "xxx"
       }
     ]
   },
@@ -67,15 +95,15 @@
     "id": "experience",
     "image": "/fish/opah.png",
     "fishName": "Opah",
-    "title": "Experience",
+    "title": "xxx",
     "items": [
       {
-        "title": "Zhiyuan Robotics",
-        "text": "Intern · Shanghai · May–July 2026. Supported testing and validation by preparing test sets and documenting results."
+        "title": "xxx",
+        "text": "xxx"
       },
       {
-        "title": "Peer Academic Support",
-        "text": "Kintore College · Toronto · 2026. Helped peers with programming, mathematics, and debugging."
+        "title": "xxx",
+        "text": "xxx"
       }
     ]
   },
@@ -83,15 +111,15 @@
     "id": "contact",
     "image": "/fish/shark-and-pilotfish.png",
     "fishName": "Shark and pilot fish",
-    "title": "Contact",
+    "title": "xxx",
     "items": [
       {
-        "title": "Email",
-        "text": "ruoshui.deng@mail.utoronto.ca"
+        "title": "xxx",
+        "text": "xxx"
       },
       {
-        "title": "Location",
-        "text": "Toronto, Canada"
+        "title": "xxx",
+        "text": "xxx"
       }
     ]
   }

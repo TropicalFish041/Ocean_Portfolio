@@ -18,10 +18,10 @@ test('existing painted ocean and fish presentation are preserved', () => {
 
 test('animation is a finite five-frame sequence, never a looping GIF', () => {
   assert.match(hero, /FRAME_COUNT = 5/);
-  assert.match(hero, /FRAME_MS = 220/);
-  assert.match(hero, /WAIT_MS = 400/);
+  assert.match(hero, /FRAME_MS = 250/);
+  assert.match(hero, /randomSpawnDelay/);
   assert.match(hero, /framePath\(burst\.frame!?\)/);
-  assert.match(hero, /createFirework\(nextId\.current\+\+, burst, now\)/);
+  assert.match(hero, /createFirework\(nextId\.current\+\+, lastCreated, now\)/);
   assert.doesNotMatch(hero, /\.gif['"]/);
   for (let i = 0; i < 5; i++) {
     assert.ok(statSync(join(root, 'public/animations/firework-frames', `${i}.png`)).size > 1000);
@@ -29,12 +29,16 @@ test('animation is a finite five-frame sequence, never a looping GIF', () => {
 });
 
 test('at least one and at most three fireworks, with synchronized reflections', () => {
-  assert.match(hero, /initialCount = 1 \+ Math\.floor\(Math\.random\(\) \* 3\)/);
+  assert.match(hero, /let active: Firework\[\] = \[createFirework\(nextId\.current\+\+\)\]/);
   assert.match(hero, /next\.length < 3/);
-  assert.match(hero, /next\.length > 1/);
+  assert.match(hero, /next\.length === 0/);
   assert.match(hero, /const src = framePath\(burst\.frame!?\)/);
   assert.equal((hero.match(/<img src=\{src\}/g) || []).length, 2);
   assert.match(hero, /prefers-reduced-motion/);
+  assert.doesNotMatch(hero, /initialCount/);
+  assert.match(hero, /nextSpawnAt = now \+ randomSpawnDelay\(\)/);
+  assert.match(hero, /SPAWN_GAP_MIN = 450/);
+  assert.match(hero, /SPAWN_GAP_SPREAD = 1400/);
 });
 
 test('offline preview uses the same five frame images, without nonexistent scripts', () => {
@@ -42,6 +46,9 @@ test('offline preview uses the same five frame images, without nonexistent scrip
   assert.match(offline, /firework-frames/);
   assert.match(offline, /frameSources/);
   assert.match(offline, /fireworksJS/);
+  assert.match(offline, /const first = make\(\)/);
+  assert.match(offline, /randomSpawnDelay/);
+  assert.doesNotMatch(offline, /const count = 1 \+ Math\.floor/);
   assert.doesNotMatch(offline, /public\/animations\/fireworks\.js/);
 });
 

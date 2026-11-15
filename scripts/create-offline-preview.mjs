@@ -105,8 +105,10 @@ const fireworksJS = `
   updateWaterline();
   let seq = 0;
   let bursts = [];
+  let lastCreated = null;
   const random = () => Math.random();
-  function make(previous) {
+  const randomSpawnDelay = () => 450 + random() * 1400;
+  function make(previous, now = performance.now()) {
     let x = 16 + random() * 68;
     if (previous && Math.abs(x - previous.x) < 12) x = 16 + ((x - 16 + 19) % 68);
     let hue = Math.floor(random() * 360);
@@ -127,45 +129,41 @@ const fireworksJS = `
       el.style.setProperty('--firework-hue', hue + 'deg');
     }
     sky.style.top = (2 + random() * 12) + '%';
-    return { id: seq++, x, hue, frame: 1, nextAt: performance.now() + 220, pair, a, b };
+    return { id: seq++, x, hue, frame: 1, nextAt: now + 250, pair, a, b };
   }
   function show(burst) {
     const url = frames[burst.frame];
     burst.a.src = url;
     burst.b.src = url;
   }
-  const count = 1 + Math.floor(random() * 3);
-  for (let i = 0; i < count; i++) {
-    const burst = make(); show(burst); bursts.push(burst);
-  }
-  // Keep the offline fireworks on the same one-shot 220ms frames + 400ms pause as Hero.tsx.
+  // One initial burst, then staggered single arrivals.
+  const first = make();
+  show(first); bursts.push(first); lastCreated = first;
+  let nextSpawnAt = performance.now() + randomSpawnDelay();
   setInterval(() => {
     if (document.hidden) return;
     const now = performance.now();
-    let finished = false;
-    bursts = bursts.map(burst => {
-      if (now < burst.nextAt) return burst;
-      if (burst.frame === null) {
-        burst.pair.remove();
-        const next = make(burst); show(next); return next;
-      }
+    bursts = bursts.filter(burst => {
+      if (now < burst.nextAt) return true;
       if (burst.frame < 4) {
         burst.frame++;
-        burst.nextAt = now + 220;
+        burst.nextAt = now + 250;
         show(burst);
-        return burst;
+        return true;
       }
-      burst.frame = null;
-      burst.nextAt = now + 400;
-      burst.pair.style.display = 'none';
-      finished = true;
-      return burst;
+      burst.pair.remove();
+      return false;
     });
-    if (finished && bursts.length < 3 && random() < .12) {
-      const next = make(); show(next); bursts.push(next);
-    } else if (finished && bursts.length > 1 && random() < .08) {
-      const index = bursts.findIndex(b => b.frame === null);
-      if (index !== -1) { bursts[index].pair.remove(); bursts.splice(index, 1); }
+    if (bursts.length === 0) {
+      const next = make(lastCreated, now);
+      show(next); bursts.push(next); lastCreated = next;
+      nextSpawnAt = now + randomSpawnDelay();
+    } else if (now >= nextSpawnAt) {
+      if (bursts.length < 3) {
+        const next = make(lastCreated, now);
+        show(next); bursts.push(next); lastCreated = next;
+      }
+      nextSpawnAt = now + randomSpawnDelay();
     }
   }, 25);
 })();

@@ -73,6 +73,36 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   position: relative; display: flex; align-items: center; justify-content: center;
   height: 100svh; min-height: 480px; padding: 4vh 7vw; isolation: isolate;
 }
+/* About Me: handwritten exploration hint */
+
+.chapter-section--about .chapter-section__label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.chapter-section__explore {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  font-family: inherit;
+  font-size: clamp(16px, 1.8vw, 23px);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.chapter-section__explore svg {
+  width: 34px;
+  height: 24px;
+  color: #ffffff;
+}
 .fish-button {
   position: relative; display: block; width: min(72vw, 790px);
   border: 0; background: none; padding: 0; cursor: pointer;
