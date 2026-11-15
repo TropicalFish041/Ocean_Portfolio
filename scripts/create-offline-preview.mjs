@@ -12,7 +12,8 @@ const chapters = JSON.parse(readFileSync(join(root, 'data/chapters.json'), 'utf8
 const esc = (str) => String(str).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 const scenes = chapters.map((chapter, index) => {
   const image = readFileSync(join(root, 'public', chapter.image.slice(1))).toString('base64');
-  return `<section class="chapter-section chapter-section--${esc(chapter.id)} ${index % 2 ? 'chapter-section--alternate' : ''}" id="${esc(chapter.id)}" aria-label="${esc(chapter.fishName)}"><button class="fish-button" type="button" aria-label="Open ${esc(chapter.title)}" data-chapter="${esc(chapter.id)}"><img class="fish-button__image" src="data:image/png;base64,${image}" alt="" draggable="false" loading="${index ? 'lazy' : 'eager'}" /></button></section>`;
+  const label = chapter.id === 'about' ? 'About Me' : chapter.id === 'projects' ? 'Experience' : '';
+  return `<section class="chapter-section chapter-section--${esc(chapter.id)} ${index % 2 ? 'chapter-section--alternate' : ''}" id="${esc(chapter.id)}" aria-label="${esc(chapter.fishName)}"><button class="fish-button" type="button" aria-label="Open ${esc(chapter.title)}" data-chapter="${esc(chapter.id)}"><img class="fish-button__image" src="data:image/png;base64,${image}" alt="" draggable="false" loading="${index ? 'lazy' : 'eager'}" /></button>${label ? `<span class="chapter-section__label" aria-hidden="true">${label}</span>` : ''}</section>`;
 }).join('\n');
 const data = JSON.stringify(chapters).replaceAll('<', '\\u003c');
 const inlineScript = `
@@ -40,6 +41,16 @@ function openPanel(chapter) {
   }
   panel.showModal();
 }
+document.getElementById('contact-shortcut').addEventListener('click', () => openPanel(byId.get('contact')));
+const cue = document.getElementById('hero-scroll-cue');
+function updateCue() {
+  const visible = window.scrollY < 35;
+  cue.classList.toggle('hero__scroll-cue--hidden', !visible);
+  cue.setAttribute('aria-hidden', String(!visible));
+  cue.tabIndex = visible ? 0 : -1;
+}
+window.addEventListener('scroll', updateCue, {passive: true});
+updateCue();
 closeButton.addEventListener('click', closePanel);
 panel.addEventListener('cancel', e => { e.preventDefault(); closePanel(); });
 panel.addEventListener('click', e => { if (e.target === panel) closePanel(); });
@@ -116,7 +127,7 @@ const fireworksJS = `
       el.style.setProperty('--firework-hue', hue + 'deg');
     }
     sky.style.top = (2 + random() * 12) + '%';
-    return { id: seq++, x, hue, frame: 1, pair, a, b };
+    return { id: seq++, x, hue, frame: 1, nextAt: performance.now() + 220, pair, a, b };
   }
   function show(burst) {
     const url = frames[burst.frame];
@@ -127,18 +138,38 @@ const fireworksJS = `
   for (let i = 0; i < count; i++) {
     const burst = make(); show(burst); bursts.push(burst);
   }
+  // Keep the offline fireworks on the same one-shot 220ms frames + 400ms pause as Hero.tsx.
   setInterval(() => {
     if (document.hidden) return;
+    const now = performance.now();
+    let finished = false;
     bursts = bursts.map(burst => {
-      if (++burst.frame < 5) { show(burst); return burst; }
-      burst.pair.remove();
-      const next = make(burst); show(next); return next;
+      if (now < burst.nextAt) return burst;
+      if (burst.frame === null) {
+        burst.pair.remove();
+        const next = make(burst); show(next); return next;
+      }
+      if (burst.frame < 4) {
+        burst.frame++;
+        burst.nextAt = now + 220;
+        show(burst);
+        return burst;
+      }
+      burst.frame = null;
+      burst.nextAt = now + 400;
+      burst.pair.style.display = 'none';
+      finished = true;
+      return burst;
     });
-    if (bursts.length < 3 && random() < .12) { const b = make(); show(b); bursts.push(b); }
-    else if (bursts.length > 1 && random() < .08) { const last = bursts.pop(); last.pair.remove(); }
-  }, 220);
+    if (finished && bursts.length < 3 && random() < .12) {
+      const next = make(); show(next); bursts.push(next);
+    } else if (finished && bursts.length > 1 && random() < .08) {
+      const index = bursts.findIndex(b => b.frame === null);
+      if (index !== -1) { bursts[index].pair.remove(); bursts.splice(index, 1); }
+    }
+  }, 25);
 })();
 `;
-const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Ruoshui Deng — Ocean Portfolio (Offline)</title><style>${css}</style></head><body><main class="ocean-world" aria-label="Underwater portfolio"><section class="hero" id="surface" aria-label="Oil-painted night sea with fireworks"><img class="hero__seascape" src="data:image/png;base64,${seaPainting}" alt=""/><div class="hero__fade" aria-hidden="true"></div></section>${scenes}</main><dialog class="detail-dialog" id="details" aria-labelledby="detail-title"><div class="detail-dialog__content"><button class="detail-dialog__close" id="close-panel" type="button" aria-label="Close information">×</button><h2 id="detail-title"></h2><div id="detail-items"></div></div></dialog><script>${inlineScript}</script><script>${fireworksJS}</script></body></html>`;
+const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Ruoshui Deng — Ocean Portfolio (Offline)</title><style>${css}</style></head><body><main class="ocean-world" aria-label="Underwater portfolio"><section class="hero" id="surface" aria-label="Oil-painted night sea with fireworks"><img class="hero__seascape" src="data:image/png;base64,${seaPainting}" alt=""/><div class="hero__fade" aria-hidden="true"></div><h1 class="hero__handwritten-name">Ruoshui Deng</h1><a class="hero__scroll-cue" href="#about" id="hero-scroll-cue" aria-label="Scroll to view my work"><span>Scroll to view my work</span><svg viewBox="0 0 32 42" fill="none" aria-hidden="true"><path d="M16 2V35M5 25L16 36L27 25" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" /></svg></a><button class="hero__contact-brush" type="button" id="contact-shortcut" aria-label="Contact Ruoshui Deng"><svg viewBox="0 0 190 72" preserveAspectRatio="none" aria-hidden="true"><path d="M12 20 52 12 98 17 145 10 180 23 169 37 185 50 130 54 76 58 20 50 4 40Z" fill="#07070d"/><path d="M15 23Q72 11 168 24M8 35Q98 20 178 36M20 47Q92 57 169 43" stroke="#101019" stroke-width="10" stroke-linecap="round" opacity=".8"/><path d="M24 14 70 10M132 59 160 53M5 48 32 53" stroke="#020208" stroke-width="3" stroke-linecap="round" opacity=".8"/></svg><span>Contact</span></button></section>${scenes}</main><dialog class="detail-dialog" id="details" aria-labelledby="detail-title"><div class="detail-dialog__content"><button class="detail-dialog__close" id="close-panel" type="button" aria-label="Close information">×</button><h2 id="detail-title"></h2><div id="detail-items"></div></div></dialog><script>${inlineScript}</script><script>${fireworksJS}</script></body></html>`;
 writeFileSync(join(root, 'offline-preview.html'), page, 'utf8');
 console.log('Created offline-preview.html (open directly without a server).');

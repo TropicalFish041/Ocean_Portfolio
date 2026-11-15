@@ -56,6 +56,8 @@ export default function ChapterSection({ chapter, index, onOpen }: Props) {
       <button className="fish-button" type="button" onClick={openIfPainted} aria-label={`Open ${chapter.title} via ${chapter.fishName}`}>
         <img ref={imageRef} className="fish-button__image" src={chapter.image} alt="" draggable={false} loading={index === 0 ? 'eager' : 'lazy'} />
       </button>
+      {chapter.id === 'about' && <span className="chapter-section__label" aria-hidden="true">About Me</span>}
+      {chapter.id === 'projects' && <span className="chapter-section__label" aria-hidden="true">Experience</span>}
     </section>
   );
 }

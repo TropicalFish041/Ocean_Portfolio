@@ -15,8 +15,8 @@ type Firework = {
 
 // The original GIF has five 220ms frames; frame 0 is fully transparent. Start at frame 1 so at least one burst stays visible.
 const FRAME_COUNT = 5;
-const FRAME_MS = 220;
-const WAIT_MS = 400;
+const FRAME_MS = 250;
+const WAIT_MS = 600;
 const PAINTING_HORIZON = 0.565;
 const framePath = (frame: number) => `/animations/firework-frames/${frame}.png`;
 
@@ -40,13 +40,19 @@ function createFirework(id: number, previous?: Firework, now = performance.now()
   };
 }
 
-export default function Hero() {
+interface HeroProps {
+  onContact: () => void;
+}
+
+export default function Hero({ onContact }: HeroProps) {
   const imageRef = useRef<HTMLImageElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const nextId = useRef(0);
   const [seaHorizon, setSeaHorizon] = useState('56%');
   const [fireworks, setFireworks] = useState<Firework[]>([]);
+  const [showScrollCue, setShowScrollCue] = useState(true);
 
+  // object-fit: cover crops the painting. Position reflections at the visible waterline.
   useEffect(() => {
     const hero = heroRef.current;
     const image = imageRef.current;
@@ -69,6 +75,14 @@ export default function Hero() {
       image.removeEventListener('load', measure);
       observer.disconnect();
     };
+  }, []);
+
+  // Keep the hint visible only while the user is at the top of the page.
+  useEffect(() => {
+    const update = () => setShowScrollCue(window.scrollY < 35);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
   }, []);
 
   useEffect(() => {
@@ -97,8 +111,7 @@ export default function Hero() {
           return { ...burst, frame: null, nextAt: now + WAIT_MS };
         });
 
-        // Vary the number of independently animated slots (1–3).
-        // Do so only at a burst boundary, not on every timer tick.
+        // Vary the number of independently animated slots (1–3) at burst boundaries.
         const finished = next.some((burst, index) => burst.frame === null && current[index].frame !== null);
         if (finished && next.length < 3 && Math.random() < 0.12) {
           next.push(createFirework(nextId.current++, undefined, now));
@@ -119,6 +132,29 @@ export default function Hero() {
       style={{ '--sea-horizon': seaHorizon } as CSSProperties}>
       <img ref={imageRef} className="hero__seascape" src="/ocean/night-seascape.png" alt="" />
       <div className="hero__fade" aria-hidden="true" />
+
+      <h1 className="hero__handwritten-name">Ruoshui Deng</h1>
+      <a className={`hero__scroll-cue${showScrollCue ? '' : ' hero__scroll-cue--hidden'}`}
+        href="#about" aria-label="Scroll to view my work" aria-hidden={!showScrollCue}
+        tabIndex={showScrollCue ? 0 : -1}>
+        <span>Scroll to view my work</span>
+        <svg viewBox="0 0 32 42" fill="none" aria-hidden="true">
+          <path d="M16 2V35M5 25L16 36L27 25" stroke="currentColor" strokeWidth="2.3"
+            strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </a>
+      <button className="hero__contact-brush" type="button" onClick={onContact}
+        aria-label="Contact Ruoshui Deng">
+        <svg viewBox="0 0 190 72" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M12 20 52 12 98 17 145 10 180 23 169 37 185 50 130 54 76 58 20 50 4 40Z" fill="#07070d" />
+          <path d="M15 23Q72 11 168 24M8 35Q98 20 178 36M20 47Q92 57 169 43" stroke="#101019"
+            strokeWidth="10" strokeLinecap="round" opacity=".8" />
+          <path d="M24 14 70 10M132 59 160 53M5 48 32 53" stroke="#020208" strokeWidth="3"
+            strokeLinecap="round" opacity=".8" />
+        </svg>
+        <span>Contact</span>
+      </button>
+
       {fireworks.filter(burst => burst.frame !== null).map(burst => {
         const style = {
           left: `${burst.x}%`,

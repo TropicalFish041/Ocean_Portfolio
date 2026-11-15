@@ -66,10 +66,18 @@ test('presenter creates a new view model without mutating source entries', () =>
   assert.deepEqual(output[0].items, portfolioChapters[2].items);
 });
 
-test('no visible headings, navigation, captions, or footer on the main canvas', () => {
-  const files = ['view/OceanJourney.tsx', 'view/Hero.tsx', 'view/ChapterSection.tsx'];
-  const jsx = files.map((file) => readFileSync(resolve(root, file), 'utf8')).join('\n');
-  for (const pattern of [/<header\b/, /<footer\b/, /<nav\b/, /<h[1-6]\b/, /<p\b/, /DISCOVER/, /SCROLL TO DIVE/]) {
+test('only the requested handwritten titles and navigation appear on the main canvas', () => {
+  const hero = readFileSync(resolve(root, 'view/Hero.tsx'), 'utf8');
+  const section = readFileSync(resolve(root, 'view/ChapterSection.tsx'), 'utf8');
+  const journey = readFileSync(resolve(root, 'view/OceanJourney.tsx'), 'utf8');
+  const jsx = [hero, section, journey].join('\n');
+  assert.match(hero, /<h1 className="hero__handwritten-name">Ruoshui Deng<\/h1>/);
+  assert.match(hero, /Scroll to view my work/);
+  assert.match(hero, /hero__contact-brush/);
+  assert.match(section, /chapter.id === 'about'/);
+  assert.match(section, /chapter.id === 'projects'/);
+  assert.match(journey, /onOpenChapter\('contact'\)/);
+  for (const pattern of [/<header\b/, /<footer\b/, /<nav\b/, /<p\b/, /DISCOVER/, /SCROLL TO DIVE/]) {
     assert.ok(!pattern.test(jsx), `${pattern} should not appear on the canvas`);
   }
 });

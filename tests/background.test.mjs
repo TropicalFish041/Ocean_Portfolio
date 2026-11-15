@@ -19,8 +19,9 @@ test('existing painted ocean and fish presentation are preserved', () => {
 test('animation is a finite five-frame sequence, never a looping GIF', () => {
   assert.match(hero, /FRAME_COUNT = 5/);
   assert.match(hero, /FRAME_MS = 220/);
-  assert.match(hero, /framePath\(burst\.frame\)/);
-  assert.match(hero, /createFirework\(nextId\.current\+\+, burst\)/);
+  assert.match(hero, /WAIT_MS = 400/);
+  assert.match(hero, /framePath\(burst\.frame!?\)/);
+  assert.match(hero, /createFirework\(nextId\.current\+\+, burst, now\)/);
   assert.doesNotMatch(hero, /\.gif['"]/);
   for (let i = 0; i < 5; i++) {
     assert.ok(statSync(join(root, 'public/animations/firework-frames', `${i}.png`)).size > 1000);
@@ -28,10 +29,10 @@ test('animation is a finite five-frame sequence, never a looping GIF', () => {
 });
 
 test('at least one and at most three fireworks, with synchronized reflections', () => {
-  assert.match(hero, /startCount = 1 \+ Math\.floor\(Math\.random\(\) \* 3\)/);
+  assert.match(hero, /initialCount = 1 \+ Math\.floor\(Math\.random\(\) \* 3\)/);
   assert.match(hero, /next\.length < 3/);
   assert.match(hero, /next\.length > 1/);
-  assert.match(hero, /const src = framePath\(burst\.frame\)/);
+  assert.match(hero, /const src = framePath\(burst\.frame!?\)/);
   assert.equal((hero.match(/<img src=\{src\}/g) || []).length, 2);
   assert.match(hero, /prefers-reduced-motion/);
 });
@@ -42,4 +43,18 @@ test('offline preview uses the same five frame images, without nonexistent scrip
   assert.match(offline, /frameSources/);
   assert.match(offline, /fireworksJS/);
   assert.doesNotMatch(offline, /public\/animations\/fireworks\.js/);
+});
+
+test('handwritten overlays use the existing contact panel and hide scroll hint on scroll', () => {
+  const journey = read('view/OceanJourney.tsx');
+  const chapterSection = read('view/ChapterSection.tsx');
+  assert.match(hero, /Ruoshui Deng/);
+  assert.match(hero, /Scroll to view my work/);
+  assert.match(hero, /showScrollCue/);
+  assert.match(hero, /scrollY < 35/);
+  assert.match(hero, /hero__contact-brush/);
+  assert.match(journey, /onOpenChapter\('contact'\)/);
+  assert.match(chapterSection, /chapter.id === 'about'.*About Me/);
+  assert.match(chapterSection, /chapter.id === 'projects'.*Experience/);
+  assert.match(css, /hero__handwritten-name/);
 });

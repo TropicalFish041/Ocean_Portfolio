@@ -13,12 +13,12 @@ interface Props {
   onCloseChapter: () => void;
 }
 
-/** No on-page labels, menus, footer, or decorative image assets. */
+/** Presentation composes the hero, chapter scenes, and the existing detail dialog. */
 export default function OceanJourney({ chapters, activeChapter, onOpenChapter, onCloseChapter }: Props) {
   return (
     <>
       <main className="ocean-world" aria-label="Underwater portfolio">
-        <Hero />
+        <Hero onContact={() => onOpenChapter('contact')} />
         {chapters.map((chapter, index) => (
           <ChapterSection key={chapter.id} chapter={chapter} index={index} onOpen={onOpenChapter} />
         ))}
