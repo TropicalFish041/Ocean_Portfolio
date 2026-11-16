@@ -19,7 +19,7 @@ const pipeline = () => {
 };
 
 test('exactly five scenes ordered from the surface to deep water', () => {
-  assert.deepEqual(portfolioChapters.map(({ id }) => id), ['about', 'projects', 'skills', 'experience', 'contact']);
+  assert.deepEqual(portfolioChapters.map(({ id }) => id), ['about', 'projects', 'skills', 'experience', 'shark']);
   assert.equal(new Set(portfolioChapters.map(({ id }) => id)).size, 5);
 });
 
@@ -39,10 +39,22 @@ test('controller -> interactor -> presenter maps clicked fish to dialog content'
   const { controller, output } = pipeline();
   controller.open('projects');
   assert.equal(output.length, 1);
-  assert.equal(output[0].title, 'Projects');
-  assert.equal(output[0].items.length, 3);
+  assert.equal(output[0].title, 'Projects & Experience');
+  assert.equal(output[0].items.length, 6);
   assert.ok(!('eyebrow' in output[0]));
   assert.ok(!('subtitle' in output[0]));
+});
+
+
+test('shark and top Contact route through the same use case but show different content', () => {
+  const { controller, output } = pipeline();
+  controller.open('shark');
+  controller.open('contact');
+  assert.equal(output[0].title, 'Beyond the Surface');
+  assert.equal(output[1].title, 'Contact me');
+  assert.notDeepEqual(output[0].items, output[1].items);
+  assert.equal(portfolioChapters.length, 5);
+  assert.equal(portfolioChapters.filter(({ id }) => id === 'contact').length, 0);
 });
 
 test('invalid and empty chapter identifiers never open a dialog', () => {

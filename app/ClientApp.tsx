@@ -13,7 +13,8 @@ export default function ClientApp() {
   const [activeChapter, setActiveChapter] = useState<ChapterViewModel | null>(null);
 
   const controller = useMemo(() => {
-    const repository = new StaticChapterRepository(portfolioChapters);
+    // Default repository includes five fish scenes AND a separate Contact entry.
+    const repository = new StaticChapterRepository();
     const presenter = new ShowChapterPresenter(setActiveChapter);
     const interactor = new ShowChapterInteractor(repository, presenter);
     return new ShowChapterController(interactor);

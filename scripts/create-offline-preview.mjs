@@ -9,13 +9,16 @@ const frameSources = Array.from({ length: 5 }, (_, i) => 'data:image/png;base64,
 const css = readFileSync(join(root, 'app/globals.css'), 'utf8')
   .replaceAll("url('/textures/impasto-relief.webp')", `url('data:image/webp;base64,${paintTexture}')`);
 const chapters = JSON.parse(readFileSync(join(root, 'data/chapters.json'), 'utf8'));
+const contact = JSON.parse(readFileSync(join(root, 'data/contact.json'), 'utf8'));
 const esc = (str) => String(str).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 const scenes = chapters.map((chapter, index) => {
   const image = readFileSync(join(root, 'public', chapter.image.slice(1))).toString('base64');
   const label = chapter.id === 'about' ? 'About Me' : chapter.id === 'projects' ? 'Experience' : '';
-  return `<section class="chapter-section chapter-section--${esc(chapter.id)} ${index % 2 ? 'chapter-section--alternate' : ''}" id="${esc(chapter.id)}" aria-label="${esc(chapter.fishName)}"><button class="fish-button" type="button" aria-label="Open ${esc(chapter.title)}" data-chapter="${esc(chapter.id)}"><img class="fish-button__image" src="data:image/png;base64,${image}" alt="" draggable="false" loading="${index ? 'lazy' : 'eager'}" /></button>${label ? `<span class="chapter-section__label" aria-hidden="true">${label}</span>` : ''}</section>`;
+  return `<section class="chapter-section chapter-section--${esc(chapter.id)} ${index % 2 ? 'chapter-section--alternate' : ''}" id="${esc(chapter.id)}" aria-label="${esc(chapter.fishName)}"><button class="fish-button" type="button" aria-label="Open ${esc(chapter.title)}" data-chapter="${esc(chapter.id)}"><img class="fish-button__image" src="data:image/png;base64,${image}" alt="" draggable="false" loading="${index ? 'lazy' : 'eager'}" /></button>${label ? chapter.id === 'about'
+  ? `<div class="chapter-section__label" aria-hidden="true"><span>About Me</span><span class="chapter-section__explore"><span>Click to explore</span><svg viewBox="0 0 44 24" fill="none" aria-hidden="true"><path d="M40 12H4M14 3L4 12L14 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>`
+  : `<span class="chapter-section__label" aria-hidden="true">${label}</span>` : ''}</section>`;
 }).join('\n');
-const data = JSON.stringify(chapters).replaceAll('<', '\\u003c');
+const data = JSON.stringify([...chapters, contact]).replaceAll('<', '\\u003c');
 const inlineScript = `
 const chapters = ${data};
 const byId = new Map(chapters.map(ch => [ch.id, ch]));
@@ -105,10 +108,9 @@ const fireworksJS = `
   updateWaterline();
   let seq = 0;
   let bursts = [];
-  let lastCreated = null;
   const random = () => Math.random();
   const randomSpawnDelay = () => 450 + random() * 1400;
-  function make(previous, now = performance.now()) {
+  function make(previous) {
     let x = 16 + random() * 68;
     if (previous && Math.abs(x - previous.x) < 12) x = 16 + ((x - 16 + 19) % 68);
     let hue = Math.floor(random() * 360);
@@ -129,16 +131,17 @@ const fireworksJS = `
       el.style.setProperty('--firework-hue', hue + 'deg');
     }
     sky.style.top = (2 + random() * 12) + '%';
-    return { id: seq++, x, hue, frame: 1, nextAt: now + 250, pair, a, b };
+    return { id: seq++, x, hue, frame: 1, nextAt: performance.now() + 220, pair, a, b };
   }
   function show(burst) {
     const url = frames[burst.frame];
     burst.a.src = url;
     burst.b.src = url;
   }
-  // One initial burst, then staggered single arrivals.
+  // Only the first burst starts immediately; subsequent launches are staggered.
   const first = make();
-  show(first); bursts.push(first); lastCreated = first;
+  show(first); bursts.push(first);
+  let lastCreated = first;
   let nextSpawnAt = performance.now() + randomSpawnDelay();
   setInterval(() => {
     if (document.hidden) return;
