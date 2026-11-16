@@ -19,7 +19,7 @@ const pipeline = () => {
 };
 
 test('exactly four swimming scenes after the Hello interlude', () => {
-  assert.deepEqual(portfolioChapters.map(({ id }) => id), ['about', 'projects', 'experience', 'shark']);
+  assert.deepEqual(portfolioChapters.map(({ id }) => id), ['about', 'projects', 'shark', 'experience']);
   assert.equal(new Set(portfolioChapters.map(({ id }) => id)).size, 4);
 });
 

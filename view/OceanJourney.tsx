@@ -5,6 +5,7 @@ import type { ChapterViewModel } from '../interface_adapter/ChapterViewModel';
 import Hero from './Hero';
 import ChapterSection from './ChapterSection';
 import ChapterDialog from './ChapterDialog';
+import BackgroundMusic from './BackgroundMusic';
 
 interface Props {
   chapters: readonly Chapter[];
@@ -17,6 +18,7 @@ interface Props {
 export default function OceanJourney({ chapters, activeChapter, onOpenChapter, onCloseChapter }: Props) {
   return (
     <>
+      <BackgroundMusic />
       <main className="ocean-world" aria-label="Underwater portfolio">
         <Hero onContact={() => onOpenChapter('contact')} />
         <section className="hello-section" id="hello" aria-label="Introduction">

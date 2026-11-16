@@ -395,3 +395,50 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 @media (prefers-reduced-motion: reduce) {
   .chapter-section .fish-button, .chapter-section .chapter-section__label { transition: none; }
 }
+
+/* Decorative reef cutouts: the first two fish only. Keep artwork and labels clickable. */
+.chapter-section { overflow: hidden; }
+.coral-reef {
+  position: absolute;
+  z-index: 0;
+  bottom: -7svh;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  opacity: .92;
+  transform-origin: 50% 94%;
+  animation: coral-sway 7.8s ease-in-out infinite alternate;
+  filter: drop-shadow(0 18px 24px #05142b28);
+}
+.coral-reef--about { left: -4vw; width: min(34vw, 500px); }
+.coral-reef--projects { right: -3vw; width: min(35vw, 520px); animation-delay: -3.8s; }
+.chapter-section .fish-button { z-index: 1; }
+@keyframes coral-sway {
+  from { transform: rotate(-1.3deg) translateY(3px); }
+  to { transform: rotate(1.2deg) translateY(-4px); }
+}
+/* Small audio control: fixed so the user can pause on any section. */
+.music-toggle {
+  position: fixed;
+  z-index: 100;
+  top: clamp(18px, 4svh, 45px);
+  left: clamp(12px, 3vw, 54px);
+  width: 44px;
+  height: 44px;
+  border: 1px solid #ffffff63;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #0208169e;
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+}
+.music-toggle:hover { background: #040b1ddc; }
+@media (max-width: 700px) {
+  .coral-reef--about { left: -11vw; width: min(56vw, 310px); }
+  .coral-reef--projects { right: -10vw; width: min(55vw, 300px); }
+  .coral-reef { bottom: -3svh; opacity: .80; }
+  .music-toggle { top: 16px; left: 11px; width: 41px; height: 41px; }
+}
+@media (prefers-reduced-motion: reduce) { .coral-reef { animation: none; } }

@@ -68,7 +68,7 @@ test('hello interlude, viewport-triggered swim and five PNG frames per fish', ()
   assert.match(section, /frameMs/);
   assert.match(section, /setFrame\(previous => \(previous \+ 1\) % 5\)/);
   assert.match(css, /chapter-section--in-view/);
-  assert.deepEqual(chapters.map(c => c.id), ['about','projects','experience','shark']);
+  assert.deepEqual(chapters.map(c => c.id), ['about','projects','shark','experience']);
   assert.equal(chapters[1].image, '/fish/peppermint-angelfish.png');
   assert.equal(chapters[1].title, 'Projects & Experience');
   assert.equal(chapters[1].items.length, 6);
@@ -77,4 +77,39 @@ test('hello interlude, viewport-triggered swim and five PNG frames per fish', ()
     assert.ok(statSync(join(root,'public/fish/frames',folder,`${frame}.png`)).size > 1000);
   }
   assert.match(read('scripts/create-offline-preview.mjs'), /swimJS/);
+});
+
+
+test('two independent coral cutouts decorate only the first two sections', () => {
+  const component = read('view/ChapterSection.tsx');
+  assert.match(component, /coral-reef--about/);
+  assert.match(component, /coral-reef--projects/);
+  assert.match(css, /@keyframes coral-sway/);
+  assert.match(css, /pointer-events: none/);
+  for (const image of ['reef-about.png', 'reef-projects.png']) {
+    assert.ok(statSync(join(root, 'public/coral', image)).size > 100_000);
+  }
+});
+
+test('background music uses the supplied OGG, fades up and is gesture-safe', () => {
+  const music = read('view/BackgroundMusic.tsx');
+  const journey = read('view/OceanJourney.tsx');
+  assert.match(journey, /<BackgroundMusic \/>/);
+  assert.match(music, /\/audio\/background\.ogg/);
+  assert.match(music, /FADE_IN_MS = 3000/);
+  assert.match(music, /audio\.play\(\)/);
+  assert.match(music, /pointerdown/);
+  assert.match(music, /keydown/);
+  assert.match(music, /aria-pressed/);
+  assert.match(music, /userPausedRef/);
+  assert.ok(statSync(join(root, 'public/audio/background.ogg')).size > 1_000_000);
+});
+
+test('offline preview keeps music, coral and the reordered scenes', () => {
+  const source = read('scripts/create-offline-preview.mjs');
+  assert.match(source, /audioSource/);
+  assert.match(source, /coralSources/);
+  assert.match(source, /musicJS/);
+  assert.match(source, /site-music/);
+  assert.deepEqual(JSON.parse(read('data/chapters.json')).map(c => c.id), ['about','projects','shark','experience']);
 });

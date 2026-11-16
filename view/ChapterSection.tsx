@@ -96,6 +96,14 @@ export default function ChapterSection({ chapter, index, onOpen }: Props) {
     <section ref={sectionRef}
       className={`chapter-section chapter-section--${chapter.id} ${index % 2 ? 'chapter-section--alternate' : ''}${inView ? ' chapter-section--in-view' : ''}`}
       id={chapter.id} aria-label={chapter.fishName}>
+      {chapter.id === 'about' && (
+        <img className="coral-reef coral-reef--about" src="/coral/reef-about.png"
+          alt="" aria-hidden="true" draggable={false} loading="lazy" />
+      )}
+      {chapter.id === 'projects' && (
+        <img className="coral-reef coral-reef--projects" src="/coral/reef-projects.png"
+          alt="" aria-hidden="true" draggable={false} loading="lazy" />
+      )}
       <button className="fish-button" type="button" onClick={openIfPainted}
         aria-label={`Open ${chapter.title} via ${chapter.fishName}`}>
         <img ref={imageRef} className="fish-button__image" src={src} alt=""

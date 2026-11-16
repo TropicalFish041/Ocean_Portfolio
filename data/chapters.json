@@ -76,6 +76,18 @@
     ]
   },
   {
+    "id": "shark",
+    "image": "/fish/shark-and-pilotfish.png",
+    "fishName": "Shark and pilot fish",
+    "title": "xxx",
+    "items": [
+      {
+        "title": "xxx",
+        "text": "xxx."
+      }
+    ]
+  },
+  {
     "id": "experience",
     "image": "/fish/opah.png",
     "fishName": "Opah",
@@ -88,18 +100,6 @@
       {
         "title": "xxx",
         "text": "xxx"
-      }
-    ]
-  },
-  {
-    "id": "shark",
-    "image": "/fish/shark-and-pilotfish.png",
-    "fishName": "Shark and pilot fish",
-    "title": "xxx",
-    "items": [
-      {
-        "title": "xxx",
-        "text": "xxx."
       }
     ]
   }
