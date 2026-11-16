@@ -13,10 +13,8 @@ type Firework = {
   nextAt: number;
 };
 
-// The original GIF has five frames; frame 0 is transparent. Play frames 1–4 once.
 const FRAME_COUNT = 5;
 const FRAME_MS = 250;
-// Spawn one burst at a time, with varied delays so bursts rarely begin together.
 const SPAWN_GAP_MIN = 450;
 const SPAWN_GAP_SPREAD = 1400;
 const randomSpawnDelay = () => SPAWN_GAP_MIN + Math.random() * SPAWN_GAP_SPREAD;
@@ -80,7 +78,6 @@ export default function Hero({ onContact }: HeroProps) {
     };
   }, []);
 
-  // Keep the hint visible only while the user is at the top of the page.
   useEffect(() => {
     const update = () => setShowScrollCue(window.scrollY < 35);
     update();
@@ -90,9 +87,6 @@ export default function Hero({ onContact }: HeroProps) {
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    // Only the first burst starts immediately. Never start several in one tick.
-    // Keep at least one active burst, allow occasional overlap, cap at three.
     let active: Firework[] = [createFirework(nextId.current++)];
     let lastCreated = active[0];
     let nextSpawnAt = performance.now() + randomSpawnDelay();
@@ -103,8 +97,6 @@ export default function Hero({ onContact }: HeroProps) {
       const now = performance.now();
       let changed = false;
       const next: Firework[] = [];
-
-      // Each burst has its own frame deadline; finished bursts are removed.
       for (const burst of active) {
         if (now < burst.nextAt) {
           next.push(burst);
@@ -115,16 +107,13 @@ export default function Hero({ onContact }: HeroProps) {
           changed = true;
         }
       }
-
       if (next.length === 0) {
-        // The last firework ended: immediately start exactly one new burst.
         const burst = createFirework(nextId.current++, lastCreated, now);
         next.push(burst);
         lastCreated = burst;
         nextSpawnAt = now + randomSpawnDelay();
         changed = true;
       } else if (now >= nextSpawnAt) {
-        // Randomly stagger arrivals. One scheduled opportunity = at most one launch.
         if (next.length < 3) {
           const burst = createFirework(nextId.current++, lastCreated, now);
           next.push(burst);
@@ -133,7 +122,6 @@ export default function Hero({ onContact }: HeroProps) {
         }
         nextSpawnAt = now + randomSpawnDelay();
       }
-
       if (changed) {
         active = next;
         setFireworks(next);
@@ -148,10 +136,9 @@ export default function Hero({ onContact }: HeroProps) {
       style={{ '--sea-horizon': seaHorizon } as CSSProperties}>
       <img ref={imageRef} className="hero__seascape" src="/ocean/night-seascape.png" alt="" />
       <div className="hero__fade" aria-hidden="true" />
-
       <h1 className="hero__handwritten-name">Ruoshui Deng</h1>
       <a className={`hero__scroll-cue${showScrollCue ? '' : ' hero__scroll-cue--hidden'}`}
-        href="#about" aria-label="Scroll to view my work" aria-hidden={!showScrollCue}
+        href="#hello" aria-label="Scroll to view my work" aria-hidden={!showScrollCue}
         tabIndex={showScrollCue ? 0 : -1}>
         <span>Scroll to view my work</span>
         <svg viewBox="0 0 32 42" fill="none" aria-hidden="true">
@@ -170,7 +157,6 @@ export default function Hero({ onContact }: HeroProps) {
         </svg>
         <span>Contact</span>
       </button>
-
       {fireworks.map(burst => {
         const style = {
           left: `${burst.x}%`,

@@ -18,9 +18,9 @@ const pipeline = () => {
   return { controller, output };
 };
 
-test('exactly five scenes ordered from the surface to deep water', () => {
-  assert.deepEqual(portfolioChapters.map(({ id }) => id), ['about', 'projects', 'skills', 'experience', 'shark']);
-  assert.equal(new Set(portfolioChapters.map(({ id }) => id)).size, 5);
+test('exactly four swimming scenes after the Hello interlude', () => {
+  assert.deepEqual(portfolioChapters.map(({ id }) => id), ['about', 'projects', 'experience', 'shark']);
+  assert.equal(new Set(portfolioChapters.map(({ id }) => id)).size, 4);
 });
 
 test('all artwork references point to bundled transparent PNGs', () => {
@@ -50,10 +50,10 @@ test('shark and top Contact route through the same use case but show different c
   const { controller, output } = pipeline();
   controller.open('shark');
   controller.open('contact');
-  assert.equal(output[0].title, 'Beyond the Surface');
+  assert.equal(output[0].title, 'xxx');
   assert.equal(output[1].title, 'Contact me');
   assert.notDeepEqual(output[0].items, output[1].items);
-  assert.equal(portfolioChapters.length, 5);
+  assert.equal(portfolioChapters.length, 4);
   assert.equal(portfolioChapters.filter(({ id }) => id === 'contact').length, 0);
 });
 
@@ -73,9 +73,9 @@ test('narrow read gateway is substitutable with an injected stub', () => {
 
 test('presenter creates a new view model without mutating source entries', () => {
   const { controller, output } = pipeline();
-  controller.open('skills');
-  assert.notEqual(output[0].items, portfolioChapters[2].items);
-  assert.deepEqual(output[0].items, portfolioChapters[2].items);
+  controller.open('projects');
+  assert.notEqual(output[0].items, portfolioChapters[1].items);
+  assert.deepEqual(output[0].items, portfolioChapters[1].items);
 });
 
 test('only the requested handwritten titles and navigation appear on the main canvas', () => {
@@ -88,6 +88,7 @@ test('only the requested handwritten titles and navigation appear on the main ca
   assert.match(hero, /hero__contact-brush/);
   assert.match(section, /chapter.id === 'about'/);
   assert.match(section, /chapter.id === 'projects'/);
+  assert.match(journey, /className="hello-section"/);
   assert.match(journey, /onOpenChapter\('contact'\)/);
   for (const pattern of [/<header\b/, /<footer\b/, /<nav\b/, /<p\b/, /DISCOVER/, /SCROLL TO DIVE/]) {
     assert.ok(!pattern.test(jsx), `${pattern} should not appear on the canvas`);

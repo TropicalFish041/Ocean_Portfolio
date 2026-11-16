@@ -17,7 +17,7 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
      the last section, which fades to almost-black navy. */
   background: linear-gradient(180deg,
     #090f3d 0%,
-    #0b205b 16.6667%,
+    #0b205b 18.45%,
     #19396a 27%,
     #20436d 40%,
     #1a365e 55%,
@@ -130,8 +130,7 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 /* Visual hierarchy, not a strict cm-to-pixel scale: butterflyfish is a school,
    shark artwork includes pilot fish, and all scenes must remain clickable. */
 .chapter-section--about { --fish-max: 510px; }
-.chapter-section--projects { --fish-max: 430px; }
-.chapter-section--skills { --fish-max: 230px; }
+.chapter-section--projects { --fish-max: 230px; }
 .chapter-section--experience { --fish-max: 750px; }
 .chapter-section--shark { --fish-max: 1120px; }
 .chapter-section--shark .fish-button { transform: translateX(0); animation-name: fish-float-center; }
@@ -186,9 +185,8 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   .fish-button, .chapter-section--alternate .fish-button { width: min(var(--fish-max, 790px), 88vw); transform: translateX(-3vw); }
   .chapter-section--alternate .fish-button { transform: translateX(3vw); }
   .chapter-section--about { --fish-max: 370px; }
-  .chapter-section--projects { --fish-max: 340px; }
-  .chapter-section--skills { --fish-max: 220px; }
-  .chapter-section--experience { --fish-max: 490px; }
+  .chapter-section--projects { --fish-max: 220px; }
+    .chapter-section--experience { --fish-max: 490px; }
   .chapter-section--shark { --fish-max: 690px; }
   .chapter-section--shark .fish-button { transform: none; }
   .detail-dialog { width: calc(100vw - 24px); height: 82dvh; max-height: 900px; border-radius: 15px; }
@@ -357,4 +355,43 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero__scroll-cue { transition: none; }
+}
+
+/* A short handwritten pause between the sea and the first fish. */
+.hello-section {
+  position: relative;
+  z-index: 1;
+  min-height: 42svh;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', 'Comic Neue', cursive;
+  font-size: clamp(55px, 8vw, 116px);
+  letter-spacing: -.05em;
+  text-shadow: 0 3px 20px #040c27a0;
+}
+/* A single entrance/exit transform. The old floating animation uses the separate
+   CSS translate property, so it does not interfere with this scroll transition. */
+.chapter-section { --swim-rest-x: -13vw; --swim-off-x: -75vw; }
+.chapter-section--alternate { --swim-rest-x: 13vw; --swim-off-x: 75vw; }
+.chapter-section--shark { --swim-rest-x: 0vw; --swim-off-x: 75vw; }
+.chapter-section .fish-button {
+  opacity: 0;
+  transform: translateX(var(--swim-off-x));
+  transition: transform 1.35s cubic-bezier(.16,.68,.21,1), opacity 1.05s ease;
+  will-change: transform, opacity;
+}
+.chapter-section--in-view .fish-button {
+  opacity: 1;
+  transform: translateX(var(--swim-rest-x));
+}
+.chapter-section .chapter-section__label { opacity: 0; transition: opacity .75s ease .18s; }
+.chapter-section--in-view .chapter-section__label { opacity: 1; }
+@media (max-width:700px) {
+  .chapter-section { --swim-rest-x: -3vw; --swim-off-x: -96vw; }
+  .chapter-section--alternate { --swim-rest-x: 3vw; --swim-off-x: 96vw; }
+  .chapter-section--shark { --swim-rest-x: 0vw; --swim-off-x: 96vw; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chapter-section .fish-button, .chapter-section .chapter-section__label { transition: none; }
 }

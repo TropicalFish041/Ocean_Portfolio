@@ -13,12 +13,15 @@ interface Props {
   onCloseChapter: () => void;
 }
 
-/** Presentation composes the hero, chapter scenes, and the existing detail dialog. */
+/** Presentation only: original hero, a short greeting, then four swimming scenes. */
 export default function OceanJourney({ chapters, activeChapter, onOpenChapter, onCloseChapter }: Props) {
   return (
     <>
       <main className="ocean-world" aria-label="Underwater portfolio">
         <Hero onContact={() => onOpenChapter('contact')} />
+        <section className="hello-section" id="hello" aria-label="Introduction">
+          <span>Hello</span>
+        </section>
         {chapters.map((chapter, index) => (
           <ChapterSection key={chapter.id} chapter={chapter} index={index} onOpen={onOpenChapter} />
         ))}

@@ -13,19 +13,19 @@ test('night scene and original impasto texture are preserved', () => {
   assert.match(css, /--sea-horizon/);
   assert.match(css, /\.gif-firework--reflection/);
   assert.ok(statSync(join(root, 'public/ocean/night-seascape.png')).size > 100_000);
-  assert.equal(JSON.parse(read('data/chapters.json')).length, 5);
+  assert.equal(JSON.parse(read('data/chapters.json')).length, 4);
 });
 
 test('continuous lighter-to-abyss gradient and visible lower texture', () => {
-  assert.match(css, /#0b205b 16\.6667%/);
+  assert.match(css, /#0b205b 18\.45%/);
   assert.match(css, /#010512 100%/);
   assert.match(css, /\.ocean-world::before/);
   assert.match(css, /\.ocean-world::after/);
   assert.match(css, /background-size: 1120px 1120px/);
 });
 
-test('fish scaling is editable through five named CSS variables', () => {
-  for (const id of ['about', 'projects', 'skills', 'experience', 'shark']) {
+test('fish scaling is editable through four named CSS variables', () => {
+  for (const id of ['about', 'projects', 'experience', 'shark']) {
     assert.match(css, new RegExp('\\.chapter-section--' + id + '\\s*\\{\\s*--fish-max:'));
   }
   assert.match(css, /width: min\(var\(--fish-max/);
@@ -49,9 +49,32 @@ test('original staggered single-burst fireworks and handwritten nav are still th
   }
 });
 
-test('offline preview has independent contact and five fish chapters', () => {
+test('offline preview has independent contact and four fish chapters', () => {
   const offline = read('scripts/create-offline-preview.mjs');
   assert.match(offline, /data\/contact\.json/);
   assert.match(offline, /JSON\.stringify\(\[\.\.\.chapters, contact\]\)/);
   assert.match(offline, /firework-frames/);
+});
+
+
+test('hello interlude, viewport-triggered swim and five PNG frames per fish', () => {
+  const section = read('view/ChapterSection.tsx');
+  const journey = read('view/OceanJourney.tsx');
+  const chapters = JSON.parse(read('data/chapters.json'));
+  assert.match(journey, /className="hello-section"/);
+  assert.match(journey, /<span>Hello<\/span>/);
+  assert.match(hero, /href="#hello"/);
+  assert.match(section, /IntersectionObserver/);
+  assert.match(section, /frameMs/);
+  assert.match(section, /setFrame\(previous => \(previous \+ 1\) % 5\)/);
+  assert.match(css, /chapter-section--in-view/);
+  assert.deepEqual(chapters.map(c => c.id), ['about','projects','experience','shark']);
+  assert.equal(chapters[1].image, '/fish/peppermint-angelfish.png');
+  assert.equal(chapters[1].title, 'Projects & Experience');
+  assert.equal(chapters[1].items.length, 6);
+  const folders = ['butterflyfish','peppermint-angelfish','opah','shark'];
+  for (const folder of folders) for (let frame=0;frame<5;frame++) {
+    assert.ok(statSync(join(root,'public/fish/frames',folder,`${frame}.png`)).size > 1000);
+  }
+  assert.match(read('scripts/create-offline-preview.mjs'), /swimJS/);
 });
