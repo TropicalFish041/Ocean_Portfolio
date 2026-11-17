@@ -137,8 +137,8 @@ test('reef ends are no longer clipped and shark enters from the left', () => {
   assert.match(css, /\.chapter-section \{ overflow: visible; \}/);
   assert.match(css, /\.coral-reef--about/);
   assert.match(css, /\.coral-reef--projects/);
-  assert.match(css, /\.chapter-section--shark \{ --swim-rest-x: 0vw; --swim-off-x: -75vw; \}/);
-  assert.match(css, /\.coral-reef \{ opacity: \.88; \}/);
+  assert.match(css, /\.chapter-section--shark \{ --swim-rest-x: -13vw; --swim-off-x: -75vw; \}/);
+  assert.match(css, /\.coral-reef \{ --reef-edge-overhang: 10px; opacity: \.88; \}/);
 });
 
 test('four centered handwritten labels and two new moving underwater cutouts', () => {

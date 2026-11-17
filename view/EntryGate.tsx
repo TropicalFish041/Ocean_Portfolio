@@ -29,6 +29,8 @@ export default function EntryGate() {
     for (let i = 0; i < SKY_FRAMES; i++) {
       const image = new Image();
       image.src = `/intro/sky-${i}.png`;
+      const front = new Image();
+      front.src = `/intro/sky-front-${i}.png`;
     }
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const timer = window.setInterval(() => {
@@ -62,7 +64,7 @@ export default function EntryGate() {
       <div className="entry-gate__cloud-stack" aria-hidden="true">
         {[0, 1, 2].map(layer => (
           <div className={`entry-gate__cloud-layer entry-gate__cloud-layer--${layer + 1}`} key={layer}>
-            <img src={`/intro/sky-${frame}.png`} alt="" draggable={false} />
+            <img src={layer === 0 ? `/intro/sky-front-${frame}.png` : `/intro/sky-${frame}.png`} alt="" draggable={false} />
           </div>
         ))}
       </div>

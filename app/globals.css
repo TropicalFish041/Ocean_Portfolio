@@ -18,8 +18,10 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   background: linear-gradient(180deg,
     #090f3d 0%,
     #071b59 18.45%, /* matches the painted sea at the hero boundary */
-    #0738a7 27%,
-    #0036b1 40%, /* richer International Klein Blue family */
+    #0a245e 27%, /* near-surface fish stays close to the darker painted waves */
+    #0b2a70 35%,
+    #0b2e80 40%,
+    #0337a9 45%, /* rejoin the original gradient; later sections are unchanged */
     #083899 55%,
     #0b2b76 71%,
     #071c49 85%,
@@ -341,7 +343,7 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 /* Move text toward the visual center while keeping the same handwritten style. */
 .chapter-section--about .chapter-section__label { right: clamp(20px, 11vw, 180px); }
 .chapter-section--projects .chapter-section__label { left: clamp(20px, 13vw, 200px); }
-.chapter-section--shark .chapter-section__label { right: clamp(20px, 8vw, 124px); }
+.chapter-section--shark .chapter-section__label { right: clamp(24px, 14vw, 205px); }
 .chapter-section--experience .chapter-section__label { left: clamp(20px, 12vw, 184px); }
 @media (max-width: 700px) {
   .hero__handwritten-name { top: 98px; max-width: 95vw; font-size: clamp(34px, 8vw, 53px); }
@@ -405,7 +407,7 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
    safely beyond the viewport. .ocean-world clips the overflow at the screen edge. */
 .chapter-section { overflow: visible; }
 .coral-reef {
-  --reef-edge-overhang: clamp(48px, 9vw, 140px); /* change to hide more/less of the side */
+  --reef-edge-overhang: 10px; /* exactly 10px of the artwork extends past the side */
   position: absolute;
   z-index: 0;
   bottom: 0;
@@ -443,7 +445,7 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   to { transform: rotate(1.2deg) translateY(-4px); }
 }
 @media (max-width: 700px) {
-  .coral-reef { --reef-edge-overhang: clamp(38px, 11vw, 90px); opacity: .88; }
+  .coral-reef { --reef-edge-overhang: 10px; opacity: .88; }
   .coral-reef--about { width: min(56vw, 310px); }
   .coral-reef--projects { width: min(55vw, 300px); }
   .coral-reef--shark { width: min(56vw, 320px); }
