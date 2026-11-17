@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 
 const SKY_FRAMES = 3;
-const SKY_FRAME_MS = 1100;
-const EXIT_MS = 1150;
+const SKY_FRAME_MS = 1100; // preserve the existing three-frame cadence
+const EXIT_MS = 4400; // three descents: about 1.0s, 1.35s, then 2.05s
 
-/** A visual entry curtain. The downward-camera effect reveals the unchanged page. */
+/** Three successive cloud sheets reveal the ocean, without changing page navigation. */
 export default function EntryGate() {
   const [frame, setFrame] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -16,27 +16,31 @@ export default function EntryGate() {
     if (finished) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('ocean-entry-active');
     window.scrollTo(0, 0);
-    return () => { document.body.style.overflow = previousOverflow; };
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.classList.remove('ocean-entry-active');
+    };
   }, [finished]);
 
   useEffect(() => {
-    if (leaving || finished || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    // Prefetch all frames, so playback does not flash during the first cycle.
+    if (finished) return;
     for (let i = 0; i < SKY_FRAMES; i++) {
       const image = new Image();
       image.src = `/intro/sky-${i}.png`;
     }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const timer = window.setInterval(() => {
       if (!document.hidden) setFrame(previous => (previous + 1) % SKY_FRAMES);
     }, SKY_FRAME_MS);
     return () => window.clearInterval(timer);
-  }, [leaving, finished]);
+  }, [finished]);
 
   useEffect(() => {
     if (!leaving) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const timer = window.setTimeout(() => setFinished(true), reduced ? 0 : EXIT_MS);
+    const timer = window.setTimeout(() => setFinished(true), reduced ? 150 : EXIT_MS);
     return () => window.clearTimeout(timer);
   }, [leaving]);
 
@@ -47,8 +51,14 @@ export default function EntryGate() {
       onClick={() => setLeaving(true)}
       disabled={leaving}
       aria-label="Click to explore the ocean portfolio">
-      <img src={`/intro/sky-${frame}.png`} alt="" aria-hidden="true" draggable={false}/>
-      <span>click to explore</span>
+      <div className="entry-gate__cloud-stack" aria-hidden="true">
+        {[0, 1, 2].map(layer => (
+          <div className="entry-gate__cloud-layer" key={layer}>
+            <img src={`/intro/sky-${frame}.png`} alt="" draggable={false} />
+          </div>
+        ))}
+      </div>
+      <span className="entry-gate__prompt">click to explore</span>
     </button>
   );
 }

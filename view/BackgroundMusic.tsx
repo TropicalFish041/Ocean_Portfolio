@@ -36,12 +36,18 @@ export default function BackgroundMusic() {
         fadeFrame = requestAnimationFrame(fade);
       }).catch(() => { attempting = false; });
     }
+    // Attempt at mount, again as the OGG becomes playable, and on page restore.
+    // Browsers that block audible autoplay still require a real user gesture.
     start();
+    audio.addEventListener('canplay', start);
+    window.addEventListener('pageshow', start);
     window.addEventListener('pointerdown', start);
     window.addEventListener('keydown', start);
     return () => {
       cancelled = true;
       cancelAnimationFrame(fadeFrame);
+      audio.removeEventListener('canplay', start);
+      window.removeEventListener('pageshow', start);
       window.removeEventListener('pointerdown', start);
       window.removeEventListener('keydown', start);
       audio.pause();
