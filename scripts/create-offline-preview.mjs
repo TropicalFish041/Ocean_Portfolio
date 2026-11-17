@@ -9,7 +9,10 @@ const skyFrames = Array.from({ length: 3 }, (_, i) => 'data:image/png;base64,' +
 const nightFrames = Array.from({ length: 3 }, (_, i) => 'data:image/png;base64,' + readFileSync(join(root, 'public/ocean', `night-frame-${i}.png`)).toString('base64'));
 const boatSource = 'data:image/png;base64,' + readFileSync(join(root, 'public/ocean/boat.png')).toString('base64');
 const audioSource = 'data:audio/ogg;base64,' + readFileSync(join(root, 'public/audio/background.ogg')).toString('base64');
-const coralSources = { about: 'data:image/png;base64,' + readFileSync(join(root, 'public/coral/reef-about.png')).toString('base64'), projects: 'data:image/png;base64,' + readFileSync(join(root, 'public/coral/reef-projects.png')).toString('base64') };
+const coralSources = Object.fromEntries(Object.entries({
+  about: 'reef-about.png', projects: 'reef-projects.png',
+  shark: 'reef-shark.png', experience: 'kelp-experience.png',
+}).map(([id, filename]) => [id, 'data:image/png;base64,' + readFileSync(join(root, 'public/coral', filename)).toString('base64')]));
 const frameSources = Array.from({ length: 5 }, (_, i) => 'data:image/png;base64,' + readFileSync(join(root, 'public/animations/firework-frames', `${i}.png`)).toString('base64'));
 const css = readFileSync(join(root, 'app/globals.css'), 'utf8')
   .replaceAll("url('/textures/impasto-relief.webp')", `url('data:image/webp;base64,${paintTexture}')`);
@@ -26,8 +29,8 @@ const contact = JSON.parse(readFileSync(join(root, 'data/contact.json'), 'utf8')
 const esc = (str) => String(str).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 const scenes = chapters.map((chapter, index) => {
   const image = fishFrameSources[chapter.id][0];
-  const label = chapter.id === 'about' ? 'About Me' : chapter.id === 'projects' ? 'Experience' : '';
-  const reef = coralSources[chapter.id] ? `<img class="coral-reef coral-reef--${esc(chapter.id)}" src="${coralSources[chapter.id]}" alt="" aria-hidden="true"/>` : '';
+  const label = { about: 'About Me', projects: 'Experience', shark: 'Arts', experience: 'Interests' }[chapter.id] || '';
+  const reef = coralSources[chapter.id] ? `<img class="coral-reef ${chapter.id === 'experience' ? 'kelp-forest--experience' : `coral-reef--${esc(chapter.id)}`} " src="${coralSources[chapter.id]}" alt="" aria-hidden="true"/>` : '';
   return `<section class="chapter-section chapter-section--${esc(chapter.id)} ${index % 2 ? 'chapter-section--alternate' : ''}" id="${esc(chapter.id)}" aria-label="${esc(chapter.fishName)}">${reef}<button class="fish-button" type="button" aria-label="Open ${esc(chapter.title)}" data-chapter="${esc(chapter.id)}"><img class="fish-button__image" src="${image}" alt="" draggable="false" loading="${index ? 'lazy' : 'eager'}" /></button>${label ? chapter.id === 'about'
   ? `<div class="chapter-section__label" aria-hidden="true"><span>About Me</span><span class="chapter-section__explore"><span>Click to explore</span><svg viewBox="0 0 44 24" fill="none" aria-hidden="true"><path d="M40 12H4M14 3L4 12L14 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>`
   : `<span class="chapter-section__label" aria-hidden="true">${label}</span>` : ''}</section>`;

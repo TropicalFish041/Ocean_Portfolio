@@ -60,14 +60,21 @@ export default function Hero({ onContact }: HeroProps) {
   useEffect(() => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduceMotion) return;
-    for (let i = 0; i < 3; i++) {
+    let cancelled = false;
+    let timer: number | undefined;
+    const images = Array.from({ length: 3 }, (_, index) => {
       const image = new Image();
-      image.src = `/ocean/night-frame-${i}.png`;
-    }
-    const timer = window.setInterval(() => {
-      if (!document.hidden) setNightFrame(previous => (previous + 1) % 3);
-    }, NIGHT_FRAME_MS);
-    return () => window.clearInterval(timer);
+      image.src = `/ocean/night-frame-${index}.png`;
+      return image;
+    });
+    // Decode all frames before the first swap, while the opening clouds are visible.
+    void Promise.all(images.map(image => image.decode().catch(() => undefined))).then(() => {
+      if (cancelled) return;
+      timer = window.setInterval(() => {
+        if (!document.hidden) setNightFrame(previous => (previous + 1) % 3);
+      }, NIGHT_FRAME_MS);
+    });
+    return () => { cancelled = true; if (timer !== undefined) window.clearInterval(timer); };
   }, []);
 
   // object-fit: cover crops the painting. Position reflections at the visible waterline.

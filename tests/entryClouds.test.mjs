@@ -23,7 +23,7 @@ test('opening sky keeps three PNG frames and the unchanged 1100ms cycle', () => 
   }
 });
 
-test('independently positioned transparent clouds meet exact 2/5 and 4/5 alignment', () => {
+test('independently positioned transparent clouds meet exact 1/5 and 2/5 alignment', () => {
   assert.match(entry, /\[0, 1, 2\]\.map\(layer/);
   assert.match(entry, /entry-gate__cloud-layer--\$\{layer \+ 1\}/);
   assert.match(css, /\.entry-gate__cloud-stack\s*\{[^}]*height: 110dvh/s);
@@ -32,9 +32,9 @@ test('independently positioned transparent clouds meet exact 2/5 and 4/5 alignme
     assert.ok(m, `layer ${n} has own top position`);
     return Number(m[1]);
   });
-  assert.deepEqual(tops, [-25, 15, 95]);
-  assert.equal(tops[1] - tops[0], 40);
-  assert.equal(tops[2] - tops[1], 80);
+  assert.deepEqual(tops, [-25, -5, 35]);
+  assert.equal(tops[1] - tops[0], 20);
+  assert.equal(tops[2] - tops[1], 40);
   assert.match(css, /\.entry-gate__cloud-layer--2 img,[\s\S]*?mask-image: linear-gradient\(to bottom, transparent 0%/);
 });
 
@@ -51,14 +51,15 @@ test('all clouds travel UP, with front faster than middle faster than rear', () 
   const speeds = parameters.map(({ ms, distance }) => distance / ms);
   assert.ok(speeds[0] > speeds[1] && speeds[1] > speeds[2], 'strict speed ordering');
   // All three are completely above the viewport before removing the gate.
-  const starts = [-27.5, 16.5, 104.5]; // top percentages * 110dvh
+  const starts = [-27.5, -5.5, 38.5]; // top percentages * 110dvh
   parameters.forEach(({ distance }, i) => assert.ok(starts[i] + 110 - distance < 0));
   assert.match(entry, /EXIT_MS = 4650/);
 });
 
 test('main scene is already mounted and starts moving with the first cloud', () => {
   assert.match(entry, /document\.body\.classList\.add\('ocean-entry-leaving'\)/);
-  assert.match(css, /\.ocean-entry-active:not\(\.ocean-entry-leaving\) \.hero__painted-scene \{ animation-play-state: paused;/);
+  assert.doesNotMatch(css, /animation-play-state: paused/);
+  assert.match(css, /backface-visibility: hidden/);
   assert.match(css, /sea-camera-rock 6\.4s/);
   const camera = css.match(/@keyframes sea-camera-rock \{([\s\S]*?)\}/)?.[1] ?? '';
   assert.doesNotMatch(camera, /scale\(/);

@@ -17,7 +17,7 @@ test('night scene and original impasto texture are preserved', () => {
 });
 
 test('continuous lighter-to-abyss gradient and visible lower texture', () => {
-  assert.match(css, /#0e2d7c 18\.45%/);
+  assert.match(css, /#071b59 18\.45%/);
   assert.match(css, /#010512 100%/);
   assert.match(css, /\.ocean-world::before/);
   assert.match(css, /\.ocean-world::after/);
@@ -138,5 +138,18 @@ test('reef ends are no longer clipped and shark enters from the left', () => {
   assert.match(css, /\.coral-reef--about/);
   assert.match(css, /\.coral-reef--projects/);
   assert.match(css, /\.chapter-section--shark \{ --swim-rest-x: 0vw; --swim-off-x: -75vw; \}/);
-  assert.match(css, /\.coral-reef \{ bottom: 0; opacity: \.88; \}/);
+  assert.match(css, /\.coral-reef \{ opacity: \.88; \}/);
+});
+
+test('four centered handwritten labels and two new moving underwater cutouts', () => {
+  const component = read('view/ChapterSection.tsx');
+  for (const label of ['About Me','Experience','Arts','Interests']) assert.match(component, new RegExp('>' + label + '<'));
+  for (const name of ['reef-shark.png','kelp-experience.png']) {
+    assert.ok(statSync(join(root, 'public/coral', name)).size > 100_000);
+  }
+  assert.match(component, /coral-reef--shark/);
+  assert.match(component, /kelp-forest--experience/);
+  assert.match(css, /bottom: -14svh/);
+  assert.match(css, /coral-sway/);
+  assert.match(css, /\.chapter-section--experience \.chapter-section__label/);
 });

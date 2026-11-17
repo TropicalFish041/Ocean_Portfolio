@@ -8,7 +8,7 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 
 /* Match the painted nighttime water at the surface, then deepen gradually.
    The surface hero fades to --surface-blue, exactly the color at its lower edge. */
-:root { --surface-blue: #0e2d7c; }
+:root { --surface-blue: #071b59; }
 .ocean-world {
   position: relative;
   isolation: isolate;
@@ -17,12 +17,12 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
      the last section, which fades to almost-black navy. */
   background: linear-gradient(180deg,
     #090f3d 0%,
-    #0e2d7c 18.45%,
-    #19459a 27%,
-    #1d4d9d 40%,
-    #163a81 55%,
-    #112d67 71%,
-    #091c47 85%,
+    #071b59 18.45%, /* matches the painted sea at the hero boundary */
+    #0738a7 27%,
+    #0036b1 40%, /* richer International Klein Blue family */
+    #083899 55%,
+    #0b2b76 71%,
+    #071c49 85%,
     #040f25 94%,
     #010512 100%);
 }
@@ -81,7 +81,7 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 .hero__fade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 62%, #0e2d7c0d 76%, #0e2d7c9c 92%, var(--surface-blue) 100%);
+  background: linear-gradient(to bottom, transparent 62%, #071b590d 76%, #071b599c 92%, var(--surface-blue) 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -129,9 +129,9 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 }
 /* Visual hierarchy, not a strict cm-to-pixel scale: butterflyfish is a school,
    shark artwork includes pilot fish, and all scenes must remain clickable. */
-.chapter-section--about { --fish-max: 510px; }
-.chapter-section--projects { --fish-max: 230px; }
-.chapter-section--experience { --fish-max: 750px; }
+.chapter-section--about { --fish-max: 600px; }
+.chapter-section--projects { --fish-max: 300px; }
+.chapter-section--experience { --fish-max: 900px; }
 .chapter-section--shark { --fish-max: 1120px; }
 .chapter-section--shark .fish-button { transform: translateX(0); animation-name: fish-float-center; }
 
@@ -330,7 +330,7 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 .chapter-section__label {
   position: absolute;
   z-index: 2;
-  top: 49%;
+  top: 50%;
   transform: translateY(-50%);
   font-size: clamp(42px, 5.4vw, 80px);
   line-height: 1.3;
@@ -338,8 +338,11 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   white-space: nowrap;
   pointer-events: none;
 }
-.chapter-section--about .chapter-section__label { right: clamp(24px, 7vw, 140px); }
-.chapter-section--projects .chapter-section__label { left: clamp(24px, 7vw, 140px); }
+/* Move text toward the visual center while keeping the same handwritten style. */
+.chapter-section--about .chapter-section__label { right: clamp(20px, 11vw, 180px); }
+.chapter-section--projects .chapter-section__label { left: clamp(20px, 13vw, 200px); }
+.chapter-section--shark .chapter-section__label { right: clamp(20px, 8vw, 124px); }
+.chapter-section--experience .chapter-section__label { left: clamp(20px, 12vw, 184px); }
 @media (max-width: 700px) {
   .hero__handwritten-name { top: 98px; max-width: 95vw; font-size: clamp(34px, 8vw, 53px); }
   .hero__contact-brush { top: 16px; right: 11px; }
@@ -350,8 +353,10 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
     transform: none;
     font-size: clamp(36px, 8.8vw, 53px);
   }
-  .chapter-section--about .chapter-section__label { right: 5vw; }
-  .chapter-section--projects .chapter-section__label { left: 5vw; }
+  .chapter-section--about .chapter-section__label,
+  .chapter-section--shark .chapter-section__label { right: 6vw; }
+  .chapter-section--projects .chapter-section__label,
+  .chapter-section--experience .chapter-section__label { left: 6vw; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero__scroll-cue { transition: none; }
@@ -374,7 +379,7 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
    CSS translate property, so it does not interfere with this scroll transition. */
 .chapter-section { --swim-rest-x: -13vw; --swim-off-x: -75vw; }
 .chapter-section--alternate { --swim-rest-x: 13vw; --swim-off-x: 75vw; }
-.chapter-section--shark { --swim-rest-x: 0vw; --swim-off-x: -75vw; }
+.chapter-section--shark { --swim-rest-x: -13vw; --swim-off-x: -75vw; }
 .chapter-section .fish-button {
   opacity: 0;
   transform: translateX(var(--swim-off-x));
@@ -410,8 +415,16 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   animation: coral-sway 7.8s ease-in-out infinite alternate;
   filter: drop-shadow(0 18px 24px #05142b28);
 }
-.coral-reef--about { left: 0; width: min(34vw, 500px); }
-.coral-reef--projects { right: 0; width: min(35vw, 520px); animation-delay: -3.8s; }
+.coral-reef--about { left: -10; width: min(34vw, 500px); }
+.coral-reef--projects { right: -10; width: min(35vw, 520px); animation-delay: -3.8s; }
+.coral-reef--shark { left: -10; width: min(36vw, 520px); animation-delay: -1.9s; }
+.kelp-forest--experience {
+  right: -10;
+  width: min(39vw, 570px);
+  bottom: -14svh; /* sink the plant roots beyond the bottom of the page */
+  transform-origin: 52% 100%;
+  animation-delay: -2.4s;
+}
 .chapter-section .fish-button { z-index: 1; }
 @keyframes coral-sway {
   from { transform: rotate(-1.3deg) translateY(3px); }
@@ -420,15 +433,17 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 @media (max-width: 700px) {
   .coral-reef--about { left: 0; width: min(56vw, 310px); }
   .coral-reef--projects { right: 0; width: min(55vw, 300px); }
-  .coral-reef { bottom: 0; opacity: .88; }
+  .coral-reef--shark { right: 0; width: min(56vw, 320px); }
+  .kelp-forest--experience { left: 0; width: min(58vw, 400px); bottom: -12svh; }
+  .coral-reef { opacity: .88; }
 }
 @media (prefers-reduced-motion: reduce) { .coral-reef { animation: none; } }
 
 /* Three repeated painted cloud sheets: a camera descending through three depths.
    Each consecutive 100dvh sweep takes longer (0.99s, 1.36s, 2.05s). */
 /* Three TRANSPARENT clouds in one 110dvh coordinate system.
-   Sheet 2 top = sheet 1 top + 2/5 of sheet height (-25% + 40% = 15%).
-   Sheet 3 top = sheet 2 top + 4/5 of sheet height (15% + 80% = 95%).
+   Sheet 2 top = sheet 1 top + 1/5 of sheet height (-25% + 20% = -5%).
+   Sheet 3 top = sheet 2 top + 2/5 of sheet height (-5% + 40% = 35%).
    Front is painted above middle, which is above rear. */
 .entry-gate {
   position: fixed;
@@ -478,8 +493,8 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   transform: translate3d(0, 0, 0);
 }
 .entry-gate__cloud-layer--1 { top: -25%; z-index: 3; }
-.entry-gate__cloud-layer--2 { top: 15%; z-index: 2; }
-.entry-gate__cloud-layer--3 { top: 95%; z-index: 1; }
+.entry-gate__cloud-layer--2 { top: -5%; z-index: 2; }
+.entry-gate__cloud-layer--3 { top: 35%; z-index: 1; }
 .entry-gate__cloud-layer img {
   display: block;
   width: 100%;
@@ -529,6 +544,9 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   overflow: hidden;
   pointer-events: none;
   transform-origin: 50% 57%;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform;
   animation: sea-camera-rock 6.4s ease-in-out infinite alternate;
 }
 .hero__painted-scene .hero__seascape { width: 100%; height: 100%; }
@@ -541,16 +559,16 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 }
 .hero__boat { display: block; width: 100%; height: 100%; object-fit: cover; }
 @keyframes sea-camera-rock {
-  from { transform: translate3d(-.65%, .25%, 0) rotate(-.32deg); }
-  to   { transform: translate3d(.65%, -.25%, 0) rotate(.32deg); }
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  25% { transform: translate3d(-.65%, .25%, 0) rotate(-.32deg); }
+  75% { transform: translate3d(.65%, -.25%, 0) rotate(.32deg); }
 }
 @keyframes boat-rock {
   from { transform: translateY(3px) rotate(-.85deg); }
   to   { transform: translateY(-3px) rotate(.85deg); }
 }
-/* Freeze the scene at the first keyframe behind the entry curtain, then start
-   the faster rocking smoothly, without an abrupt scale change at reveal. */
-.ocean-entry-active:not(.ocean-entry-leaving) .hero__painted-scene { animation-play-state: paused; }
+/* Keep the camera moving behind the curtain from the first paint.
+   No pause/unpause or first-frame transform handoff at the reveal boundary. */
 @media (prefers-reduced-motion: reduce) {
   .entry-gate--leaving .entry-gate__cloud-layer { animation: none; opacity: 0; }
   .entry-gate--leaving::before { opacity: 0; transition-duration: 0ms; }

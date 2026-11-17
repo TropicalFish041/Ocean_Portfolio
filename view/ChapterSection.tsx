@@ -104,6 +104,14 @@ export default function ChapterSection({ chapter, index, onOpen }: Props) {
         <img className="coral-reef coral-reef--projects" src="/coral/reef-projects.png"
           alt="" aria-hidden="true" draggable={false} loading="lazy" />
       )}
+      {chapter.id === 'shark' && (
+        <img className="coral-reef coral-reef--shark" src="/coral/reef-shark.png"
+          alt="" aria-hidden="true" draggable={false} loading="lazy" />
+      )}
+      {chapter.id === 'experience' && (
+        <img className="coral-reef kelp-forest--experience" src="/coral/kelp-experience.png"
+          alt="" aria-hidden="true" draggable={false} loading="lazy" />
+      )}
       <button className="fish-button" type="button" onClick={openIfPainted}
         aria-label={`Open ${chapter.title} via ${chapter.fishName}`}>
         <img ref={imageRef} className="fish-button__image" src={src} alt=""
@@ -122,6 +130,8 @@ export default function ChapterSection({ chapter, index, onOpen }: Props) {
         </div>
       )}
       {chapter.id === 'projects' && <span className="chapter-section__label" aria-hidden="true">Experience</span>}
+      {chapter.id === 'shark' && <span className="chapter-section__label" aria-hidden="true">Arts</span>}
+      {chapter.id === 'experience' && <span className="chapter-section__label" aria-hidden="true">Interests</span>}
     </section>
   );
 }
