@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 
 const SKY_FRAMES = 3;
-const SKY_FRAME_MS = 1100; // preserve the existing three-frame cadence
-const EXIT_MS = 4400; // three descents: about 1.0s, 1.35s, then 2.05s
+const SKY_FRAME_MS = 1100; // unchanged cadence
+const EXIT_MS = 4650; // slightly longer than the slowest cloud layer
 
-/** Three successive cloud sheets reveal the ocean, without changing page navigation. */
+/** Three overlapping transparent PNG sheets; each exits upward at its own speed. */
 export default function EntryGate() {
   const [frame, setFrame] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -20,7 +20,7 @@ export default function EntryGate() {
     window.scrollTo(0, 0);
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.body.classList.remove('ocean-entry-active');
+      document.body.classList.remove('ocean-entry-active', 'ocean-entry-leaving');
     };
   }, [finished]);
 
@@ -44,16 +44,24 @@ export default function EntryGate() {
     return () => window.clearTimeout(timer);
   }, [leaving]);
 
+  const enter = () => {
+    if (leaving) return;
+    // The main scene is already mounted and images already requested.
+    // Unpause its camera as soon as the first sheet begins moving.
+    document.body.classList.add('ocean-entry-leaving');
+    setLeaving(true);
+  };
+
   if (finished) return null;
   return (
     <button type="button"
       className={`entry-gate${leaving ? ' entry-gate--leaving' : ''}`}
-      onClick={() => setLeaving(true)}
+      onClick={enter}
       disabled={leaving}
       aria-label="Click to explore the ocean portfolio">
       <div className="entry-gate__cloud-stack" aria-hidden="true">
         {[0, 1, 2].map(layer => (
-          <div className="entry-gate__cloud-layer" key={layer}>
+          <div className={`entry-gate__cloud-layer entry-gate__cloud-layer--${layer + 1}`} key={layer}>
             <img src={`/intro/sky-${frame}.png`} alt="" draggable={false} />
           </div>
         ))}

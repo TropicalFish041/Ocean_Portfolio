@@ -426,6 +426,10 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 
 /* Three repeated painted cloud sheets: a camera descending through three depths.
    Each consecutive 100dvh sweep takes longer (0.99s, 1.36s, 2.05s). */
+/* Three TRANSPARENT clouds in one 110dvh coordinate system.
+   Sheet 2 top = sheet 1 top + 2/5 of sheet height (-25% + 40% = 15%).
+   Sheet 3 top = sheet 2 top + 4/5 of sheet height (15% + 80% = 95%).
+   Front is painted above middle, which is above rear. */
 .entry-gate {
   position: fixed;
   inset: 0;
@@ -442,27 +446,41 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   color: #fff;
   isolation: isolate;
 }
+/* A temporary blue underpaint hides any transparency before entry.
+   It fades promptly so the already-mounted seascape appears on the first move. */
+.entry-gate::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(180deg, #080f3c, #112f7c 85%);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 1300ms ease-out;
+}
+.entry-gate--leaving::before { opacity: 0; }
 .entry-gate__cloud-stack {
   position: absolute;
-  inset: 0 0 auto;
+  left: 0;
+  top: 0;
   width: 100%;
-  height: 300dvh;
-  display: flex;
-  flex-direction: column;
+  height: 110dvh; /* all layer top percentages refer to this same height */
+  pointer-events: none;
+}
+.entry-gate__cloud-layer {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible; /* do not make a rectangular top/bottom crop */
   pointer-events: none;
   will-change: transform;
   transform: translate3d(0, 0, 0);
 }
-.entry-gate__cloud-layer {
-  flex: 0 0 100dvh;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  background: #2039a2; /* the transparent lower edge of the supplied painting */
-}
+.entry-gate__cloud-layer--1 { top: -25%; z-index: 3; }
+.entry-gate__cloud-layer--2 { top: 15%; z-index: 2; }
+.entry-gate__cloud-layer--3 { top: 95%; z-index: 1; }
 .entry-gate__cloud-layer img {
-  position: absolute;
-  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
@@ -470,9 +488,16 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   user-select: none;
   pointer-events: none;
 }
+/* The rear sheets enter the viewport through an invisible, feathered upper edge;
+   a flat image top never sweeps across the visible sky. */
+.entry-gate__cloud-layer--2 img,
+.entry-gate__cloud-layer--3 img {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 7%, #000 26%, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, transparent 7%, #000 26%, #000 100%);
+}
 .entry-gate__prompt {
   position: relative;
-  z-index: 1;
+  z-index: 4;
   font-family: 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', 'Comic Neue', cursive;
   font-size: clamp(16px, 1.75vw, 22px);
   font-weight: 400;
@@ -485,15 +510,15 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
   opacity: 0;
   transition: opacity 250ms ease;
 }
-.entry-gate--leaving .entry-gate__cloud-stack {
-  animation: cloud-descent 4400ms linear both;
-}
-@keyframes cloud-descent {
-  0%   { transform: translate3d(0, 0, 0); animation-timing-function: cubic-bezier(.44,.02,.56,1); }
-  22.5% { transform: translate3d(0, -100dvh, 0); animation-timing-function: cubic-bezier(.44,.02,.56,1); }
-  53.5% { transform: translate3d(0, -200dvh, 0); animation-timing-function: cubic-bezier(.44,.02,.56,1); }
-  100% { transform: translate3d(0, -300dvh, 0); }
-}
+/* Each layer moves UP independently: speed front > middle > rear.
+   Distances / durations: 220vh/1.90s > 195vh/3.05s > 240vh/4.50s.
+   The rear sheet begins lower, so it must travel farther to clear the viewport. */
+.entry-gate--leaving .entry-gate__cloud-layer--1 { animation: cloud-front-rise 1900ms linear both; }
+.entry-gate--leaving .entry-gate__cloud-layer--2 { animation: cloud-middle-rise 3050ms linear both; }
+.entry-gate--leaving .entry-gate__cloud-layer--3 { animation: cloud-rear-rise 4500ms linear both; }
+@keyframes cloud-front-rise { to { transform: translate3d(0, -220dvh, 0); } }
+@keyframes cloud-middle-rise { to { transform: translate3d(0, -195dvh, 0); } }
+@keyframes cloud-rear-rise { to { transform: translate3d(0, -240dvh, 0); } }
 .entry-gate:focus-visible { outline: 3px solid #fff; outline-offset: -8px; }
 
 /* Only the painting moves: headings, Contact, fireworks and reflections remain fixed. */
@@ -525,9 +550,10 @@ button:focus-visible { outline: 3px solid #fff0ad; outline-offset: 8px; }
 }
 /* Freeze the scene at the first keyframe behind the entry curtain, then start
    the faster rocking smoothly, without an abrupt scale change at reveal. */
-.ocean-entry-active .hero__painted-scene { animation-play-state: paused; }
+.ocean-entry-active:not(.ocean-entry-leaving) .hero__painted-scene { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
-  .entry-gate--leaving .entry-gate__cloud-stack { animation: none; opacity: 0; }
+  .entry-gate--leaving .entry-gate__cloud-layer { animation: none; opacity: 0; }
+  .entry-gate--leaving::before { opacity: 0; transition-duration: 0ms; }
   .entry-gate--leaving { pointer-events: none; }
   .hero__painted-scene, .hero__boat-rock { animation: none; }
 }

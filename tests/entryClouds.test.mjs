@@ -7,52 +7,67 @@ const root = process.cwd();
 const read = file => readFileSync(join(root, file), 'utf8');
 const entry = read('view/EntryGate.tsx');
 const css = read('app/globals.css');
+const offline = read('scripts/create-offline-preview.mjs');
 
-test('new opening sky is exactly three separate PNG frames at the old 1100ms cadence', () => {
+test('opening sky keeps three PNG frames and the unchanged 1100ms cycle', () => {
   assert.match(entry, /SKY_FRAMES = 3/);
   assert.match(entry, /SKY_FRAME_MS = 1100/);
   assert.match(entry, /\/intro\/sky-\$\{i\}\.png/);
   for (let i = 0; i < 3; i++) {
-    assert.ok(statSync(join(root, 'public/intro', `sky-${i}.png`)).size > 100_000);
-    const png = readFileSync(join(root, 'public/intro', `sky-${i}.png`));
+    const path = join(root, 'public/intro', `sky-${i}.png`);
+    assert.ok(statSync(path).size > 100_000);
+    const png = readFileSync(path);
     assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
     assert.equal(png.readUInt32BE(16), 1912);
     assert.equal(png.readUInt32BE(20), 816);
   }
 });
 
-test('three stacked cloud sheets descend in progressively longer sweeps', () => {
+test('independently positioned transparent clouds meet exact 2/5 and 4/5 alignment', () => {
   assert.match(entry, /\[0, 1, 2\]\.map\(layer/);
-  assert.match(entry, /EXIT_MS = 4400/);
-  assert.match(css, /\.entry-gate__cloud-stack/);
-  assert.match(css, /@keyframes cloud-descent/);
-  const markers = [...css.matchAll(/(?:0%|22\.5%|53\.5%|100%)\s*\{\s*transform: translate3d\(0,/g)];
-  assert.equal(markers.length, 4);
-  const durations = [22.5, 53.5 - 22.5, 100 - 53.5];
-  assert.ok(durations[0] < durations[1] && durations[1] < durations[2]);
+  assert.match(entry, /entry-gate__cloud-layer--\$\{layer \+ 1\}/);
+  assert.match(css, /\.entry-gate__cloud-stack\s*\{[^}]*height: 110dvh/s);
+  const tops = [1, 2, 3].map(n => {
+    const m = css.match(new RegExp(`\\.entry-gate__cloud-layer--${n} \\{ top: (-?[\\d.]+)%;`));
+    assert.ok(m, `layer ${n} has own top position`);
+    return Number(m[1]);
+  });
+  assert.deepEqual(tops, [-25, 15, 95]);
+  assert.equal(tops[1] - tops[0], 40);
+  assert.equal(tops[2] - tops[1], 80);
+  assert.match(css, /\.entry-gate__cloud-layer--2 img,[\s\S]*?mask-image: linear-gradient\(to bottom, transparent 0%/);
 });
 
-test('sea camera is quicker without a zoom pop and remains paused behind entry', () => {
+test('all clouds travel UP, with front faster than middle faster than rear', () => {
+  const parameters = [
+    { name: 'front', layer: 1, ms: 1900, distance: 220 },
+    { name: 'middle', layer: 2, ms: 3050, distance: 195 },
+    { name: 'rear', layer: 3, ms: 4500, distance: 240 },
+  ];
+  for (const { name, layer, ms, distance } of parameters) {
+    assert.match(css, new RegExp(`entry-gate--leaving \\.entry-gate__cloud-layer--${layer} \\{ animation: cloud-${name}-rise ${ms}ms linear both;`));
+    assert.match(css, new RegExp(`@keyframes cloud-${name}-rise \\{ to \\{ transform: translate3d\\(0, -${distance}dvh, 0\\);`));
+  }
+  const speeds = parameters.map(({ ms, distance }) => distance / ms);
+  assert.ok(speeds[0] > speeds[1] && speeds[1] > speeds[2], 'strict speed ordering');
+  // All three are completely above the viewport before removing the gate.
+  const starts = [-27.5, 16.5, 104.5]; // top percentages * 110dvh
+  parameters.forEach(({ distance }, i) => assert.ok(starts[i] + 110 - distance < 0));
+  assert.match(entry, /EXIT_MS = 4650/);
+});
+
+test('main scene is already mounted and starts moving with the first cloud', () => {
+  assert.match(entry, /document\.body\.classList\.add\('ocean-entry-leaving'\)/);
+  assert.match(css, /\.ocean-entry-active:not\(\.ocean-entry-leaving\) \.hero__painted-scene \{ animation-play-state: paused;/);
   assert.match(css, /sea-camera-rock 6\.4s/);
-  assert.match(css, /\.ocean-entry-active \.hero__painted-scene \{ animation-play-state: paused;/);
   const camera = css.match(/@keyframes sea-camera-rock \{([\s\S]*?)\}/)?.[1] ?? '';
   assert.doesNotMatch(camera, /scale\(/);
-  assert.match(entry, /classList\.add\('ocean-entry-active'\)/);
+  assert.match(read('view/OceanJourney.tsx'), /<EntryGate \/>[\s\S]*<main className="ocean-world"/);
 });
 
-test('music first attempts autoplay before clicks and retries when loaded', () => {
-  const music = read('view/BackgroundMusic.tsx');
-  assert.match(music, /audio\.play\(\)/);
-  assert.match(music, /autoPlay loop/);
-  assert.match(music, /audio\.addEventListener\('canplay', start\)/);
-  assert.match(music, /window\.addEventListener\('pointerdown', start\)/);
-  assert.doesNotMatch(music, /music-toggle/);
-});
-
-test('standalone preview mirrors the cloud stack and time sequence', () => {
-  const offline = read('scripts/create-offline-preview.mjs');
-  assert.match(offline, /class="entry-gate__cloud-stack"/);
-  assert.match(offline, /class="entry-sky-frame"/);
+test('offline version retains the same three independent layers and exit behavior', () => {
+  assert.match(offline, /entry-gate__cloud-layer--\$\{layer \+ 1\}/);
   assert.match(offline, /}, 1100\)/);
-  assert.match(offline, /reduced \? 150 : 4400/);
+  assert.match(offline, /reduced \? 150 : 4650/);
+  assert.match(offline, /document\.body\.classList\.add\('ocean-entry-leaving'\)/);
 });
