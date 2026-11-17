@@ -4,7 +4,10 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const paintTexture = readFileSync(join(root, 'public/textures/impasto-relief.webp')).toString('base64');
-const seaPainting = readFileSync(join(root, 'public/ocean/night-seascape.png')).toString('base64');
+const seaPainting = readFileSync(join(root, 'public/ocean/night-frame-0.png')).toString('base64');
+const skyFrames = Array.from({ length: 3 }, (_, i) => 'data:image/png;base64,' + readFileSync(join(root, 'public/intro', `sky-${i}.png`)).toString('base64'));
+const nightFrames = Array.from({ length: 3 }, (_, i) => 'data:image/png;base64,' + readFileSync(join(root, 'public/ocean', `night-frame-${i}.png`)).toString('base64'));
+const boatSource = 'data:image/png;base64,' + readFileSync(join(root, 'public/ocean/boat.png')).toString('base64');
 const audioSource = 'data:audio/ogg;base64,' + readFileSync(join(root, 'public/audio/background.ogg')).toString('base64');
 const coralSources = { about: 'data:image/png;base64,' + readFileSync(join(root, 'public/coral/reef-about.png')).toString('base64'), projects: 'data:image/png;base64,' + readFileSync(join(root, 'public/coral/reef-projects.png')).toString('base64') };
 const frameSources = Array.from({ length: 5 }, (_, i) => 'data:image/png;base64,' + readFileSync(join(root, 'public/animations/firework-frames', `${i}.png`)).toString('base64'));
@@ -214,52 +217,69 @@ const fireworksJS = `
 const musicJS = `
 (() => {
   const audio = document.getElementById('site-music');
-  const button = document.getElementById('music-toggle');
-  if (!audio || !button) return;
-  let userPaused = false;
+  if (!audio) return;
   let attempting = false;
   let fadeFrame = 0;
-  function sync() {
-    const playing = !audio.paused;
-    button.setAttribute('aria-pressed', String(playing));
-    button.setAttribute('aria-label', playing ? 'Pause background music' : 'Play background music');
-    button.title = playing ? 'Pause music' : 'Play music';
-    button.querySelector('.music-icon--playing').hidden = !playing;
-    button.querySelector('.music-icon--paused').hidden = playing;
-  }
   function start() {
-    if (userPaused || attempting || !audio.paused) return;
+    if (attempting || !audio.paused) return;
     attempting = true;
     audio.volume = 0;
     audio.play().then(() => {
       attempting = false;
-      sync();
       const begun = performance.now();
       cancelAnimationFrame(fadeFrame);
-      function fade(now) {
+      const fade = now => {
         if (audio.paused) return;
         const progress = Math.min(1, (now - begun) / 3000);
         audio.volume = .28 * progress;
         if (progress < 1) fadeFrame = requestAnimationFrame(fade);
-      }
+      };
       fadeFrame = requestAnimationFrame(fade);
-    }).catch(() => { attempting = false; sync(); });
+    }).catch(() => { attempting = false; });
   }
-  audio.addEventListener('pause', sync);
-  button.addEventListener('click', () => {
-    if (!audio.paused) { userPaused = true; audio.pause(); sync(); }
-    else { userPaused = false; start(); }
-  });
-  const onGesture = event => {
-    if (event.target instanceof Element && event.target.closest('[data-music-toggle]')) return;
-    start();
-  };
-  window.addEventListener('pointerdown', onGesture);
-  window.addEventListener('keydown', onGesture);
-  sync();
+  window.addEventListener('pointerdown', start);
+  window.addEventListener('keydown', start);
   start();
 })();
 `;
-const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Ruoshui Deng — Ocean Portfolio (Offline)</title><style>${css}</style></head><body><audio id="site-music" src="${audioSource}" loop preload="metadata"></audio><button id="music-toggle" data-music-toggle class="music-toggle" type="button" aria-label="Play background music" aria-pressed="false" title="Play music"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path class="music-icon--playing" d="M16 9a4 4 0 0 1 0 6M18.5 6a8 8 0 0 1 0 12" hidden/><path class="music-icon--paused" d="m16 9 5 6m0-6-5 6"/></svg></button><main class="ocean-world" aria-label="Underwater portfolio"><section class="hero" id="surface" aria-label="Oil-painted night sea with fireworks"><img class="hero__seascape" src="data:image/png;base64,${seaPainting}" alt=""/><div class="hero__fade" aria-hidden="true"></div><h1 class="hero__handwritten-name">Ruoshui Deng</h1><a class="hero__scroll-cue" href="#hello" id="hero-scroll-cue" aria-label="Scroll to view my work"><span>Scroll to view my work</span><svg viewBox="0 0 32 42" fill="none" aria-hidden="true"><path d="M16 2V35M5 25L16 36L27 25" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" /></svg></a><button class="hero__contact-brush" type="button" id="contact-shortcut" aria-label="Contact Ruoshui Deng"><svg viewBox="0 0 190 72" preserveAspectRatio="none" aria-hidden="true"><path d="M12 20 52 12 98 17 145 10 180 23 169 37 185 50 130 54 76 58 20 50 4 40Z" fill="#07070d"/><path d="M15 23Q72 11 168 24M8 35Q98 20 178 36M20 47Q92 57 169 43" stroke="#101019" stroke-width="10" stroke-linecap="round" opacity=".8"/><path d="M24 14 70 10M132 59 160 53M5 48 32 53" stroke="#020208" stroke-width="3" stroke-linecap="round" opacity=".8"/></svg><span>Contact</span></button></section><section class="hello-section" id="hello" aria-label="Introduction"><span>Hello</span></section>${scenes}</main><dialog class="detail-dialog" id="details" aria-labelledby="detail-title"><div class="detail-dialog__content"><button class="detail-dialog__close" id="close-panel" type="button" aria-label="Close information">×</button><h2 id="detail-title"></h2><div id="detail-items"></div></div></dialog><script>${inlineScript}</script><script>${swimJS}</script><script>${fireworksJS}</script><script>${musicJS}</script></body></html>`;
+const entryJS = `
+(() => {
+  const gate = document.getElementById('entry-gate');
+  const img = document.getElementById('entry-sky');
+  if (!gate || !img) return;
+  const frames = ${JSON.stringify(skyFrames)};
+  frames.forEach(src => { const prefetch = new Image(); prefetch.src = src; });
+  let index = 0, leaving = false;
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
+  const interval = setInterval(() => {
+    if (!document.hidden && !leaving) img.src = frames[++index % frames.length];
+  }, 1100);
+  gate.addEventListener('click', () => {
+    if (leaving) return;
+    leaving = true;
+    clearInterval(interval);
+    gate.classList.add('entry-gate--leaving');
+    gate.disabled = true;
+    setTimeout(() => {
+      gate.remove();
+      document.body.style.overflow = '';
+    }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1150);
+  });
+})();
+`;
+const nightJS = `
+(() => {
+  const image = document.getElementById('night-scene');
+  if (!image || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const frames = ${JSON.stringify(nightFrames)};
+  frames.forEach(src => { const prefetch = new Image(); prefetch.src = src; });
+  let frame = 0;
+  setInterval(() => {
+    if (!document.hidden) image.src = frames[++frame % frames.length];
+  }, 1250);
+})();
+`;
+const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Ruoshui Deng — Ocean Portfolio (Offline)</title><style>${css}</style></head><body><audio id="site-music" src="${audioSource}" loop preload="auto" autoplay></audio><button id="entry-gate" class="entry-gate" type="button" aria-label="Click to explore the ocean portfolio"><img id="entry-sky" src="${skyFrames[0]}" alt="" aria-hidden="true"/><span>click to explore</span></button><main class="ocean-world" aria-label="Underwater portfolio"><section class="hero" id="surface" aria-label="Oil-painted night sea with fireworks"><div class="hero__painted-scene" aria-hidden="true"><img id="night-scene" class="hero__seascape" src="data:image/png;base64,${seaPainting}" alt=""/><div class="hero__boat-rock"><img class="hero__boat" src="${boatSource}" alt=""/></div></div><div class="hero__fade" aria-hidden="true"></div><h1 class="hero__handwritten-name">Ruoshui Deng</h1><a class="hero__scroll-cue" href="#hello" id="hero-scroll-cue" aria-label="Scroll to view my work"><span>Scroll to view my work</span><svg viewBox="0 0 32 42" fill="none" aria-hidden="true"><path d="M16 2V35M5 25L16 36L27 25" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" /></svg></a><button class="hero__contact-brush" type="button" id="contact-shortcut" aria-label="Contact Ruoshui Deng"><svg viewBox="0 0 190 72" preserveAspectRatio="none" aria-hidden="true"><path d="M12 20 52 12 98 17 145 10 180 23 169 37 185 50 130 54 76 58 20 50 4 40Z" fill="#07070d"/><path d="M15 23Q72 11 168 24M8 35Q98 20 178 36M20 47Q92 57 169 43" stroke="#101019" stroke-width="10" stroke-linecap="round" opacity=".8"/><path d="M24 14 70 10M132 59 160 53M5 48 32 53" stroke="#020208" stroke-width="3" stroke-linecap="round" opacity=".8"/></svg><span>Contact</span></button></section><section class="hello-section" id="hello" aria-label="Introduction"><span>Hello</span></section>${scenes}</main><dialog class="detail-dialog" id="details" aria-labelledby="detail-title"><div class="detail-dialog__content"><button class="detail-dialog__close" id="close-panel" type="button" aria-label="Close information">×</button><h2 id="detail-title"></h2><div id="detail-items"></div></div></dialog><script>${inlineScript}</script><script>${swimJS}</script><script>${fireworksJS}</script><script>${musicJS}</script><script>${entryJS}</script><script>${nightJS}</script></body></html>`;
 writeFileSync(join(root, 'offline-preview.html'), page, 'utf8');
 console.log('Created offline-preview.html (open directly without a server).');

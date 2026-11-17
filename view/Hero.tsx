@@ -20,6 +20,7 @@ const SPAWN_GAP_SPREAD = 1400;
 const randomSpawnDelay = () => SPAWN_GAP_MIN + Math.random() * SPAWN_GAP_SPREAD;
 const PAINTING_HORIZON = 0.565;
 const framePath = (frame: number) => `/animations/firework-frames/${frame}.png`;
+const NIGHT_FRAME_MS = 1250;
 
 function createFirework(id: number, previous?: Firework, now = performance.now()): Firework {
   let x = 16 + Math.random() * 68;
@@ -52,6 +53,22 @@ export default function Hero({ onContact }: HeroProps) {
   const [seaHorizon, setSeaHorizon] = useState('56%');
   const [fireworks, setFireworks] = useState<Firework[]>([]);
   const [showScrollCue, setShowScrollCue] = useState(true);
+  const [nightFrame, setNightFrame] = useState(0);
+
+  // Animate only the painted seascape. Text, Contact and fireworks are siblings,
+  // so they never inherit the sea camera's gentle rocking transform.
+  useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+    for (let i = 0; i < 3; i++) {
+      const image = new Image();
+      image.src = `/ocean/night-frame-${i}.png`;
+    }
+    const timer = window.setInterval(() => {
+      if (!document.hidden) setNightFrame(previous => (previous + 1) % 3);
+    }, NIGHT_FRAME_MS);
+    return () => window.clearInterval(timer);
+  }, []);
 
   // object-fit: cover crops the painting. Position reflections at the visible waterline.
   useEffect(() => {
@@ -134,7 +151,13 @@ export default function Hero({ onContact }: HeroProps) {
     <section ref={heroRef} className="hero" id="surface"
       aria-label="Oil-painted night sea with fireworks"
       style={{ '--sea-horizon': seaHorizon } as CSSProperties}>
-      <img ref={imageRef} className="hero__seascape" src="/ocean/night-seascape.png" alt="" />
+      <div className="hero__painted-scene" aria-hidden="true">
+        <img ref={imageRef} className="hero__seascape"
+          src={`/ocean/night-frame-${nightFrame}.png`} alt="" />
+        <div className="hero__boat-rock">
+          <img className="hero__boat" src="/ocean/boat.png" alt="" draggable={false} />
+        </div>
+      </div>
       <div className="hero__fade" aria-hidden="true" />
       <h1 className="hero__handwritten-name">Ruoshui Deng</h1>
       <a className={`hero__scroll-cue${showScrollCue ? '' : ' hero__scroll-cue--hidden'}`}

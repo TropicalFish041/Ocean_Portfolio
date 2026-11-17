@@ -8,16 +8,16 @@ const hero = read('view/Hero.tsx');
 const css = read('app/globals.css');
 
 test('night scene and original impasto texture are preserved', () => {
-  assert.match(hero, /night-seascape\.png/);
+  assert.match(hero, /night-frame-/);
   assert.match(css, /impasto-relief\.webp/);
   assert.match(css, /--sea-horizon/);
   assert.match(css, /\.gif-firework--reflection/);
-  assert.ok(statSync(join(root, 'public/ocean/night-seascape.png')).size > 100_000);
+  assert.ok(statSync(join(root, 'public/ocean/night-frame-0.png')).size > 100_000);
   assert.equal(JSON.parse(read('data/chapters.json')).length, 4);
 });
 
 test('continuous lighter-to-abyss gradient and visible lower texture', () => {
-  assert.match(css, /#0b205b 18\.45%/);
+  assert.match(css, /#0e2d7c 18\.45%/);
   assert.match(css, /#010512 100%/);
   assert.match(css, /\.ocean-world::before/);
   assert.match(css, /\.ocean-world::after/);
@@ -100,8 +100,8 @@ test('background music uses the supplied OGG, fades up and is gesture-safe', () 
   assert.match(music, /audio\.play\(\)/);
   assert.match(music, /pointerdown/);
   assert.match(music, /keydown/);
-  assert.match(music, /aria-pressed/);
-  assert.match(music, /userPausedRef/);
+  assert.doesNotMatch(music, /music-toggle/);
+  assert.match(music, /autoPlay/);
   assert.ok(statSync(join(root, 'public/audio/background.ogg')).size > 1_000_000);
 });
 
@@ -112,4 +112,31 @@ test('offline preview keeps music, coral and the reordered scenes', () => {
   assert.match(source, /musicJS/);
   assert.match(source, /site-music/);
   assert.deepEqual(JSON.parse(read('data/chapters.json')).map(c => c.id), ['about','projects','shark','experience']);
+});
+
+test('three-frame sky gate, animated sea, boat and independently positioned fireworks', () => {
+  const entry = read('view/EntryGate.tsx');
+  const journey = read('view/OceanJourney.tsx');
+  assert.match(journey, /<EntryGate \/>/);
+  assert.match(entry, /click to explore/);
+  assert.match(entry, /SKY_FRAMES = 3/);
+  assert.match(entry, /setLeaving\(true\)/);
+  assert.match(hero, /night-frame-/);
+  assert.match(hero, /NIGHT_FRAME_MS/);
+  assert.match(hero, /hero__boat-rock/);
+  assert.match(css, /sea-camera-rock/);
+  assert.match(css, /boat-rock/);
+  for (let i=0; i<3; i++) {
+    assert.ok(statSync(join(root, 'public/intro', `sky-${i}.png`)).size>100_000);
+    assert.ok(statSync(join(root, 'public/ocean', `night-frame-${i}.png`)).size>100_000);
+  }
+  assert.ok(statSync(join(root, 'public/ocean/boat.png')).size>10_000);
+});
+
+test('reef ends are no longer clipped and shark enters from the left', () => {
+  assert.match(css, /\.chapter-section \{ overflow: visible; \}/);
+  assert.match(css, /\.coral-reef--about/);
+  assert.match(css, /\.coral-reef--projects/);
+  assert.match(css, /\.chapter-section--shark \{ --swim-rest-x: 0vw; --swim-off-x: -75vw; \}/);
+  assert.match(css, /\.coral-reef \{ bottom: 0; opacity: \.88; \}/);
 });
