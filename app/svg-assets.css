@@ -43,7 +43,6 @@ html, body { background: #002FA7 !important; color: #000 !important; }
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 32%, transparent 45%) !important;
   mask-image: linear-gradient(to bottom, #000 0%, #000 32%, transparent 45%) !important;
 }
-<<<<<<< HEAD
 
 /* Cloud stack moves DOWN by exactly one quarter viewport; its existing exit
    animation and each cloud's relative position are unchanged. */
@@ -60,18 +59,6 @@ html, body { background: #002FA7 !important; color: #000 !important; }
   .coral-reef--projects { width: min(68.75vw, 375px); }
   .coral-reef--shark { width: min(70vw, 400px); }
   .kelp-forest--experience { width: min(72.5vw, 500px); }
-=======
-/* Decorations enlarged 1.5x on desktop and mobile; fish are untouched. */
-.coral-reef--about { width: min(51vw, 750px); }
-.coral-reef--projects { width: min(52.5vw, 780px); }
-.coral-reef--shark { width: min(54vw, 780px); }
-.kelp-forest--experience { width: min(58.5vw, 855px); }
-@media (max-width: 700px) {
-  .coral-reef--about { width: min(84vw, 465px); }
-  .coral-reef--projects { width: min(82.5vw, 450px); }
-  .coral-reef--shark { width: min(84vw, 480px); }
-  .kelp-forest--experience { width: min(87vw, 600px); }
->>>>>>> de18998cc098d7d77478f54d1dee633968caa788
 }
 
 /* Black geometry on truly transparent SVG canvases; no brightness inversion.
