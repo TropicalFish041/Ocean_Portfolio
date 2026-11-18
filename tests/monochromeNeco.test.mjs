@@ -43,6 +43,6 @@ test('all text uses Neco Medium except fish-side titles in Neco Black',()=>{
   assert.match(css,/font-weight: 500 !important/);
   assert.match(css,/\.chapter-section__label/);
   assert.match(css,/font-weight: 900 !important/);
-  assert.match(css,/\.hero__seascape \{ opacity: \.92/);
-  assert.match(css,/filter: invert\(1\)/);
+  assert.match(css,/\.hero__seascape \{ opacity: 1/);
+  assert.doesNotMatch(css,/filter:\s*invert\(1\)/);
 });

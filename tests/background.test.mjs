@@ -7,22 +7,22 @@ const read = path => readFileSync(join(root, path), 'utf8');
 const hero = read('view/Hero.tsx');
 const css = read('app/globals.css');
 
-test('night scene and original impasto texture are preserved', () => {
+test('night scene and two-ink surface are preserved', () => {
   assert.match(hero, /night-frame-/);
-  assert.match(read('app/svg-assets.css'), /impasto-relief\.svg/);
+  assert.match(read('app/svg-assets.css'), /#002FA7/);
   assert.match(css, /--sea-horizon/);
   assert.match(css, /\.gif-firework--reflection/);
   assert.ok(statSync(join(root, 'public/ocean/night-frame-0.svg')).size > 100_000);
   assert.equal(JSON.parse(read('data/chapters.json')).length, 4);
 });
 
-test('continuous lighter-to-abyss gradient and visible lower texture', () => {
+test('uniform Klein-blue field replaces previous gradients and textures', () => {
   const svgCss = read('app/svg-assets.css');
-  assert.match(svgCss, /background: #08172f/);
+  assert.match(svgCss, /background: #002FA7/);
   assert.doesNotMatch(svgCss, /linear-gradient/);
-  assert.match(css, /\.ocean-world::before/);
-  assert.match(css, /\.ocean-world::after/);
-  assert.match(css, /background-size: 1120px 1120px/);
+  assert.match(svgCss, /\.ocean-world::before/);
+  assert.match(svgCss, /\.ocean-world::after/);
+  assert.match(svgCss, /display: none !important/);
 });
 
 test('fish scaling is editable through four named CSS variables', () => {

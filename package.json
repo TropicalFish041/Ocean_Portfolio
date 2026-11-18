@@ -7,7 +7,11 @@
     "build": "next build",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
-    "offline": "node scripts/create-offline-preview.mjs"
+    "offline": "node scripts/create-offline-preview.mjs",
+    "predev": "node scripts/normalize-svg-backgrounds.mjs",
+    "prebuild": "node scripts/normalize-svg-backgrounds.mjs",
+    "pretest": "node scripts/normalize-svg-backgrounds.mjs",
+    "preoffline": "node scripts/normalize-svg-backgrounds.mjs"
   },
   "dependencies": {
     "next": "^15.5.0",

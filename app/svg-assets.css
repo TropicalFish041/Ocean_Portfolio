@@ -1,32 +1,59 @@
-/* SVG-only asset paths; original geometry, labels and animation remain unchanged. */
-.ocean-world {
-  /* Temporarily disable underwater color-gradient rendering. */
-  background: #08172f;
+/* Two-ink art direction. This stylesheet is loaded AFTER globals.css.
+   Keep layout, fonts, animation timings and viewport behavior in globals.css. */
+:root { --surface-blue: #002FA7; color-scheme: light; }
+html, body { background: #002FA7 !important; color: #000 !important; }
+.ocean-world, .hero, .entry-gate {
+  background: #002FA7 !important;
+  color: #000 !important;
 }
-.ocean-world::before { background-image: url('/textures/impasto-relief.svg'); }
-.ocean-world::after { background-image: url('/textures/impasto-relief.svg'); }
-
-/* Transparent path-only illustrations: monochrome white ink on the existing dark canvas.
-   The underlying SVG files retain BLACK vector strokes. No raster image layers. */
+/* Remove the previous gradient and all painted surface overlays. */
+.ocean-world::before, .ocean-world::after { content: none !important; display: none !important; }
+.hero__fade { display: none !important; }
+.entry-gate::before { background: #002FA7 !important; }
+/* Black geometry on truly transparent SVG canvases; no brightness inversion.
+   The replacement night SVGs retain readable black shoreline/reflections. */
 .hero__seascape, .hero__boat,
-.entry-gate__cloud-layer img,
-.coral-reef,
-.gif-firework--sky img, .gif-firework--reflection img {
-  filter: invert(1) !important;
-}
-.fish-button__image {
-  filter: invert(1) drop-shadow(0 22px 25px #05192e27) !important;
-}
+.entry-gate__cloud-layer img, .coral-reef,
+.gif-firework--sky img, .gif-firework--reflection img,
+.fish-button__image,
 .fish-button:hover .fish-button__image,
 .fish-button:focus-visible .fish-button__image {
-  filter: invert(1) drop-shadow(0 27px 33px #05192e56) !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
 }
-/* Keep the night-frame line art visibly distinct from the dark hero background. */
-.hero__seascape { opacity: .92; }
-/* The black path relief appears as a subtle monochrome texture. */
-.ocean-world::before, .ocean-world::after { filter: invert(1); }
-
-/* Neco Medium everywhere, Neco Black ONLY for the fish-section titles. */
+.hero__seascape { opacity: 1 !important; visibility: visible !important; }
+.coral-reef { opacity: 1 !important; }
+/* Preserve reflection position and oscillation, but render ink without color/shadow. */
+.gif-firework--reflection { filter: none !important; opacity: 1 !important; }
+/* Two colors for EVERY visible UI element, including text and dialog. */
+.hero__handwritten-name, .hero__scroll-cue,
+.chapter-section__label, .chapter-section__explore,
+.chapter-section__explore svg, .hello-section, .entry-gate__prompt {
+  color: #000 !important;
+  text-shadow: none !important;
+}
+.hero__contact-brush { color: #002FA7 !important; text-shadow: none !important; }
+.hero__contact-brush span { color: #002FA7 !important; }
+.hero__contact-brush svg { filter: none !important; }
+.hero__contact-brush svg [fill] { fill: #000 !important; }
+.hero__contact-brush svg [stroke] { stroke: #000 !important; }
+.detail-dialog {
+  background: #002FA7 !important; color: #000 !important;
+  border-color: #000 !important; box-shadow: none !important;
+  backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+}
+.detail-dialog::backdrop {
+  background: transparent !important;
+  backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+}
+.detail-dialog__content h2, .detail-dialog__content h3,
+.detail-dialog__content p, .detail-dialog__close {
+  color: #000 !important; text-shadow: none !important;
+}
+.detail-dialog__content article, .detail-dialog__close { border-color: #000 !important; }
+.detail-dialog__close:hover { background: #002FA7 !important; }
+button:focus-visible { outline-color: #000 !important; }
+/* Keep Neco Medium (500) across the site, fish side labels in Neco Black (900). */
 body, body * { font-family: 'Neco', Georgia, serif !important; font-weight: 500 !important; }
 body .chapter-section__label,
 body .chapter-section__label > span:first-child { font-weight: 900 !important; }

@@ -23,9 +23,9 @@ test('Arts label moves inward without changing font and section order', () => {
 test('underwater palette is paused without changing layout', () => {
   const replacement = readFileSync(join(root, 'app/svg-assets.css'), 'utf8');
   assert.match(replacement, /\.ocean-world/);
-  assert.match(replacement, /background: #08172f/);
+  assert.match(replacement, /background: #002FA7/);
   assert.doesNotMatch(replacement, /linear-gradient/);
-  assert.match(replacement, /impasto-relief\.svg/);
+  assert.match(replacement, /\.hero__fade/);
 });
 
 test('the three original sky layers use SVG and preserve the old 1100ms timing', () => {

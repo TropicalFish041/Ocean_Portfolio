@@ -3,7 +3,6 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const paintTexture = readFileSync(join(root, 'public/textures/impasto-relief.svg')).toString('base64');
 const seaPainting = readFileSync(join(root, 'public/ocean/night-frame-0.svg')).toString('base64');
 const skyFrames = Array.from({ length: 3 }, (_, i) => 'data:image/svg+xml;base64,' + readFileSync(join(root, 'public/intro', `sky-front-${i}.svg`)).toString('base64'));
 const nightFrames = Array.from({ length: 3 }, (_, i) => 'data:image/svg+xml;base64,' + readFileSync(join(root, 'public/ocean', `night-frame-${i}.svg`)).toString('base64'));
@@ -14,8 +13,7 @@ const coralSources = Object.fromEntries(Object.entries({
   shark: 'reef-shark.svg', experience: 'kelp-experience.svg',
 }).map(([id, filename]) => [id, 'data:image/svg+xml;base64,' + readFileSync(join(root, 'public/coral', filename)).toString('base64')]));
 const frameSources = Array.from({ length: 5 }, (_, i) => 'data:image/svg+xml;base64,' + readFileSync(join(root, 'public/animations/firework-frames', `${i}.svg`)).toString('base64'));
-const css = (readFileSync(join(root, 'app/globals.css'), 'utf8') + '\n' + readFileSync(join(root, 'app/svg-assets.css'), 'utf8'))
-  .replaceAll("url('/textures/impasto-relief.svg')", `url('data:image/svg+xml;base64,${paintTexture}')`);
+const css = readFileSync(join(root, 'app/globals.css'), 'utf8') + '\n' + readFileSync(join(root, 'app/svg-assets.css'), 'utf8');
 const chapters = JSON.parse(readFileSync(join(root, 'data/chapters.json'), 'utf8'));
 // Five numbered SVG frames are used for each fish.
 const swimFolders = { about: 'lionfish', projects: 'peppermint-angelfish', experience: 'opah', shark: 'shark' };
