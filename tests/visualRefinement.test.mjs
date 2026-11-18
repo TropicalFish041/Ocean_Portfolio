@@ -24,7 +24,7 @@ test('underwater palette is paused without changing layout', () => {
   const replacement = readFileSync(join(root, 'app/svg-assets.css'), 'utf8');
   assert.match(replacement, /\.ocean-world/);
   assert.match(replacement, /background: #002FA7/);
-  assert.match(replacement, /rgba\(0,47,167,0\) 43%/);
+  assert.match(replacement, /rgba\(0,47,167,0\) 94%/);
   assert.match(replacement, /\.hero__fade/);
 });
 
