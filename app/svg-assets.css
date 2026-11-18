@@ -181,12 +181,12 @@ body .detail-dialog__content article a {
 }
 
 /* Small typography and spacing changes; existing animations stay intact. */
-.entry-gate__prompt { translate: 0 -6svh; }
+.entry-gate__prompt { translate: 0 -10svh; }
 body .hero__handwritten-name { font-weight: 900 !important; } /* Neco Black */
 body .hero__scroll-cue,
-body .hero__scroll-cue span { font-weight: 700 !important; } /* Neco Bold */
+body .hero__scroll-cue span { font-weight: 900 !important; } /* Neco Black */
 /* Fish sections: 100svh tall, at least 480px (420px on mobile). */
-.hello-section { height: 50svh; min-height: 240px; }
+.hello-section { height: 80svh; min-height: 384px; }
 @media (max-width: 700px) {
-  .hello-section { min-height: 210px; }
+  .hello-section { min-height: 336px; }
 }
