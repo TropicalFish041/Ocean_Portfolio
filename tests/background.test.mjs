@@ -20,7 +20,7 @@ test('uniform Klein-blue field replaces previous gradients and textures', () => 
   const svgCss = read('app/svg-assets.css');
   assert.match(svgCss, /background: #002FA7/);
   assert.match(svgCss, /\.ocean-world, \.hero \{/);
-  assert.match(svgCss, /rgba\(0,47,167,0\) 43%/);
+  assert.match(svgCss, /rgba\(0,47,167,0\) 94%/);
   assert.match(svgCss, /\.ocean-world::before/);
   assert.match(svgCss, /\.ocean-world::after/);
   assert.match(svgCss, /display: none !important/);
