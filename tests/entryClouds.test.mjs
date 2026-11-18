@@ -32,11 +32,12 @@ test('independently positioned transparent clouds retain exact 1/5 and 2/5 align
   assert.deepEqual(tops, [-25, -5, 35]);
   assert.equal(tops[1] - tops[0], 20);
   assert.equal(tops[2] - tops[1], 40);
-  assert.match(css, /\.entry-gate__cloud-layer--1 img \{/);
-  assert.match(css, /\.entry-gate__cloud-layer--2 img \{/);
-  assert.match(css, /\.entry-gate__cloud-layer--3 img \{/);
-  assert.match(css, /transparent 65%/);
-  assert.match(css, /transparent 83%/);
+  const overrides = read('app/svg-assets.css');
+  assert.match(overrides, /\.entry-gate__cloud-layer--1 img/);
+  assert.match(overrides, /\.entry-gate__cloud-layer--2 img/);
+  assert.match(overrides, /\.entry-gate__cloud-layer--3 img/);
+  assert.match(overrides, /transparent 94%/);
+  assert.match(overrides, /transparent 45%/);
 });
 
 test('all clouds travel UP, with front faster than middle faster than rear', () => {
