@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const SKY_FRAMES = 3;
 const SKY_FRAME_MS = 1100; // unchanged cadence
@@ -11,6 +11,19 @@ export default function EntryGate() {
   const [frame, setFrame] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [finished, setFinished] = useState(false);
+  const nightReady = useRef<Promise<void>>(Promise.resolve());
+  const entering = useRef(false);
+  const mounted = useRef(true);
+
+  // Predecode the FIRST visible sea frame during the opening animation.
+  // The moving clouds must never reveal an unloaded image underneath.
+  useEffect(() => {
+    mounted.current = true;
+    const painting = new Image();
+    painting.src = '/ocean/night-frame-0.svg';
+    nightReady.current = painting.decode().catch(() => undefined);
+    return () => { mounted.current = false; };
+  }, []);
 
   useEffect(() => {
     if (finished) return;
@@ -45,11 +58,15 @@ export default function EntryGate() {
   }, [leaving]);
 
   const enter = () => {
-    if (leaving) return;
-    // The main scene is already mounted and images already requested.
-    // Unpause its camera as soon as the first sheet begins moving.
-    document.body.classList.add('ocean-entry-leaving');
-    setLeaving(true);
+    if (leaving || entering.current) return;
+    entering.current = true;
+    // Await the cached first sea image BEFORE any clouds begin to rise.
+    // Normally it is already decoded by the time the user clicks.
+    void nightReady.current.then(() => {
+      if (!mounted.current) return;
+      document.body.classList.add('ocean-entry-leaving');
+      setLeaving(true);
+    });
   };
 
   if (finished) return null;

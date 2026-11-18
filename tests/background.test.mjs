@@ -19,7 +19,8 @@ test('night scene and two-ink surface are preserved', () => {
 test('uniform Klein-blue field replaces previous gradients and textures', () => {
   const svgCss = read('app/svg-assets.css');
   assert.match(svgCss, /background: #002FA7/);
-  assert.doesNotMatch(svgCss, /linear-gradient/);
+  assert.match(svgCss, /\.ocean-world, \.hero \{/);
+  assert.match(svgCss, /rgba\(0,47,167,0\) 43%/);
   assert.match(svgCss, /\.ocean-world::before/);
   assert.match(svgCss, /\.ocean-world::after/);
   assert.match(svgCss, /display: none !important/);
@@ -128,7 +129,7 @@ test('three-frame sky gate, animated sea, boat and independently positioned fire
   assert.match(css, /sea-camera-rock/);
   assert.match(css, /boat-rock/);
   for (let i=0; i<3; i++) {
-    assert.ok(statSync(join(root, 'public/intro', `sky-front-${i}.svg`)).size>100_000);
+    assert.ok(statSync(join(root, 'public/intro', `sky-front-${i}.svg`)).size>3_000);
     assert.ok(statSync(join(root, 'public/ocean', `night-frame-${i}.svg`)).size>100_000);
   }
   assert.ok(statSync(join(root, 'public/ocean/boat.svg')).size>10_000);

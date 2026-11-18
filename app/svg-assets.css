@@ -2,14 +2,41 @@
    Keep layout, fonts, animation timings and viewport behavior in globals.css. */
 :root { --surface-blue: #002FA7; color-scheme: light; }
 html, body { background: #002FA7 !important; color: #000 !important; }
-.ocean-world, .hero, .entry-gate {
+.ocean-world, .hero {
   background: #002FA7 !important;
   color: #000 !important;
 }
 /* Remove the previous gradient and all painted surface overlays. */
 .ocean-world::before, .ocean-world::after { content: none !important; display: none !important; }
 .hero__fade { display: none !important; }
-.entry-gate::before { background: #002FA7 !important; }
+/* No full-screen blue card: the night painting is already rendered underneath. */
+.entry-gate { background: transparent !important; }
+.entry-gate::before { background: transparent !important; opacity: 0 !important; transition: none !important; }
+/* Each cloud has blue only at its upper edge; its LOWER PART is fully clear.
+   The soft gradient is transparency, not a new color palette. */
+.entry-gate__cloud-layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(to bottom,
+    #002FA7 0%, rgba(0,47,167,.98) 12%,
+    rgba(0,47,167,.42) 27%, rgba(0,47,167,0) 43%);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 260ms linear;
+}
+.entry-gate--leaving .entry-gate__cloud-layer::before { opacity: 0; }
+/* Keep black contours visible while fading the sheet's lower outline, too. */
+.entry-gate__cloud-layer--1 img,
+.entry-gate__cloud-layer--2 img,
+.entry-gate__cloud-layer--3 img {
+  position: relative;
+  z-index: 1;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 94%) !important;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 94%) !important;
+}
+
 /* Black geometry on truly transparent SVG canvases; no brightness inversion.
    The replacement night SVGs retain readable black shoreline/reflections. */
 .hero__seascape, .hero__boat,

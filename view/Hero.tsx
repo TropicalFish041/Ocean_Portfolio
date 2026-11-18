@@ -160,7 +160,7 @@ export default function Hero({ onContact }: HeroProps) {
       style={{ '--sea-horizon': seaHorizon } as CSSProperties}>
       <div className="hero__painted-scene" aria-hidden="true">
         <img ref={imageRef} className="hero__seascape"
-          src={`/ocean/night-frame-${nightFrame}.svg`} alt="" />
+          src={`/ocean/night-frame-${nightFrame}.svg`} alt="" loading="eager" fetchPriority="high" />
         <div className="hero__boat-rock">
           <img className="hero__boat" src="/ocean/boat.svg" alt="" draggable={false} />
         </div>

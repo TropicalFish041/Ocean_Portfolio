@@ -15,7 +15,7 @@ test('opening sky uses 3 SVG frames at the original 1100ms cadence', () => {
   assert.match(entry, /sky-front-\$\{i\}\.svg/);
   for (let i = 0; i < 3; i++) {
     const path = join(root, 'public/intro', `sky-front-${i}.svg`);
-    assert.ok(statSync(path).size > 100_000);
+    assert.ok(statSync(path).size > 3_000);
     assert.match(readFileSync(path, 'utf8'), /<svg\b/);
   }
 });

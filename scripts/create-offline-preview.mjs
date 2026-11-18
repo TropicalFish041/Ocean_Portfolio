@@ -253,6 +253,9 @@ const entryJS = `
   const frames = ${JSON.stringify(skyFrames)};
   frames.forEach(src => { const prefetch = new Image(); prefetch.src = src; });
   let index = 0, leaving = false;
+  const nightPreload = new Image();
+  nightPreload.src = ${JSON.stringify(nightFrames[0])};
+  const seaReady = nightPreload.decode().catch(() => undefined);
   const previousOverflow = document.body.style.overflow;
   document.body.classList.add('ocean-entry-active');
   document.body.style.overflow = 'hidden';
@@ -266,16 +269,18 @@ const entryJS = `
   gate.addEventListener('click', () => {
     if (leaving) return;
     leaving = true;
-    document.body.classList.add('ocean-entry-leaving');
-    gate.classList.add('entry-gate--leaving');
-    gate.disabled = true;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    setTimeout(() => {
-      clearInterval(interval);
-      gate.remove();
-      document.body.style.overflow = previousOverflow;
-      document.body.classList.remove('ocean-entry-active', 'ocean-entry-leaving');
-    }, reduced ? 150 : 4650);
+    void seaReady.then(() => {
+      document.body.classList.add('ocean-entry-leaving');
+      gate.classList.add('entry-gate--leaving');
+      gate.disabled = true;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      setTimeout(() => {
+        clearInterval(interval);
+        gate.remove();
+        document.body.style.overflow = previousOverflow;
+        document.body.classList.remove('ocean-entry-active', 'ocean-entry-leaving');
+      }, reduced ? 150 : 4650);
+    });
   });
 })();
 `;
