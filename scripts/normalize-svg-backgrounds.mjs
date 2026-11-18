@@ -1,10 +1,11 @@
 /** One-time, idempotent transparency repair for the ORIGINAL extracted SVG paths.
- * No raster conversion, no path rewriting, and no changes to the five-frame animations.
+ * No raster conversion, no path rewriting, and no changes to fish or animation frames.
  * Automatically runs before npm run dev/build/test/offline. */
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../public/', import.meta.url));
+const coralNames = new Set(['reef-about.svg', 'reef-projects.svg', 'reef-shark.svg', 'kelp-experience.svg']);
 let changed = 0;
 let checked = 0;
 function walk(folder) {
@@ -28,6 +29,11 @@ function walk(folder) {
     content = content.replace(/<rect\b[^>]*\bfill=["'](?:white|#fff|#ffffff)["'][^>]*\/?\s*>/gi, '');
     if (/<image\b|data:image\/(?:png|jpe?g|webp)/i.test(content)) {
       throw new Error(`Raster data found in vector asset: ${path}`);
+    }
+    // Coral and kelp only: 1.45 -> 2.175 is exactly 1.5x stroke width.
+    // Running the script again cannot multiply the width a second time.
+    if (coralNames.has(entry.name)) {
+      content = content.replace(/stroke-width="1\.45"/g, 'stroke-width="2.175"');
     }
     if (content !== original) { writeFileSync(path, content, 'utf8'); changed++; }
   }

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
 import type { Chapter } from '../entity/Chapter';
 
 interface Props {
@@ -21,8 +20,6 @@ const SWIM: Record<string, { folder: string; frameMs: number }> = {
 
 export default function ChapterSection({ chapter, index, onOpen }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
-  const pixelsRef = useRef<ImageData | null>(null);
   const [inView, setInView] = useState(false);
   const [frame, setFrame] = useState(0);
   const animation = SWIM[chapter.id];
@@ -47,47 +44,7 @@ export default function ChapterSection({ chapter, index, onOpen }: Props) {
     return () => window.clearInterval(timer);
   }, [inView, animation]);
 
-  // Preserve pixel-accurate clicking even as the five SVG frames change.
-  useEffect(() => {
-    const image = imageRef.current;
-    if (!image) return;
-    let cancelled = false;
-    const prepare = () => {
-      if (cancelled || !image.naturalWidth || !image.naturalHeight) return;
-      try {
-        const canvas = document.createElement('canvas');
-        canvas.width = image.naturalWidth;
-        canvas.height = image.naturalHeight;
-        const context = canvas.getContext('2d', { willReadFrequently: true });
-        if (!context) return;
-        context.drawImage(image, 0, 0);
-        pixelsRef.current = context.getImageData(0, 0, canvas.width, canvas.height);
-      } catch { pixelsRef.current = null; }
-    };
-    if (image.complete) prepare();
-    image.addEventListener('load', prepare);
-    return () => { cancelled = true; image.removeEventListener('load', prepare); };
-  }, []);
-
-  const openIfPainted = (event: MouseEvent<HTMLButtonElement>) => {
-    if (event.detail === 0) { onOpen(chapter.id); return; }
-    const image = imageRef.current;
-    const pixels = pixelsRef.current;
-    if (!image || !pixels) { onOpen(chapter.id); return; }
-    const bounds = image.getBoundingClientRect();
-    if (!bounds.width || !bounds.height) return;
-    // The lionfish SVG frames are letterboxed by object-fit: contain.
-    const scale = Math.min(bounds.width / pixels.width, bounds.height / pixels.height);
-    const displayedWidth = pixels.width * scale;
-    const displayedHeight = pixels.height * scale;
-    const offsetX = (bounds.width - displayedWidth) / 2;
-    const offsetY = (bounds.height - displayedHeight) / 2;
-    const x = Math.floor((event.clientX - bounds.left - offsetX) / scale);
-    const y = Math.floor((event.clientY - bounds.top - offsetY) / scale);
-    if (x >= 0 && y >= 0 && x < pixels.width && y < pixels.height
-      && pixels.data[(y * pixels.width + x) * 4 + 3] > 28) onOpen(chapter.id);
-  };
-
+  // The entire image/button rectangle is clickable, including transparent pixels.
   const src = animation
     ? `/fish/frames/${animation.folder}/${frame}.svg`
     : chapter.image;
@@ -112,9 +69,9 @@ export default function ChapterSection({ chapter, index, onOpen }: Props) {
         <img className="coral-reef kelp-forest--experience" src="/coral/kelp-experience.svg"
           alt="" aria-hidden="true" draggable={false} loading="lazy" />
       )}
-      <button className="fish-button" type="button" onClick={openIfPainted}
+      <button className="fish-button" type="button" onClick={() => onOpen(chapter.id)}
         aria-label={`Open ${chapter.title} via ${chapter.fishName}`}>
-        <img ref={imageRef} className="fish-button__image" src={src} alt=""
+        <img className="fish-button__image" src={src} alt=""
           draggable={false} loading={index === 0 ? 'eager' : 'lazy'} />
       </button>
       {chapter.id === 'about' && (

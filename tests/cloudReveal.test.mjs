@@ -3,6 +3,38 @@ import { readFileSync, statSync } from 'node:fs';
 import { test } from 'node:test';
 const read = p => readFileSync(p, 'utf8');
 
+<<<<<<< HEAD
+test('Klein-blue cover stays opaque until cloud exit', () => {
+  const css = read('app/svg-assets.css');
+  assert.match(css, /\.entry-gate::before \{[\s\S]*?background: #002FA7 !important;[\s\S]*?opacity: 1 !important/);
+  assert.match(css, /\.entry-gate--leaving::before \{ opacity: 0 !important/);
+  assert.match(css, /#002FA7 65%, rgba\(0,47,167,0\) 94%/);
+  assert.match(css, /#002FA7 32%, rgba\(0,47,167,0\) 45%/);
+  assert.match(css, /\.entry-gate__cloud-stack \{ top: 25dvh; \}/);
+});
+
+test('underwater decorations shrink by 1.2 and use 1.5x thicker lines', () => {
+  const css = read('app/svg-assets.css');
+  for (const width of ['42.5vw, 625px', '43.75vw, 650px', '45vw, 650px', '48.75vw, 712.5px',
+    '70vw, 387.5px', '68.75vw, 375px', '70vw, 400px', '72.5vw, 500px']) {
+    assert.ok(css.includes(width), `missing ${width}`);
+  }
+  for (const name of ['reef-about', 'reef-projects', 'reef-shark', 'kelp-experience']) {
+    assert.match(read(`public/coral/${name}.svg`), /stroke-width="2\.175"/);
+  }
+  assert.match(read('public/ocean/night-frame-0.svg'), /stroke-width="1\.45"/);
+});
+
+test('fish hitbox covers its whole image, and sparse wave art is kept behind it', () => {
+  const fish = read('view/ChapterSection.tsx');
+  const css = read('app/svg-assets.css');
+  assert.match(fish, /onClick=\{\(\) => onOpen\(chapter\.id\)\}/);
+  assert.doesNotMatch(fish, /getImageData|openIfPainted|pixelsRef/);
+  assert.match(css, /\.ocean-world::after \{/);
+  assert.match(css, /data:image\/svg\+xml;base64/);
+  assert.match(css, /top: max\(100svh, 470px\)/);
+  assert.match(css, /pointer-events: none/);
+=======
 test('the closed gate covers the night with Klein blue until entry', () => {
   const css = read('app/svg-assets.css');
   assert.match(css, /\.entry-gate::before \{[\s\S]*?background: #002FA7 !important;[\s\S]*?opacity: 1 !important;/);
@@ -21,6 +53,7 @@ test('underwater ornaments are 1.5x larger and match the night stroke', () => {
     assert.match(read(`public/coral/${name}.svg`), /stroke-width="1\.45"/);
   }
   assert.match(read('public/ocean/night-frame-0.svg'), /stroke-width="1\.45"/);
+>>>>>>> de18998cc098d7d77478f54d1dee633968caa788
 });
 
 test('night is decoded before transition and preloaded as high priority', () => {
