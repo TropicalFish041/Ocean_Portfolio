@@ -9,7 +9,8 @@ test('the entire illustrated canvas uses Klein blue and black ink only', () => {
   assert.match(css, /#002FA7/);
   assert.match(css, /\.ocean-world::before, \.ocean-world::after/);
   assert.match(css, /\.hero__fade \{ display: none/);
-  assert.match(css, /\.entry-gate::before \{ background: transparent/);
+  assert.match(css, /\.entry-gate::before \{/);
+  assert.match(css, /background: #002FA7 !important/);
   assert.doesNotMatch(css, /invert\(1\)/);
 });
 test('night imagery remains three transparent black vector frames', () => {
