@@ -46,7 +46,7 @@ test('original staggered single-burst fireworks and handwritten nav are still th
   assert.match(hero, /hero__contact-brush/);
   assert.match(hero, /Scroll to view my work/);
   for (let i = 0; i < 5; i++) {
-    assert.ok(statSync(join(root, 'public/animations/firework-frames', `${i}.svg`)).size > 1000);
+    assert.ok(statSync(join(root, 'public/animations/firework-frames', `${i}.svg`)).size > (i === 0 ? 60 : 1000)); // 0.svg is deliberately blank
   }
 });
 

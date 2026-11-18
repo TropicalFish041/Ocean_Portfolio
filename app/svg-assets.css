@@ -5,3 +5,30 @@
 }
 .ocean-world::before { background-image: url('/textures/impasto-relief.svg'); }
 .ocean-world::after { background-image: url('/textures/impasto-relief.svg'); }
+
+/* Transparent path-only illustrations: monochrome white ink on the existing dark canvas.
+   The underlying SVG files retain BLACK vector strokes. No raster image layers. */
+.hero__seascape, .hero__boat,
+.entry-gate__cloud-layer img,
+.coral-reef,
+.gif-firework--sky img, .gif-firework--reflection img {
+  filter: invert(1) !important;
+}
+.fish-button__image {
+  filter: invert(1) drop-shadow(0 22px 25px #05192e27) !important;
+}
+.fish-button:hover .fish-button__image,
+.fish-button:focus-visible .fish-button__image {
+  filter: invert(1) drop-shadow(0 27px 33px #05192e56) !important;
+}
+/* Keep the night-frame line art visibly distinct from the dark hero background. */
+.hero__seascape { opacity: .92; }
+/* The black path relief appears as a subtle monochrome texture. */
+.ocean-world::before, .ocean-world::after { filter: invert(1); }
+
+/* Neco Medium everywhere, Neco Black ONLY for the fish-section titles. */
+body, body * { font-family: 'Neco', Georgia, serif !important; font-weight: 500 !important; }
+body .chapter-section__label,
+body .chapter-section__label > span:first-child { font-weight: 900 !important; }
+body .chapter-section__explore,
+body .chapter-section__explore * { font-weight: 500 !important; }
