@@ -88,7 +88,7 @@ test('two independent coral cutouts decorate only the first two sections', () =>
   assert.match(css, /pointer-events: none/);
   for (const image of ['reef-about.svg', 'reef-projects.svg']) {
     const svg = read(join('public/coral', image));
-    assert.match(svg, /data-coral-quarter-density="true"/);
+    assert.match(svg, /data-coral-half-density="true"/);
     assert.ok(statSync(join(root, 'public/coral', image)).size > 5_000);
   }
 });
@@ -148,7 +148,7 @@ test('four centered handwritten labels and two new moving underwater cutouts', (
   for (const label of ['About Me','Experience','Arts','Interests']) assert.match(component, new RegExp('>' + label + '<'));
   for (const name of ['reef-shark.svg','kelp-experience.svg']) {
     const svg = read(join('public/coral', name));
-    assert.match(svg, /data-coral-quarter-density="true"/);
+    assert.match(svg, /data-coral-half-density="true"/);
     assert.ok(statSync(join(root, 'public/coral', name)).size > 5_000);
   }
   assert.match(component, /coral-reef--shark/);

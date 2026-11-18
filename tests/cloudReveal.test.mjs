@@ -9,6 +9,8 @@ test('intro sky and full-coverage curtain are preserved; prompt doubles and is b
   assert.match(css, /background: #002FA7 !important/);
   assert.match(css, /font-size: clamp\(32px, 3\.5vw, 44px\)/);
   assert.match(css, /font-weight: 900 !important/);
+  assert.match(css, /entry-prompt-breathe 5\.4s ease-in-out infinite/);
+  assert.match(css, /50% \{ transform: scale\(1\.13\); \}/);
 });
 
 test('fish and sea scene stay separate from the animated ripples', () => {
@@ -20,7 +22,7 @@ test('fish and sea scene stay separate from the animated ripples', () => {
   assert.match(css, /\.underwater-ripples/);
   assert.match(css, /ocean-world::after \{ content: none/);
   assert.match(journey, /<UnderwaterRipples \/>/);
-  assert.match(waves, /random\(1\.56, 2\.35\) \* 8/);
+  assert.match(waves, /random\(1\.56, 2\.35\) \* 2/);
   assert.match(waves, /window\.setInterval/);
   assert.match(waves, /pointerEvents|underwater-ripples/);
   assert.doesNotMatch(css, /data:image\/svg\+xml;base64/);
@@ -28,9 +30,9 @@ test('fish and sea scene stay separate from the animated ripples', () => {
 
 test('coral density and stroke updated only by idempotent sanitizer', () => {
   const sanitizer = read('scripts/normalize-svg-backgrounds.mjs');
-  assert.match(sanitizer, /data-coral-quarter-density/);
-  assert.match(sanitizer, /i % 4 === 0/);
-  assert.match(sanitizer, /Number\(value\) \* 6/);
+  assert.match(sanitizer, /data-coral-half-density/);
+  assert.match(sanitizer, /i % 2 === 0/);
+  assert.match(sanitizer, /stroke-width: 4px/);
   assert.match(sanitizer, /coralNames\.has/);
   assert.match(read('view/ChapterSection.tsx'), /onClick=\{\(\) => onOpen\(chapter\.id\)\}/);
 });
@@ -44,4 +46,10 @@ test('contact includes final CV link with predictable downloadable PDF name', ()
   const css = read('app/svg-assets.css');
   assert.match(css, /\.detail-dialog__content article h3/);
   assert.match(css, /\.detail-dialog__content article p/);
+});
+
+test('dialog paragraphs are regular weight while headings stay bold', () => {
+  const css = read('app/svg-assets.css');
+  assert.match(css, /body \.detail-dialog__content article h3 \{[\s\S]*?font-weight: 900 !important;/);
+  assert.match(css, /body \.detail-dialog__content article p,[\s\S]*?font-weight: 400 !important;/);
 });

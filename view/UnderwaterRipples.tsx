@@ -22,8 +22,8 @@ function makeRipple(id: number, initial: boolean): Ripple {
   return {
     id,
     d: `M ${x} ${y} c ${length * .32} ${bend} ${length * .68} ${-bend} ${length} ${random(-8, 8)}`,
-    // Former water strokes were 1.56–2.35; these are exactly 8x thicker.
-    strokeWidth: random(1.56, 2.35) * 8,
+    // One quarter of the previous width (8x -> 2x original).
+    strokeWidth: random(1.56, 2.35) * 2,
     duration,
     delay: initial ? random(-duration, 0) : 0,
   };

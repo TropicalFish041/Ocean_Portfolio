@@ -115,6 +115,15 @@ body .chapter-section__explore * { font-weight: 500 !important; }
 .entry-gate__prompt {
   font-size: clamp(32px, 3.5vw, 44px) !important;
   font-weight: 900 !important;
+  transform-origin: center;
+  animation: entry-prompt-breathe 5.4s ease-in-out infinite;
+}
+@keyframes entry-prompt-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.13); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .entry-gate__prompt { animation: none !important; }
 }
 
 /* Allow the painted ocean's lowest wave lines to continue past the first screen
@@ -162,7 +171,7 @@ body .detail-dialog__content article h3 {
 body .detail-dialog__content article p,
 body .detail-dialog__content article a {
   font-size: clamp(18px, 1.6vw, 22px) !important;
-  font-weight: 900 !important;
+  font-weight: 400 !important;
   line-height: 1.65;
 }
 .detail-dialog__content article a {
