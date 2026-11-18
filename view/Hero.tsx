@@ -19,7 +19,7 @@ const SPAWN_GAP_MIN = 450;
 const SPAWN_GAP_SPREAD = 1400;
 const randomSpawnDelay = () => SPAWN_GAP_MIN + Math.random() * SPAWN_GAP_SPREAD;
 const PAINTING_HORIZON = 0.565;
-const framePath = (frame: number) => `/animations/firework-frames/${frame}.png`;
+const framePath = (frame: number) => `/animations/firework-frames/${frame}.svg`;
 const NIGHT_FRAME_MS = 1250;
 
 function createFirework(id: number, previous?: Firework, now = performance.now()): Firework {
@@ -64,7 +64,7 @@ export default function Hero({ onContact }: HeroProps) {
     let timer: number | undefined;
     const images = Array.from({ length: 3 }, (_, index) => {
       const image = new Image();
-      image.src = `/ocean/night-frame-${index}.png`;
+      image.src = `/ocean/night-frame-${index}.svg`;
       return image;
     });
     // Decode all frames before the first swap, while the opening clouds are visible.
@@ -160,9 +160,9 @@ export default function Hero({ onContact }: HeroProps) {
       style={{ '--sea-horizon': seaHorizon } as CSSProperties}>
       <div className="hero__painted-scene" aria-hidden="true">
         <img ref={imageRef} className="hero__seascape"
-          src={`/ocean/night-frame-${nightFrame}.png`} alt="" />
+          src={`/ocean/night-frame-${nightFrame}.svg`} alt="" />
         <div className="hero__boat-rock">
-          <img className="hero__boat" src="/ocean/boat.png" alt="" draggable={false} />
+          <img className="hero__boat" src="/ocean/boat.svg" alt="" draggable={false} />
         </div>
       </div>
       <div className="hero__fade" aria-hidden="true" />

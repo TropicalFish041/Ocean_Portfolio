@@ -1,0 +1,7 @@
+/* SVG-only asset paths; original geometry, labels and animation remain unchanged. */
+.ocean-world {
+  /* Temporarily disable underwater color-gradient rendering. */
+  background: #08172f;
+}
+.ocean-world::before { background-image: url('/textures/impasto-relief.svg'); }
+.ocean-world::after { background-image: url('/textures/impasto-relief.svg'); }

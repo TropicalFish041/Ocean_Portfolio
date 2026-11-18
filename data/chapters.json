@@ -1,8 +1,8 @@
 [
   {
     "id": "about",
-    "image": "/fish/butterflyfish.png",
-    "fishName": "Butterflyfish",
+    "image": "/fish/lionfish.svg",
+    "fishName": "Lionfish",
     "title": "About Me",
     "items": [
       {
@@ -45,7 +45,7 @@
   },
   {
     "id": "projects",
-    "image": "/fish/peppermint-angelfish.png",
+    "image": "/fish/peppermint-angelfish.svg",
     "fishName": "Peppermint Angelfish",
     "title": "Projects & Experience",
     "items": [
@@ -77,7 +77,7 @@
   },
   {
     "id": "shark",
-    "image": "/fish/shark-and-pilotfish.png",
+    "image": "/fish/shark-and-pilotfish.svg",
     "fishName": "Shark and pilot fish",
     "title": "xxx",
     "items": [
@@ -89,7 +89,7 @@
   },
   {
     "id": "experience",
-    "image": "/fish/opah.png",
+    "image": "/fish/opah.svg",
     "fishName": "Opah",
     "title": "xxx",
     "items": [

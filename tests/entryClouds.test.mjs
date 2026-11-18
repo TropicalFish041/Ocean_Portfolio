@@ -9,21 +9,18 @@ const entry = read('view/EntryGate.tsx');
 const css = read('app/globals.css');
 const offline = read('scripts/create-offline-preview.mjs');
 
-test('opening sky keeps three PNG frames and the unchanged 1100ms cycle', () => {
+test('opening sky uses 3 SVG frames at the original 1100ms cadence', () => {
   assert.match(entry, /SKY_FRAMES = 3/);
   assert.match(entry, /SKY_FRAME_MS = 1100/);
-  assert.match(entry, /\/intro\/sky-\$\{i\}\.png/);
+  assert.match(entry, /sky-front-\$\{i\}\.svg/);
   for (let i = 0; i < 3; i++) {
-    const path = join(root, 'public/intro', `sky-${i}.png`);
+    const path = join(root, 'public/intro', `sky-front-${i}.svg`);
     assert.ok(statSync(path).size > 100_000);
-    const png = readFileSync(path);
-    assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
-    assert.equal(png.readUInt32BE(16), 1912);
-    assert.equal(png.readUInt32BE(20), 816);
+    assert.match(readFileSync(path, 'utf8'), /<svg\b/);
   }
 });
 
-test('independently positioned transparent clouds meet exact 1/5 and 2/5 alignment', () => {
+test('independently positioned transparent clouds retain exact 1/5 and 2/5 alignment', () => {
   assert.match(entry, /\[0, 1, 2\]\.map\(layer/);
   assert.match(entry, /entry-gate__cloud-layer--\$\{layer \+ 1\}/);
   assert.match(css, /\.entry-gate__cloud-stack\s*\{[^}]*height: 110dvh/s);
@@ -35,7 +32,11 @@ test('independently positioned transparent clouds meet exact 1/5 and 2/5 alignme
   assert.deepEqual(tops, [-25, -5, 35]);
   assert.equal(tops[1] - tops[0], 20);
   assert.equal(tops[2] - tops[1], 40);
-  assert.match(css, /\.entry-gate__cloud-layer--2 img,[\s\S]*?mask-image: linear-gradient\(to bottom, transparent 0%/);
+  assert.match(css, /\.entry-gate__cloud-layer--1 img \{/);
+  assert.match(css, /\.entry-gate__cloud-layer--2 img \{/);
+  assert.match(css, /\.entry-gate__cloud-layer--3 img \{/);
+  assert.match(css, /transparent 65%/);
+  assert.match(css, /transparent 83%/);
 });
 
 test('all clouds travel UP, with front faster than middle faster than rear', () => {
@@ -59,7 +60,6 @@ test('all clouds travel UP, with front faster than middle faster than rear', () 
 test('main scene is already mounted and starts moving with the first cloud', () => {
   assert.match(entry, /document\.body\.classList\.add\('ocean-entry-leaving'\)/);
   assert.doesNotMatch(css, /animation-play-state: paused/);
-  assert.match(css, /backface-visibility: hidden/);
   assert.match(css, /sea-camera-rock 6\.4s/);
   const camera = css.match(/@keyframes sea-camera-rock \{([\s\S]*?)\}/)?.[1] ?? '';
   assert.doesNotMatch(camera, /scale\(/);

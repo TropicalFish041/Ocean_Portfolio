@@ -6,7 +6,7 @@ const SKY_FRAMES = 3;
 const SKY_FRAME_MS = 1100; // unchanged cadence
 const EXIT_MS = 4650; // slightly longer than the slowest cloud layer
 
-/** Three overlapping transparent PNG sheets; each exits upward at its own speed. */
+/** Three overlapping transparent SVG sheets; each exits upward at its own speed. */
 export default function EntryGate() {
   const [frame, setFrame] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -28,9 +28,7 @@ export default function EntryGate() {
     if (finished) return;
     for (let i = 0; i < SKY_FRAMES; i++) {
       const image = new Image();
-      image.src = `/intro/sky-${i}.png`;
-      const front = new Image();
-      front.src = `/intro/sky-front-${i}.png`;
+      image.src = `/intro/sky-front-${i}.svg`;
     }
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const timer = window.setInterval(() => {
@@ -64,7 +62,7 @@ export default function EntryGate() {
       <div className="entry-gate__cloud-stack" aria-hidden="true">
         {[0, 1, 2].map(layer => (
           <div className={`entry-gate__cloud-layer entry-gate__cloud-layer--${layer + 1}`} key={layer}>
-            <img src={layer === 0 ? `/intro/sky-front-${frame}.png` : `/intro/sky-${frame}.png`} alt="" draggable={false} />
+            <img src={`/intro/sky-front-${frame}.svg`} alt="" draggable={false} />
           </div>
         ))}
       </div>

@@ -10,10 +10,10 @@ interface Props {
   onOpen: (chapterId: string) => void;
 }
 
-// The supplied swimming GIFs have exactly five transparent frames each.
+// The swimming artwork uses exactly five numbered SVG frames per fish.
 // Keep animation timing local to the view; no use-case or domain changes needed.
 const SWIM: Record<string, { folder: string; frameMs: number }> = {
-  about: { folder: 'butterflyfish', frameMs: 180 },
+  about: { folder: 'lionfish', frameMs: 180 },
   projects: { folder: 'peppermint-angelfish', frameMs: 180 },
   experience: { folder: 'opah', frameMs: 150 },
   shark: { folder: 'shark', frameMs: 160 },
@@ -47,7 +47,7 @@ export default function ChapterSection({ chapter, index, onOpen }: Props) {
     return () => window.clearInterval(timer);
   }, [inView, animation]);
 
-  // Preserve pixel-accurate clicking even as the five PNG frames change.
+  // Preserve pixel-accurate clicking even as the five SVG frames change.
   useEffect(() => {
     const image = imageRef.current;
     if (!image) return;
@@ -76,7 +76,7 @@ export default function ChapterSection({ chapter, index, onOpen }: Props) {
     if (!image || !pixels) { onOpen(chapter.id); return; }
     const bounds = image.getBoundingClientRect();
     if (!bounds.width || !bounds.height) return;
-    // The tall butterflyfish frames are letterboxed by object-fit: contain.
+    // The lionfish SVG frames are letterboxed by object-fit: contain.
     const scale = Math.min(bounds.width / pixels.width, bounds.height / pixels.height);
     const displayedWidth = pixels.width * scale;
     const displayedHeight = pixels.height * scale;
@@ -89,7 +89,7 @@ export default function ChapterSection({ chapter, index, onOpen }: Props) {
   };
 
   const src = animation
-    ? `/fish/frames/${animation.folder}/${frame}.png`
+    ? `/fish/frames/${animation.folder}/${frame}.svg`
     : chapter.image;
 
   return (
@@ -97,19 +97,19 @@ export default function ChapterSection({ chapter, index, onOpen }: Props) {
       className={`chapter-section chapter-section--${chapter.id} ${index % 2 ? 'chapter-section--alternate' : ''}${inView ? ' chapter-section--in-view' : ''}`}
       id={chapter.id} aria-label={chapter.fishName}>
       {chapter.id === 'about' && (
-        <img className="coral-reef coral-reef--about" src="/coral/reef-about.png"
+        <img className="coral-reef coral-reef--about" src="/coral/reef-about.svg"
           alt="" aria-hidden="true" draggable={false} loading="lazy" />
       )}
       {chapter.id === 'projects' && (
-        <img className="coral-reef coral-reef--projects" src="/coral/reef-projects.png"
+        <img className="coral-reef coral-reef--projects" src="/coral/reef-projects.svg"
           alt="" aria-hidden="true" draggable={false} loading="lazy" />
       )}
       {chapter.id === 'shark' && (
-        <img className="coral-reef coral-reef--shark" src="/coral/reef-shark.png"
+        <img className="coral-reef coral-reef--shark" src="/coral/reef-shark.svg"
           alt="" aria-hidden="true" draggable={false} loading="lazy" />
       )}
       {chapter.id === 'experience' && (
-        <img className="coral-reef kelp-forest--experience" src="/coral/kelp-experience.png"
+        <img className="coral-reef kelp-forest--experience" src="/coral/kelp-experience.svg"
           alt="" aria-hidden="true" draggable={false} loading="lazy" />
       )}
       <button className="fish-button" type="button" onClick={openIfPainted}

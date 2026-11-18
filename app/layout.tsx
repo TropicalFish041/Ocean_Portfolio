@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import './svg-assets.css';
 
 export const metadata: Metadata = {
   title: 'Ruoshui Deng — Beneath the Surface',

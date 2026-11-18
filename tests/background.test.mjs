@@ -9,16 +9,17 @@ const css = read('app/globals.css');
 
 test('night scene and original impasto texture are preserved', () => {
   assert.match(hero, /night-frame-/);
-  assert.match(css, /impasto-relief\.webp/);
+  assert.match(read('app/svg-assets.css'), /impasto-relief\.svg/);
   assert.match(css, /--sea-horizon/);
   assert.match(css, /\.gif-firework--reflection/);
-  assert.ok(statSync(join(root, 'public/ocean/night-frame-0.png')).size > 100_000);
+  assert.ok(statSync(join(root, 'public/ocean/night-frame-0.svg')).size > 100_000);
   assert.equal(JSON.parse(read('data/chapters.json')).length, 4);
 });
 
 test('continuous lighter-to-abyss gradient and visible lower texture', () => {
-  assert.match(css, /#071b59 18\.45%/);
-  assert.match(css, /#010512 100%/);
+  const svgCss = read('app/svg-assets.css');
+  assert.match(svgCss, /background: #08172f/);
+  assert.doesNotMatch(svgCss, /linear-gradient/);
   assert.match(css, /\.ocean-world::before/);
   assert.match(css, /\.ocean-world::after/);
   assert.match(css, /background-size: 1120px 1120px/);
@@ -45,7 +46,7 @@ test('original staggered single-burst fireworks and handwritten nav are still th
   assert.match(hero, /hero__contact-brush/);
   assert.match(hero, /Scroll to view my work/);
   for (let i = 0; i < 5; i++) {
-    assert.ok(statSync(join(root, 'public/animations/firework-frames', `${i}.png`)).size > 1000);
+    assert.ok(statSync(join(root, 'public/animations/firework-frames', `${i}.svg`)).size > 1000);
   }
 });
 
@@ -57,7 +58,7 @@ test('offline preview has independent contact and four fish chapters', () => {
 });
 
 
-test('hello interlude, viewport-triggered swim and five PNG frames per fish', () => {
+test('hello interlude, viewport-triggered swim and five SVG frames per fish', () => {
   const section = read('view/ChapterSection.tsx');
   const journey = read('view/OceanJourney.tsx');
   const chapters = JSON.parse(read('data/chapters.json'));
@@ -69,12 +70,12 @@ test('hello interlude, viewport-triggered swim and five PNG frames per fish', ()
   assert.match(section, /setFrame\(previous => \(previous \+ 1\) % 5\)/);
   assert.match(css, /chapter-section--in-view/);
   assert.deepEqual(chapters.map(c => c.id), ['about','projects','shark','experience']);
-  assert.equal(chapters[1].image, '/fish/peppermint-angelfish.png');
+  assert.equal(chapters[1].image, '/fish/peppermint-angelfish.svg');
   assert.equal(chapters[1].title, 'Projects & Experience');
   assert.equal(chapters[1].items.length, 6);
-  const folders = ['butterflyfish','peppermint-angelfish','opah','shark'];
+  const folders = ['lionfish','peppermint-angelfish','opah','shark'];
   for (const folder of folders) for (let frame=0;frame<5;frame++) {
-    assert.ok(statSync(join(root,'public/fish/frames',folder,`${frame}.png`)).size > 1000);
+    assert.ok(statSync(join(root,'public/fish/frames',folder,`${frame}.svg`)).size > 1000);
   }
   assert.match(read('scripts/create-offline-preview.mjs'), /swimJS/);
 });
@@ -86,7 +87,7 @@ test('two independent coral cutouts decorate only the first two sections', () =>
   assert.match(component, /coral-reef--projects/);
   assert.match(css, /@keyframes coral-sway/);
   assert.match(css, /pointer-events: none/);
-  for (const image of ['reef-about.png', 'reef-projects.png']) {
+  for (const image of ['reef-about.svg', 'reef-projects.svg']) {
     assert.ok(statSync(join(root, 'public/coral', image)).size > 100_000);
   }
 });
@@ -127,10 +128,10 @@ test('three-frame sky gate, animated sea, boat and independently positioned fire
   assert.match(css, /sea-camera-rock/);
   assert.match(css, /boat-rock/);
   for (let i=0; i<3; i++) {
-    assert.ok(statSync(join(root, 'public/intro', `sky-${i}.png`)).size>100_000);
-    assert.ok(statSync(join(root, 'public/ocean', `night-frame-${i}.png`)).size>100_000);
+    assert.ok(statSync(join(root, 'public/intro', `sky-front-${i}.svg`)).size>100_000);
+    assert.ok(statSync(join(root, 'public/ocean', `night-frame-${i}.svg`)).size>100_000);
   }
-  assert.ok(statSync(join(root, 'public/ocean/boat.png')).size>10_000);
+  assert.ok(statSync(join(root, 'public/ocean/boat.svg')).size>10_000);
 });
 
 test('reef ends are no longer clipped and shark enters from the left', () => {
@@ -144,7 +145,7 @@ test('reef ends are no longer clipped and shark enters from the left', () => {
 test('four centered handwritten labels and two new moving underwater cutouts', () => {
   const component = read('view/ChapterSection.tsx');
   for (const label of ['About Me','Experience','Arts','Interests']) assert.match(component, new RegExp('>' + label + '<'));
-  for (const name of ['reef-shark.png','kelp-experience.png']) {
+  for (const name of ['reef-shark.svg','kelp-experience.svg']) {
     assert.ok(statSync(join(root, 'public/coral', name)).size > 100_000);
   }
   assert.match(component, /coral-reef--shark/);

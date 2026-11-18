@@ -23,14 +23,12 @@ test('exactly four swimming scenes after the Hello interlude', () => {
   assert.equal(new Set(portfolioChapters.map(({ id }) => id)).size, 4);
 });
 
-test('all artwork references point to bundled transparent PNGs', () => {
+test('all artwork references point to the supplied SVGs', () => {
   for (const scene of portfolioChapters) {
-    assert.match(scene.image, /^\/fish\/[a-z-]+\.png$/);
+    assert.match(scene.image, /^\/fish\/[a-z-]+\.svg$/);
     const file = resolve(root, 'public', scene.image.slice(1));
     assert.ok(existsSync(file), file);
-    const image = readFileSync(file);
-    assert.equal(image.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
-    assert.equal(image[25], 6, 'PNG color type is RGBA');
+    assert.match(readFileSync(file, 'utf8'), /<svg\b/);
     assert.ok(scene.fishName && scene.items.length > 0);
   }
 });

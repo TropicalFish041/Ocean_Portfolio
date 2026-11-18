@@ -1,29 +1,28 @@
-/** Standalone file:// preview built from the same content, CSS, and PNGs as Next.js. */
+/** Standalone file:// preview built from the same content, CSS, and SVGs as Next.js. */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const paintTexture = readFileSync(join(root, 'public/textures/impasto-relief.webp')).toString('base64');
-const seaPainting = readFileSync(join(root, 'public/ocean/night-frame-0.png')).toString('base64');
-const skyFrames = Array.from({ length: 3 }, (_, i) => 'data:image/png;base64,' + readFileSync(join(root, 'public/intro', `sky-${i}.png`)).toString('base64'));
-const skyFrontFrames = Array.from({ length: 3 }, (_, i) => 'data:image/png;base64,' + readFileSync(join(root, 'public/intro', `sky-front-${i}.png`)).toString('base64'));
-const nightFrames = Array.from({ length: 3 }, (_, i) => 'data:image/png;base64,' + readFileSync(join(root, 'public/ocean', `night-frame-${i}.png`)).toString('base64'));
-const boatSource = 'data:image/png;base64,' + readFileSync(join(root, 'public/ocean/boat.png')).toString('base64');
+const paintTexture = readFileSync(join(root, 'public/textures/impasto-relief.svg')).toString('base64');
+const seaPainting = readFileSync(join(root, 'public/ocean/night-frame-0.svg')).toString('base64');
+const skyFrames = Array.from({ length: 3 }, (_, i) => 'data:image/svg+xml;base64,' + readFileSync(join(root, 'public/intro', `sky-front-${i}.svg`)).toString('base64'));
+const nightFrames = Array.from({ length: 3 }, (_, i) => 'data:image/svg+xml;base64,' + readFileSync(join(root, 'public/ocean', `night-frame-${i}.svg`)).toString('base64'));
+const boatSource = 'data:image/svg+xml;base64,' + readFileSync(join(root, 'public/ocean/boat.svg')).toString('base64');
 const audioSource = 'data:audio/ogg;base64,' + readFileSync(join(root, 'public/audio/background.ogg')).toString('base64');
 const coralSources = Object.fromEntries(Object.entries({
-  about: 'reef-about.png', projects: 'reef-projects.png',
-  shark: 'reef-shark.png', experience: 'kelp-experience.png',
-}).map(([id, filename]) => [id, 'data:image/png;base64,' + readFileSync(join(root, 'public/coral', filename)).toString('base64')]));
-const frameSources = Array.from({ length: 5 }, (_, i) => 'data:image/png;base64,' + readFileSync(join(root, 'public/animations/firework-frames', `${i}.png`)).toString('base64'));
-const css = readFileSync(join(root, 'app/globals.css'), 'utf8')
-  .replaceAll("url('/textures/impasto-relief.webp')", `url('data:image/webp;base64,${paintTexture}')`);
+  about: 'reef-about.svg', projects: 'reef-projects.svg',
+  shark: 'reef-shark.svg', experience: 'kelp-experience.svg',
+}).map(([id, filename]) => [id, 'data:image/svg+xml;base64,' + readFileSync(join(root, 'public/coral', filename)).toString('base64')]));
+const frameSources = Array.from({ length: 5 }, (_, i) => 'data:image/svg+xml;base64,' + readFileSync(join(root, 'public/animations/firework-frames', `${i}.svg`)).toString('base64'));
+const css = (readFileSync(join(root, 'app/globals.css'), 'utf8') + '\n' + readFileSync(join(root, 'app/svg-assets.css'), 'utf8'))
+  .replaceAll("url('/textures/impasto-relief.svg')", `url('data:image/svg+xml;base64,${paintTexture}')`);
 const chapters = JSON.parse(readFileSync(join(root, 'data/chapters.json'), 'utf8'));
-// The fish GIFs are not shipped: use the exact five PNG frames converted from each.
-const swimFolders = { about: 'butterflyfish', projects: 'peppermint-angelfish', experience: 'opah', shark: 'shark' };
+// Five numbered SVG frames are used for each fish.
+const swimFolders = { about: 'lionfish', projects: 'peppermint-angelfish', experience: 'opah', shark: 'shark' };
 const swimFrameMs = { about: 180, projects: 180, experience: 150, shark: 160 };
 const fishFrameSources = Object.fromEntries(Object.entries(swimFolders).map(([id, folder]) => [id,
-  Array.from({ length: 5 }, (_, index) => 'data:image/png;base64,' +
-    readFileSync(join(root, 'public/fish/frames', folder, `${index}.png`)).toString('base64'))
+  Array.from({ length: 5 }, (_, index) => 'data:image/svg+xml;base64,' +
+    readFileSync(join(root, 'public/fish/frames', folder, `${index}.svg`)).toString('base64'))
 ]));
 
 const contact = JSON.parse(readFileSync(join(root, 'data/contact.json'), 'utf8'));
@@ -254,8 +253,7 @@ const entryJS = `
   if (!gate) return;
   const images = gate.querySelectorAll('.entry-sky-frame');
   const frames = ${JSON.stringify(skyFrames)};
-  const foregroundFrames = ${JSON.stringify(skyFrontFrames)};
-  [...frames, ...foregroundFrames].forEach(src => { const prefetch = new Image(); prefetch.src = src; });
+  frames.forEach(src => { const prefetch = new Image(); prefetch.src = src; });
   let index = 0, leaving = false;
   const previousOverflow = document.body.style.overflow;
   document.body.classList.add('ocean-entry-active');
@@ -264,7 +262,7 @@ const entryJS = `
   const interval = setInterval(() => {
     if (!document.hidden) {
       index = (index + 1) % frames.length;
-      images.forEach((img, layer) => { img.src = layer === 0 ? foregroundFrames[index] : frames[index]; });
+      images.forEach(img => { img.src = frames[index]; });
     }
   }, 1100);
   gate.addEventListener('click', () => {
@@ -295,6 +293,6 @@ const nightJS = `
   }, 1250);
 })();
 `;
-const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Ruoshui Deng — Ocean Portfolio (Offline)</title><style>${css}</style></head><body><audio id="site-music" src="${audioSource}" loop preload="auto" autoplay></audio><button id="entry-gate" class="entry-gate" type="button" aria-label="Click to explore the ocean portfolio"><div class="entry-gate__cloud-stack" aria-hidden="true">${Array.from({ length: 3 }, (_, layer) => `<div class="entry-gate__cloud-layer entry-gate__cloud-layer--${layer + 1}"><img class="entry-sky-frame" src="${layer === 0 ? skyFrontFrames[0] : skyFrames[0]}" alt="" draggable="false"/></div>`).join('')}</div><span class="entry-gate__prompt">click to explore</span></button><main class="ocean-world" aria-label="Underwater portfolio"><section class="hero" id="surface" aria-label="Oil-painted night sea with fireworks"><div class="hero__painted-scene" aria-hidden="true"><img id="night-scene" class="hero__seascape" src="data:image/png;base64,${seaPainting}" alt=""/><div class="hero__boat-rock"><img class="hero__boat" src="${boatSource}" alt=""/></div></div><div class="hero__fade" aria-hidden="true"></div><h1 class="hero__handwritten-name">Ruoshui Deng</h1><a class="hero__scroll-cue" href="#hello" id="hero-scroll-cue" aria-label="Scroll to view my work"><span>Scroll to view my work</span><svg viewBox="0 0 32 42" fill="none" aria-hidden="true"><path d="M16 2V35M5 25L16 36L27 25" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" /></svg></a><button class="hero__contact-brush" type="button" id="contact-shortcut" aria-label="Contact Ruoshui Deng"><svg viewBox="0 0 190 72" preserveAspectRatio="none" aria-hidden="true"><path d="M12 20 52 12 98 17 145 10 180 23 169 37 185 50 130 54 76 58 20 50 4 40Z" fill="#07070d"/><path d="M15 23Q72 11 168 24M8 35Q98 20 178 36M20 47Q92 57 169 43" stroke="#101019" stroke-width="10" stroke-linecap="round" opacity=".8"/><path d="M24 14 70 10M132 59 160 53M5 48 32 53" stroke="#020208" stroke-width="3" stroke-linecap="round" opacity=".8"/></svg><span>Contact</span></button></section><section class="hello-section" id="hello" aria-label="Introduction"><span>Hello</span></section>${scenes}</main><dialog class="detail-dialog" id="details" aria-labelledby="detail-title"><div class="detail-dialog__content"><button class="detail-dialog__close" id="close-panel" type="button" aria-label="Close information">×</button><h2 id="detail-title"></h2><div id="detail-items"></div></div></dialog><script>${inlineScript}</script><script>${swimJS}</script><script>${fireworksJS}</script><script>${musicJS}</script><script>${entryJS}</script><script>${nightJS}</script></body></html>`;
+const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Ruoshui Deng — Ocean Portfolio (Offline)</title><style>${css}</style></head><body><audio id="site-music" src="${audioSource}" loop preload="auto" autoplay></audio><button id="entry-gate" class="entry-gate" type="button" aria-label="Click to explore the ocean portfolio"><div class="entry-gate__cloud-stack" aria-hidden="true">${Array.from({ length: 3 }, (_, layer) => `<div class="entry-gate__cloud-layer entry-gate__cloud-layer--${layer + 1}"><img class="entry-sky-frame" src="${skyFrames[0]}" alt="" draggable="false"/></div>`).join('')}</div><span class="entry-gate__prompt">click to explore</span></button><main class="ocean-world" aria-label="Underwater portfolio"><section class="hero" id="surface" aria-label="Oil-painted night sea with fireworks"><div class="hero__painted-scene" aria-hidden="true"><img id="night-scene" class="hero__seascape" src="data:image/svg+xml;base64,${seaPainting}" alt=""/><div class="hero__boat-rock"><img class="hero__boat" src="${boatSource}" alt=""/></div></div><div class="hero__fade" aria-hidden="true"></div><h1 class="hero__handwritten-name">Ruoshui Deng</h1><a class="hero__scroll-cue" href="#hello" id="hero-scroll-cue" aria-label="Scroll to view my work"><span>Scroll to view my work</span><svg viewBox="0 0 32 42" fill="none" aria-hidden="true"><path d="M16 2V35M5 25L16 36L27 25" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" /></svg></a><button class="hero__contact-brush" type="button" id="contact-shortcut" aria-label="Contact Ruoshui Deng"><svg viewBox="0 0 190 72" preserveAspectRatio="none" aria-hidden="true"><path d="M12 20 52 12 98 17 145 10 180 23 169 37 185 50 130 54 76 58 20 50 4 40Z" fill="#07070d"/><path d="M15 23Q72 11 168 24M8 35Q98 20 178 36M20 47Q92 57 169 43" stroke="#101019" stroke-width="10" stroke-linecap="round" opacity=".8"/><path d="M24 14 70 10M132 59 160 53M5 48 32 53" stroke="#020208" stroke-width="3" stroke-linecap="round" opacity=".8"/></svg><span>Contact</span></button></section><section class="hello-section" id="hello" aria-label="Introduction"><span>Hello</span></section>${scenes}</main><dialog class="detail-dialog" id="details" aria-labelledby="detail-title"><div class="detail-dialog__content"><button class="detail-dialog__close" id="close-panel" type="button" aria-label="Close information">×</button><h2 id="detail-title"></h2><div id="detail-items"></div></div></dialog><script>${inlineScript}</script><script>${swimJS}</script><script>${fireworksJS}</script><script>${musicJS}</script><script>${entryJS}</script><script>${nightJS}</script></body></html>`;
 writeFileSync(join(root, 'offline-preview.html'), page, 'utf8');
 console.log('Created offline-preview.html (open directly without a server).');

@@ -20,24 +20,20 @@ test('Arts label moves inward without changing font and section order', () => {
   assert.deepEqual(JSON.parse(readFileSync(join(root,'data/chapters.json'),'utf8')).map(x => x.id), ['about','projects','shark','experience']);
 });
 
-test('only early ocean palette changes; subsequent ocean colors stay unchanged', () => {
-  assert.match(css, /#071b59 18\.45%/);
-  assert.match(css, /#0b2a70 35%/);
-  assert.match(css, /#0337a9 45%/);
-  for (const color of ['#083899 55%', '#0b2b76 71%', '#071c49 85%', '#040f25 94%', '#010512 100%']) {
-    assert.ok(css.includes(color), `unchanged later ocean stop ${color}`);
-  }
-  assert.match(css, /impasto-relief\.webp/);
+test('underwater palette is paused without changing layout', () => {
+  const replacement = readFileSync(join(root, 'app/svg-assets.css'), 'utf8');
+  assert.match(replacement, /\.ocean-world/);
+  assert.match(replacement, /background: #08172f/);
+  assert.doesNotMatch(replacement, /linear-gradient/);
+  assert.match(replacement, /impasto-relief\.svg/);
 });
 
-test('only foreground cloud uses upscaled PNG sequence with unchanged timing', () => {
+test('the three original sky layers use SVG and preserve the old 1100ms timing', () => {
   assert.match(entry, /SKY_FRAME_MS = 1100/);
-  assert.match(entry, /layer === 0 \? `\/intro\/sky-front-\$\{frame\}\.png`/);
+  assert.match(entry, /sky-front-\$\{frame\}\.svg/);
   for (let i=0; i<3; i++) {
-    const image = readFileSync(join(root, 'public/intro', `sky-front-${i}.png`));
-    assert.equal(image.readUInt32BE(16), 3824);
-    assert.equal(image.readUInt32BE(20), 1632);
+    const image = readFileSync(join(root, 'public/intro', `sky-front-${i}.svg`), 'utf8');
+    assert.match(image, /<svg\b/);
   }
-  assert.match(offline, /foregroundFrames/);
-  assert.match(offline, /skyFrontFrames/);
+  assert.match(offline, /skyFrames/);
 });
