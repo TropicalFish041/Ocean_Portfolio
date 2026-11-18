@@ -7,6 +7,7 @@ import ChapterSection from './ChapterSection';
 import ChapterDialog from './ChapterDialog';
 import BackgroundMusic from './BackgroundMusic';
 import EntryGate from './EntryGate';
+import UnderwaterRipples from './UnderwaterRipples';
 
 interface Props {
   chapters: readonly Chapter[];
@@ -22,6 +23,7 @@ export default function OceanJourney({ chapters, activeChapter, onOpenChapter, o
       <BackgroundMusic />
       <EntryGate />
       <main className="ocean-world" aria-label="Underwater portfolio">
+        <UnderwaterRipples />
         <Hero onContact={() => onOpenChapter('contact')} />
         <section className="hello-section" id="hello" aria-label="Introduction">
           <span>Hello</span>

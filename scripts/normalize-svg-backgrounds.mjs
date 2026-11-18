@@ -1,13 +1,23 @@
-/** One-time, idempotent transparency repair for the ORIGINAL extracted SVG paths.
- * No raster conversion, no path rewriting, and no changes to fish or animation frames.
- * Automatically runs before npm run dev/build/test/offline. */
+/** Idempotent repair for SVG backgrounds and four underwater ornaments.
+ * Keep fish, intro clouds, night sky and five-frame animations unchanged. */
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
 const root = fileURLToPath(new URL('../public/', import.meta.url));
 const coralNames = new Set(['reef-about.svg', 'reef-projects.svg', 'reef-shark.svg', 'kelp-experience.svg']);
-let changed = 0;
-let checked = 0;
+let checked = 0, changed = 0;
+
+function thinCoral(svg) {
+  if (svg.includes('data-coral-quarter-density="true"')) return svg;
+  svg = svg.replace(/(<path\b[^>]*\bd=")([^"]*)(")/g, (full, before, d, after) => {
+    const strokes = d.match(/M[^M]*/g);
+    if (!strokes || strokes.length < 4) return full;
+    return before + strokes.filter((_, i) => i % 4 === 0).join(' ') + after;
+  });
+  return svg.replace(/<svg\b/, '<svg data-coral-quarter-density="true"');
+}
+
 function walk(folder) {
   for (const entry of readdirSync(folder, { withFileTypes: true })) {
     const path = join(folder, entry.name);
@@ -15,28 +25,29 @@ function walk(folder) {
     if (!entry.name.endsWith('.svg')) continue;
     checked++;
     const original = readFileSync(path, 'utf8');
-    let content = original.replace(/<svg\b[^>]*>/i, tag => {
-      // Root 'background: white' makes even transparent vectors opaque.
-      return tag.replace(/\s+style=(['"])(.*?)\1/gi, (_attr, _q, style) => {
-        const keep = style.split(';').map(item => item.trim()).filter(item => {
-          return item && !/^background(?:-color)?\s*:/i.test(item)
-            && !/^position\s*:/i.test(item);
-        });
+    let content = original.replace(/<svg\b[^>]*>/i, tag =>
+      tag.replace(/\s+style=(['"])(.*?)\1/gi, (_attr, _q, style) => {
+        const keep = style.split(';').map(x => x.trim()).filter(x =>
+          x && !/^background(?:-color)?\s*:/i.test(x) && !/^position\s*:/i.test(x));
         return keep.length ? ` style="${keep.join('; ')}"` : '';
-      });
-    });
-    // Remove explicitly painted white backplates, if any, without touching ink paths.
+      }));
     content = content.replace(/<rect\b[^>]*\bfill=["'](?:white|#fff|#ffffff)["'][^>]*\/?\s*>/gi, '');
     if (/<image\b|data:image\/(?:png|jpe?g|webp)/i.test(content)) {
       throw new Error(`Raster data found in vector asset: ${path}`);
     }
-    // Coral and kelp only: 1.45 -> 2.175 is exactly 1.5x stroke width.
-    // Running the script again cannot multiply the width a second time.
     if (coralNames.has(entry.name)) {
-      content = content.replace(/stroke-width="1\.45"/g, 'stroke-width="2.175"');
+      // Source files use 2px in the style attribute; some edited copies use
+      // a stroke-width XML attribute. Multiply either representation by 6.
+      if (!content.includes('data-coral-quarter-density="true"')) {
+        content = content.replace(/stroke-width\s*:\s*([\d.]+)px/g,
+          (_full, value) => `stroke-width: ${Number((Number(value) * 6).toFixed(4))}px`);
+        content = content.replace(/stroke-width="([\d.]+)"/g,
+          (_full, value) => `stroke-width="${Number((Number(value) * 6).toFixed(4))}"`);
+        content = thinCoral(content);
+      }
     }
     if (content !== original) { writeFileSync(path, content, 'utf8'); changed++; }
   }
 }
 walk(root);
-console.log(`SVG transparent backgrounds: ${checked} checked, ${changed} repaired.`);
+console.log(`SVG backgrounds: ${checked} checked, ${changed} updated.`);

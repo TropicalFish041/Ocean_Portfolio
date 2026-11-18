@@ -47,7 +47,7 @@ test('original staggered single-burst fireworks and handwritten nav are still th
   assert.match(hero, /hero__contact-brush/);
   assert.match(hero, /Scroll to view my work/);
   for (let i = 0; i < 5; i++) {
-    assert.ok(statSync(join(root, 'public/animations/firework-frames', `${i}.svg`)).size > (i === 0 ? 60 : 1000)); // 0.svg is deliberately blank
+    assert.ok(statSync(join(root, 'public/animations/firework-frames', `${i}.svg`)).size > (i === 0 ? 60 : 1000));
   }
 });
 
@@ -57,7 +57,6 @@ test('offline preview has independent contact and four fish chapters', () => {
   assert.match(offline, /JSON\.stringify\(\[\.\.\.chapters, contact\]\)/);
   assert.match(offline, /firework-frames/);
 });
-
 
 test('hello interlude, viewport-triggered swim and five SVG frames per fish', () => {
   const section = read('view/ChapterSection.tsx');
@@ -81,7 +80,6 @@ test('hello interlude, viewport-triggered swim and five SVG frames per fish', ()
   assert.match(read('scripts/create-offline-preview.mjs'), /swimJS/);
 });
 
-
 test('two independent coral cutouts decorate only the first two sections', () => {
   const component = read('view/ChapterSection.tsx');
   assert.match(component, /coral-reef--about/);
@@ -89,7 +87,9 @@ test('two independent coral cutouts decorate only the first two sections', () =>
   assert.match(css, /@keyframes coral-sway/);
   assert.match(css, /pointer-events: none/);
   for (const image of ['reef-about.svg', 'reef-projects.svg']) {
-    assert.ok(statSync(join(root, 'public/coral', image)).size > 100_000);
+    const svg = read(join('public/coral', image));
+    assert.match(svg, /data-coral-quarter-density="true"/);
+    assert.ok(statSync(join(root, 'public/coral', image)).size > 5_000);
   }
 });
 
@@ -147,7 +147,9 @@ test('four centered handwritten labels and two new moving underwater cutouts', (
   const component = read('view/ChapterSection.tsx');
   for (const label of ['About Me','Experience','Arts','Interests']) assert.match(component, new RegExp('>' + label + '<'));
   for (const name of ['reef-shark.svg','kelp-experience.svg']) {
-    assert.ok(statSync(join(root, 'public/coral', name)).size > 100_000);
+    const svg = read(join('public/coral', name));
+    assert.match(svg, /data-coral-quarter-density="true"/);
+    assert.ok(statSync(join(root, 'public/coral', name)).size > 5_000);
   }
   assert.match(component, /coral-reef--shark/);
   assert.match(component, /kelp-forest--experience/);

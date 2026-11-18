@@ -28,8 +28,14 @@ export default function ChapterDialog({ chapter, onClose }: Props) {
           <h2 id="detail-title">{chapter.title}</h2>
           {chapter.items.map((item) => (
             <article key={item.title}>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
+              {item.title === 'CV' ? (
+                <p><a href="/cv/Ruoshui_Deng_CV.pdf" download="Ruoshui_Deng_CV.pdf">{item.text}</a></p>
+              ) : (
+                <>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </>
+              )}
             </article>
           ))}
         </div>

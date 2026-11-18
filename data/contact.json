@@ -4,8 +4,21 @@
   "fishName": "",
   "title": "Contact me",
   "items": [
-    {"title": "Email", "text": "ruoshui041@gmail.com"},
-    {"title": "Github", "text": "@TropicalFish041"},
-    {"title": "Bilibili", "text": "@ARDEO041"}
+    {
+      "title": "Email",
+      "text": "ruoshui041@gmail.com"
+    },
+    {
+      "title": "Github",
+      "text": "@TropicalFish041"
+    },
+    {
+      "title": "Bilibili",
+      "text": "@ARDEO041"
+    },
+    {
+      "title": "CV",
+      "text": "download my CV"
+    }
   ]
 }
