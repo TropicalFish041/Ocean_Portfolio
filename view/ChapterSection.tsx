@@ -78,7 +78,7 @@ export default function ChapterSection({ chapter, index, onOpen }: Props) {
         <div className="chapter-section__label" aria-hidden="true">
           <span>About Me</span>
           <span className="chapter-section__explore">
-            <span>Click to explore</span>
+            <span>Click the fish</span>
             <svg viewBox="0 0 44 24" fill="none" aria-hidden="true">
               <path d="M40 12H4M14 3L4 12L14 21" stroke="currentColor" strokeWidth="2"
                 strokeLinecap="round" strokeLinejoin="round" />

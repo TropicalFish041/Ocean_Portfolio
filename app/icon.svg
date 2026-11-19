@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Black shark silhouette on Klein blue">
+  <rect width="128" height="128" fill="#002FA7"/>
+  <path fill="#000000" d="
+    M 24 59
+    C 34 54 46 51 57 51
+    L 66 24
+    Q 67 21 69 24
+    L 79 52
+    C 94 53 107 57 116 61
+    Q 121 63 116 65
+    C 108 69 96 73 81 74
+    C 77 78 73 87 71 96
+    Q 70 100 67 96
+    L 56 77
+    C 44 77 33 74 24 70
+    L 8 93
+    L 14 65
+    L 8 36
+    L 24 59
+    Z"/>
+</svg>

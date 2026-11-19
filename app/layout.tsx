@@ -3,7 +3,7 @@ import './globals.css';
 import './svg-assets.css';
 
 export const metadata: Metadata = {
-  title: 'Ruoshui Deng — Beneath the Surface',
+  title: '“Deep calleth unto deep.”',
   description: 'An illustrated journey through computer science, classics and creative projects.',
 };
 
