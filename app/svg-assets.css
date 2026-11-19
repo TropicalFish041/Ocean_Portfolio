@@ -203,7 +203,43 @@ body .chapter-section--about .chapter-section__explore > span {
 }
 
 /* Latin quotation between the night scene and the swimming fish. */
-.hello-section__quote { display: flex; flex-direction: column; align-items: flex-end; max-width: 92vw; padding: 0 2vw; text-align: right; }
+/* The quotation remains centered; its source has its own natural, uncompressed width. */
+.hello-section__quote {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  padding: 0;
+  margin-inline: auto;
+  text-align: center;
+}
 .hello-section__quote > span { font-size: clamp(28px, 6vw, 90px); line-height: 1.24; }
-.hello-section__source { margin-top: 12px; font-size: clamp(14px, 1.75vw, 24px); line-height: 1.35; font-weight: 500 !important; text-align: right; }
+.hello-section__source {
+  display: block;
+  align-self: flex-end;
+  flex: 0 0 auto;
+  width: max-content;
+  max-width: none;
+  margin: 12px 0 0;
+  padding: 0;
+  white-space: nowrap;
+  text-indent: 0;
+  text-align: left;
+  font-size: clamp(14px, 1.75vw, 24px);
+  line-height: 1.35;
+  font-weight: 500 !important;
+}
 .hello-section__source strong { font-weight: 900 !important; }
+
+/* Shift only the longer Miscellaneous heading left, keeping a clear page margin. */
+.chapter-section--experience .chapter-section__label {
+  left: clamp(28px, 7vw, 96px);
+  right: auto;
+}
+@media (max-width: 700px) {
+  .chapter-section--experience .chapter-section__label {
+    left: clamp(20px, 5.5vw, 30px);
+    font-size: clamp(28px, 7.2vw, 42px);
+  }
+}
