@@ -28,7 +28,10 @@ export default function OceanJourney({ chapters, activeChapter, onOpenChapter, o
         <section className="hello-section" id="hello" aria-label="Introduction">
           <div className="hello-section__quote">
             <span>Veritas liberabit vos.</span>
-            <small className="hello-section__source">——<strong>John 8:32</strong></small>
+            <small className="hello-section__source"
+              style={{ letterSpacing: '0.05em', wordSpacing: 'normal', fontKerning: 'normal' }}>
+              ——{'\u00a0'}<strong>John 8:32</strong>
+            </small>
           </div>
         </section>
         {chapters.map((chapter, index) => (

@@ -1,36 +1,18 @@
 # Ocean Portfolio
 
-An interactive, oil-painted ocean portfolio built with **Next.js, React, and TypeScript**.
+My personal portfolio: a scroll-driven ocean where the fish are the navigation. All the artwork is SVG I drew myself, and there's a timeline of illustrations with playable videos.
 
-Scroll from a nighttime sea with animated fireworks to the deep ocean. Click the five fish illustrations to explore About, Projects, Skills, Experience, and Contact.
+Live site: https://ocean-portfolio-dun.vercel.app
 
-## Run locally
+Built with Next.js, React, TypeScript, and CSS/SVG, deployed on Vercel. I designed it and used AI to help write the code, but I review, debug, and make the architecture decisions myself.
 
-Requires Node.js 22+.
+## Run it locally
+
+Needs Node.js 22+.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open http://localhost:3000.
-
-## Commands
-
-```bash
-npm run typecheck
-npm test
-npm run build
-```
-
-## Customize
-
-- Content: `data/chapters.json`
-- Fish images: `public/fish/`
-- Background and layout: `app/globals.css`
-- Night seascape: `public/ocean/night-seascape.png`
-- Fireworks: `view/Hero.tsx` and `public/animations/`
-
-The project separates entities, use cases, interface adapters, data access, and views following Clean Architecture principles.
-
-**Note:** The current `Hero.tsx` references `/animations/firework.gif`, but the repository contains `public/animations/firworks.gif`. Rename the asset or update the reference. The offline-preview generator also references a missing `fireworks.js` and needs updating before `npm run offline` can work.
+To check everything: `npm run typecheck`, `npm test`, `npm run build`.
