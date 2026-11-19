@@ -79,13 +79,8 @@
     "id": "shark",
     "image": "/fish/shark-and-pilotfish.svg",
     "fishName": "Shark and pilot fish",
-    "title": "xxx",
-    "items": [
-      {
-        "title": "xxx",
-        "text": "xxx."
-      }
-    ]
+    "title": "Arts",
+    "items": []
   },
   {
     "id": "experience",

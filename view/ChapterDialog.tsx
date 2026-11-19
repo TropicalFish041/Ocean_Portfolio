@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import type { ChapterViewModel } from '../interface_adapter/ChapterViewModel';
+import ArtTimeline from './ArtTimeline';
 
 interface Props {
   chapter: ChapterViewModel | null;
@@ -26,7 +27,7 @@ export default function ChapterDialog({ chapter, onClose }: Props) {
         <div className="detail-dialog__content">
           <button className="detail-dialog__close" type="button" onClick={onClose} aria-label="Close information">×</button>
           <h2 id="detail-title">{chapter.title}</h2>
-          {chapter.items.map((item) => (
+          {chapter.id === 'shark' ? <ArtTimeline /> : chapter.items.map((item) => (
             <article key={item.title}>
               {item.title === 'CV' ? (
                 <p><a href="/cv/Ruoshui_Deng_CV.pdf" download="Ruoshui_Deng_CV.pdf">{item.text}</a></p>

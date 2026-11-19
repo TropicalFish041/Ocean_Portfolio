@@ -12,6 +12,7 @@ export class ShowChapterPresenter implements ShowChapterOutputBoundary {
   present(output: ShowChapterOutputData): void {
     const chapter = output.chapter;
     this.display(chapter ? {
+      id: chapter.id,
       title: chapter.title,
       items: chapter.items.map(({ title, text }) => ({ title, text })),
     } : null);

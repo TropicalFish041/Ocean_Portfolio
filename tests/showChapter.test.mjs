@@ -29,7 +29,7 @@ test('all artwork references point to the supplied SVGs', () => {
     const file = resolve(root, 'public', scene.image.slice(1));
     assert.ok(existsSync(file), file);
     assert.match(readFileSync(file, 'utf8'), /<svg\b/);
-    assert.ok(scene.fishName && scene.items.length > 0);
+    assert.ok(scene.fishName && (scene.id === 'shark' || scene.items.length > 0));
   }
 });
 
@@ -48,7 +48,8 @@ test('shark and top Contact route through the same use case but show different c
   const { controller, output } = pipeline();
   controller.open('shark');
   controller.open('contact');
-  assert.equal(output[0].title, 'xxx');
+  assert.equal(output[0].id, 'shark');
+  assert.equal(output[0].title, 'Arts');
   assert.equal(output[1].title, 'Contact me');
   assert.notDeepEqual(output[0].items, output[1].items);
   assert.equal(portfolioChapters.length, 4);

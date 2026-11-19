@@ -1,0 +1,199 @@
+{
+  "introduction": "A selection of my visual work from 2023 to 2026, including animation, illustration, fan comics, merchandise, commissions, and convention projects. The works below are arranged in reverse chronological order and represent only part of my archive. More work can be found on:",
+"links": [
+  {
+    "label": "Weibo@ARDEO041",
+    "href": "https://www.weibo.com/u/7537546829"
+  },
+  {
+    "label": "Bilibili@ARDEO041",
+    "href": "https://space.bilibili.com/697379302"
+  }
+],
+  "works": [
+    {
+      "id": "video-01",
+      "year": 2026,
+      "title": "[Re:Zero | Julius × Subaru] Gimme Love",
+      "date": "09/05/2026",
+      "type": "video",
+      "src": "/art/video-01.mp4"
+    },
+    {
+      "id": "video-02",
+      "year": 2026,
+      "title": "[Danganronpa V3 | Saiouma] Moonlight",
+      "date": "07/22/2026",
+      "type": "video",
+      "src": "/art/video-02.mp4"
+    },
+    {
+      "id": "video-03",
+      "year": 2026,
+      "title": "[Yuppie Psycho | Brian × TV Head] You Just Don't Get It",
+      "date": "07/08/2026",
+      "type": "video",
+      "src": "/art/video-03.mp4"
+    },
+    {
+      "id": "image-02",
+      "year": 2026,
+      "title": "[Yuppie Psycho / Brian × TV Head] Animatic Preview",
+      "date": "07/07/2026",
+      "type": "image",
+      "src": "/art/image-02.jpg"
+    },
+    {
+      "id": "video-04",
+      "year": 2026,
+      "title": "[Re:Zero | Satella] Don't Leave Me in a Hell Without You",
+      "date": "07/02/2026",
+      "type": "video",
+      "src": "/art/video-04.mp4"
+    },
+    {
+      "id": "image-03",
+      "year": 2026,
+      "title": "[Re:Zero / Satella] Animatic Preview",
+      "date": "06/31/2026",
+      "type": "image",
+      "src": "/art/image-03.jpg"
+    },
+    {
+      "id": "image-01",
+      "year": 2026,
+      "title": "Personal Artwork — Commission",
+      "date": "06/06/2026",
+      "type": "image",
+      "src": "/art/image-01.jpg"
+    },
+   {
+      "id": "image-07",
+      "year": 2025,
+      "title": "[Fullmetal Alchemist] Anthology Photos & My Contribution",
+      "date": "08/18/2025",
+      "type": "image",
+      "src": "/art/image-07.jpg"
+    },
+    {
+      "id": "image-04",
+      "year": 2025,
+      "title": "[ComiDay 29] Artist Alley Booth, Merch & Signed Sketches",
+      "date": "08/08/2025",
+      "type": "image",
+      "src": "/art/image-04.jpg"
+    },
+    {
+      "id": "image-13",
+      "year": 2025,
+      "title": "[Alice: Madness Returns / Alice] I'll Remember Everything About You — Fan Comic Cover (WIP)",
+      "date": "06/06/2025",
+      "type": "image",
+      "src": "/art/image-13.jpg"
+    },
+    {
+      "id": "image-08",
+      "year": 2025,
+      "title": "[ComiCup 31] Artist Alley Booth & Merch",
+      "date": "05/18/2025",
+      "type": "image",
+      "src": "/art/image-08.jpg"
+    },
+    {
+      "id": "image-12",
+      "year": 2025,
+      "title": "[Alice: Madness Returns / Alice] Merch — Wall Scroll, Fan & Pins",
+      "date": "05/14/2025",
+      "type": "image",
+      "src": "/art/image-12.jpg"
+    },
+    {
+      "id": "image-09",
+      "year": 2025,
+      "title": "[Your Turn to Die] Discontinuous Days — Fan Comic Preview",
+      "date": "05/08/2025",
+      "type": "image",
+      "src": "/art/image-09.jpg"
+    },
+    {
+      "id": "image-10",
+      "year": 2025,
+      "title": "[Your Turn to Die / Sara × Nao] Discontinuous Days — Fan Artbook Illustration 02",
+      "date": "04/11/2025",
+      "type": "image",
+      "src": "/art/image-10.jpg"
+    },
+    {
+      "id": "image-06",
+      "year": 2025,
+      "title": "[Fullmetal Alchemist / Edward × Winry] Anthology Contribution 02",
+      "date": "03/20/2025",
+      "type": "image",
+      "src": "/art/image-06.jpg"
+    },
+    {
+      "id": "image-05",
+      "year": 2025,
+      "title": "[Fullmetal Alchemist / Edward Elric] Anthology Contribution 01",
+      "date": "03/08/2025",
+      "type": "image",
+      "src": "/art/image-05.jpg"
+    },
+    {
+      "id": "image-11",
+      "year": 2025,
+      "title": "[Your Turn to Die / Kanna] Discontinuous Days — Fan Artbook Illustration 01",
+      "date": "01/01/2025",
+      "type": "image",
+      "src": "/art/image-11.jpg"
+    },
+    {
+      "id": "image-15",
+      "year": 2024,
+      "title": "[Chengdu Delicious in Dungeon Only Event] Artist Alley Booth & Merch",
+      "date": "07/13/2024",
+      "type": "image",
+      "src": "/art/image-15.jpg"
+    },
+    {
+      "id": "image-14",
+      "year": 2024,
+      "title": "[The Shining / Wendy] Mother's Day Fan Art",
+      "date": "05/12/2024",
+      "type": "image",
+      "src": "/art/image-14.jpg"
+    },
+    {
+      "id": "video-05",
+      "year": 2024,
+      "title": "[Delicious in Dungeon] THE BOILED EGG FELL!!!",
+      "date": "04/07/2024",
+      "type": "video",
+      "src": "/art/video-05.mp4"
+    },
+    {
+      "id": "image-17",
+      "year": 2024,
+      "title": "[ComiDay 27] Consignment Merch & Convention Participation",
+      "date": "04/06/2024",
+      "type": "image",
+      "src": "/art/image-17.jpg"
+    },
+    {
+      "id": "image-16",
+      "year": 2023,
+      "title": "[Your Turn to Die] Early Fan Merch, still selling on Taobao",
+      "date": "08/15/2023 - 06/16/2024",
+      "type": "image",
+      "src": "/art/image-16.jpg"
+    },
+    {
+      "id": "video-06",
+      "year": 2023,
+      "title": "[Frieren: Beyond Journey's End | Himmel × Frieren] 30 Seconds, an Eternity of Love",
+      "date": "11/18/2023",
+      "type": "video",
+      "src": "/art/video-06.mp4"
+    },
+  ]
+}
