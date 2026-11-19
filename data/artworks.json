@@ -1,15 +1,15 @@
 {
   "introduction": "A selection of my visual work from 2023 to 2026, including animation, illustration, fan comics, merchandise, commissions, and convention projects. The works below are arranged in reverse chronological order and represent only part of my archive. More work can be found on:",
-"links": [
-  {
-    "label": "Weibo@ARDEO041",
-    "href": "https://www.weibo.com/u/7537546829"
-  },
-  {
-    "label": "Bilibili@ARDEO041",
-    "href": "https://space.bilibili.com/697379302"
-  }
-],
+  "links": [
+    {
+      "label": "Weibo@ARDEO041",
+      "href": "https://www.weibo.com/u/7537546829"
+    },
+    {
+      "label": "Bilibili@ARDEO041",
+      "href": "https://space.bilibili.com/697379302"
+    }
+  ],
   "works": [
     {
       "id": "video-01",
@@ -41,7 +41,7 @@
       "title": "[Yuppie Psycho / Brian × TV Head] Animatic Preview",
       "date": "07/07/2026",
       "type": "image",
-      "src": "/art/image-02.jpg"
+      "src": "/art/image-02.JPG"
     },
     {
       "id": "video-04",
@@ -57,7 +57,7 @@
       "title": "[Re:Zero / Satella] Animatic Preview",
       "date": "06/31/2026",
       "type": "image",
-      "src": "/art/image-03.jpg"
+      "src": "/art/image-03.JPG"
     },
     {
       "id": "image-01",
@@ -65,15 +65,15 @@
       "title": "Personal Artwork — Commission",
       "date": "06/06/2026",
       "type": "image",
-      "src": "/art/image-01.jpg"
+      "src": "/art/image-01.JPG"
     },
-   {
+    {
       "id": "image-07",
       "year": 2025,
       "title": "[Fullmetal Alchemist] Anthology Photos & My Contribution",
       "date": "08/18/2025",
       "type": "image",
-      "src": "/art/image-07.jpg"
+      "src": "/art/image-07.JPG"
     },
     {
       "id": "image-04",
@@ -81,7 +81,7 @@
       "title": "[ComiDay 29] Artist Alley Booth, Merch & Signed Sketches",
       "date": "08/08/2025",
       "type": "image",
-      "src": "/art/image-04.jpg"
+      "src": "/art/image-04.JPG"
     },
     {
       "id": "image-13",
@@ -89,7 +89,7 @@
       "title": "[Alice: Madness Returns / Alice] I'll Remember Everything About You — Fan Comic Cover (WIP)",
       "date": "06/06/2025",
       "type": "image",
-      "src": "/art/image-13.jpg"
+      "src": "/art/image-13.PNG"
     },
     {
       "id": "image-08",
@@ -97,7 +97,7 @@
       "title": "[ComiCup 31] Artist Alley Booth & Merch",
       "date": "05/18/2025",
       "type": "image",
-      "src": "/art/image-08.jpg"
+      "src": "/art/image-08.JPG"
     },
     {
       "id": "image-12",
@@ -105,7 +105,7 @@
       "title": "[Alice: Madness Returns / Alice] Merch — Wall Scroll, Fan & Pins",
       "date": "05/14/2025",
       "type": "image",
-      "src": "/art/image-12.jpg"
+      "src": "/art/image-12.JPG"
     },
     {
       "id": "image-09",
@@ -113,7 +113,7 @@
       "title": "[Your Turn to Die] Discontinuous Days — Fan Comic Preview",
       "date": "05/08/2025",
       "type": "image",
-      "src": "/art/image-09.jpg"
+      "src": "/art/image-09.JPG"
     },
     {
       "id": "image-10",
@@ -121,7 +121,7 @@
       "title": "[Your Turn to Die / Sara × Nao] Discontinuous Days — Fan Artbook Illustration 02",
       "date": "04/11/2025",
       "type": "image",
-      "src": "/art/image-10.jpg"
+      "src": "/art/image-10.PNG"
     },
     {
       "id": "image-06",
@@ -129,7 +129,7 @@
       "title": "[Fullmetal Alchemist / Edward × Winry] Anthology Contribution 02",
       "date": "03/20/2025",
       "type": "image",
-      "src": "/art/image-06.jpg"
+      "src": "/art/image-06.PNG"
     },
     {
       "id": "image-05",
@@ -137,7 +137,7 @@
       "title": "[Fullmetal Alchemist / Edward Elric] Anthology Contribution 01",
       "date": "03/08/2025",
       "type": "image",
-      "src": "/art/image-05.jpg"
+      "src": "/art/image-05.PNG"
     },
     {
       "id": "image-11",
@@ -145,7 +145,7 @@
       "title": "[Your Turn to Die / Kanna] Discontinuous Days — Fan Artbook Illustration 01",
       "date": "01/01/2025",
       "type": "image",
-      "src": "/art/image-11.jpg"
+      "src": "/art/image-11.png"
     },
     {
       "id": "image-15",
@@ -153,7 +153,7 @@
       "title": "[Chengdu Delicious in Dungeon Only Event] Artist Alley Booth & Merch",
       "date": "07/13/2024",
       "type": "image",
-      "src": "/art/image-15.jpg"
+      "src": "/art/image-15.JPG"
     },
     {
       "id": "image-14",
@@ -161,7 +161,7 @@
       "title": "[The Shining / Wendy] Mother's Day Fan Art",
       "date": "05/12/2024",
       "type": "image",
-      "src": "/art/image-14.jpg"
+      "src": "/art/image-14.PNG"
     },
     {
       "id": "video-05",
@@ -177,7 +177,7 @@
       "title": "[ComiDay 27] Consignment Merch & Convention Participation",
       "date": "04/06/2024",
       "type": "image",
-      "src": "/art/image-17.jpg"
+      "src": "/art/image-17.JPG"
     },
     {
       "id": "image-16",
@@ -185,7 +185,7 @@
       "title": "[Your Turn to Die] Early Fan Merch, still selling on Taobao",
       "date": "08/15/2023 - 06/16/2024",
       "type": "image",
-      "src": "/art/image-16.jpg"
+      "src": "/art/image-16.JPG"
     },
     {
       "id": "video-06",
@@ -194,6 +194,6 @@
       "date": "11/18/2023",
       "type": "video",
       "src": "/art/video-06.mp4"
-    },
+    }
   ]
 }

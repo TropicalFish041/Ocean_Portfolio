@@ -8,6 +8,16 @@ export default function ArtTimeline() {
   return (
     <div className={styles.timeline}>
       <p className={styles.introduction}>{gallery.introduction}</p>
+      {gallery.links?.length > 0 && (
+        <p className={styles.archiveLinks}>
+          {gallery.links.map((link, index) => (
+            <span key={link.href}>
+              {index > 0 && ' · '}
+              <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+            </span>
+          ))}
+        </p>
+      )}
       {years.map(year => (
         <section className={styles.year} key={year} aria-labelledby={`art-year-${year}`}>
           <h3 className={styles.yearTitle} id={`art-year-${year}`}>{year}</h3>
@@ -15,7 +25,7 @@ export default function ArtTimeline() {
             {gallery.works.filter(work => work.year === year).map(work => (
               <figure className={styles.work} key={work.id}>
                 {work.type === 'video' ? (
-                  <video className={styles.media} controls playsInline preload="metadata"
+                  <video className={styles.media} controls playsInline preload="none"
                     aria-label={work.title} src={work.src}>
                     Your browser does not support MP4 video.
                   </video>
