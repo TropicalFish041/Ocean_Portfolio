@@ -2,7 +2,7 @@
 
 My personal portfolio: a scroll-driven ocean where the fish are the navigation. All the artwork is SVG I drew myself, and there's a timeline of illustrations with playable videos.
 
-Live site: https://ocean-portfolio-dun.vercel.app
+Live site: https://tropicalfish041.com/
 
 Built with Next.js, React, TypeScript, and CSS/SVG, deployed on Vercel. I designed it and used AI to help write the code, but I review, debug, and make the architecture decisions myself.
 
