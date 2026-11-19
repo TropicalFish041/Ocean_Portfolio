@@ -38,7 +38,7 @@ test('controller -> interactor -> presenter maps clicked fish to dialog content'
   controller.open('projects');
   assert.equal(output.length, 1);
   assert.equal(output[0].title, 'Projects & Experience');
-  assert.equal(output[0].items.length, 6);
+  assert.equal(output[0].items.length, 7);
   assert.ok(!('eyebrow' in output[0]));
   assert.ok(!('subtitle' in output[0]));
 });
@@ -108,4 +108,14 @@ test('inner source files never depend on outer layers', () => {
       assert.ok(!text.includes(`from '../${dependency}`) && !text.includes(`from '${dependency}`), `${filename}: ${dependency}`);
     }
   }
+});
+
+
+test('the final fish is a separate Miscellaneous gallery', () => {
+  const { controller, output } = pipeline();
+  controller.open('experience');
+  assert.equal(output[0].id, 'experience');
+  assert.equal(output[0].title, 'Miscellaneous');
+  const misc = JSON.parse(readFileSync(resolve(root, 'data/miscellaneous.json'), 'utf8'));
+  assert.equal(misc.images.length, 2);
 });

@@ -6,21 +6,35 @@ import styles from './ArtTimeline.module.css';
 
 type Preview = { src: string; title: string };
 
-function ArtworkImage({ src, title, id, onZoom }: Preview & { id: string; onZoom: () => void }) {
+function ArtworkImage({ src, originalSrc, title, id, warning, onZoom }: Preview & {
+  id: string; originalSrc?: string; warning?: string; onZoom: (source: string) => void;
+}) {
   const [failed, setFailed] = useState(false);
+  const [revealed, setRevealed] = useState(false);
   const [retry, setRetry] = useState(0);
+  const [source, setSource] = useState(src);
+  if (warning && !revealed) return (
+    <button className={styles.warningGate} type="button" onClick={() => setRevealed(true)}
+      aria-label={`Reveal ${title}: ${warning}`}>
+      <strong>Content Warning: Graphic Violence &amp; Gore</strong>
+      <span>Click to View</span>
+    </button>
+  );
   return failed ? (
     <div className={styles.imageFallback}>
       <span>Image could not be displayed.</span>
-      <button type="button" onClick={() => { setRetry(value => value + 1); setFailed(false); }}>Retry image</button>
-      <a href={src} target="_blank" rel="noopener noreferrer">Open original file</a>
+      <button type="button" onClick={() => { setRetry(value => value + 1); setSource(src); setFailed(false); }}>Retry image</button>
+      <a href={originalSrc ?? src} target="_blank" rel="noopener noreferrer">Open original file</a>
     </div>
   ) : (
-    <button className={styles.imageButton} type="button" onClick={onZoom}
+    <button className={styles.imageButton} type="button" onClick={() => onZoom(source)}
       aria-label={`Enlarge ${title}`}>
-      <img className={styles.media} src={retry ? `${src}?retry=${retry}` : src}
+      <img className={styles.media} src={retry ? `${source}?retry=${retry}` : source}
         alt={title} loading={id === 'image-08' ? 'eager' : 'lazy'}
-        decoding="async" onError={() => setFailed(true)} />
+        decoding="async" onError={() => {
+          if (originalSrc && source !== originalSrc) setSource(originalSrc);
+          else setFailed(true);
+        }} />
     </button>
   );
 }
@@ -79,7 +93,9 @@ export default function ArtTimeline() {
                   </video>
                 ) : (
                   <ArtworkImage id={work.id} src={work.src} title={work.title}
-                    onZoom={() => setPreview({ src: work.src, title: work.title })} />
+                    originalSrc={'originalSrc' in work ? work.originalSrc : undefined}
+                    warning={'contentWarning' in work && typeof work.contentWarning === 'string' ? work.contentWarning : undefined}
+                    onZoom={source => setPreview({ src: source, title: work.title })} />
                 )}
                 <figcaption className={styles.caption}>
                   <span className={styles.workTitle}>{work.title}</span>

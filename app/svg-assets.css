@@ -201,3 +201,9 @@ body .chapter-section--about .chapter-section__explore > span {
 @media (prefers-reduced-motion: reduce) {
   body .chapter-section--about .chapter-section__explore > span { animation: none !important; }
 }
+
+/* Latin quotation between the night scene and the swimming fish. */
+.hello-section__quote { display: flex; flex-direction: column; align-items: flex-end; max-width: 92vw; padding: 0 2vw; text-align: right; }
+.hello-section__quote > span { font-size: clamp(28px, 6vw, 90px); line-height: 1.24; }
+.hello-section__source { margin-top: 12px; font-size: clamp(14px, 1.75vw, 24px); line-height: 1.35; font-weight: 500 !important; text-align: right; }
+.hello-section__source strong { font-weight: 900 !important; }

@@ -38,7 +38,7 @@ test('every MP4 has a real, replaceable cover and the photo lightbox is keyboard
   const videoWorks = gallery.works.filter(work => work.type === 'video');
   assert.equal(videoWorks.length, 6);
   for (const work of videoWorks) {
-    assert.match(work.poster, /^\/art\/posters\/video-\d+\.jpg$/);
+    assert.match(work.poster, /^\/art\/posters\/video-\d+\.(jpg|png)$/);
     assert.ok(existsSync(join(root, 'public', work.poster.slice(1))), `Missing poster: ${work.poster}`);
   }
   const timeline = read('view/ArtTimeline.tsx');
@@ -61,4 +61,17 @@ test('About Me prompt breathes at Neco Black; site music stops during artwork vi
   assert.match(music, /document\.addEventListener\('ended', onVideoStop, true\)/);
   assert.match(music, /audio!\.pause\(\)/);
   assert.match(music, /resumeAfterVideo/);
+});
+
+
+test('graphic-content preview stays gated until activated and the quote and new chapter exist', () => {
+  const art = read('view/ArtTimeline.tsx');
+  const item = gallery.works.find(work => work.id === 'image-21');
+  assert.equal(item.contentWarning, 'Graphic Violence & Gore');
+  assert.match(art, /!revealed/);
+  assert.match(art, /Click to View/);
+  assert.match(read('view/OceanJourney.tsx'), /Veritas liberabit vos/);
+  assert.equal(JSON.parse(read('data/chapters.json'))[3].title, 'Miscellaneous');
+  assert.equal(JSON.parse(read('data/miscellaneous.json')).images.length, 2);
+  assert.match(read('scripts/prepare-art-images.mjs'), /image-08-display.jpg/);
 });

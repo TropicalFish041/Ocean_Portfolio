@@ -26,7 +26,10 @@ export default function OceanJourney({ chapters, activeChapter, onOpenChapter, o
         <UnderwaterRipples />
         <Hero onContact={() => onOpenChapter('contact')} />
         <section className="hello-section" id="hello" aria-label="Introduction">
-          <span>Hello</span>
+          <div className="hello-section__quote">
+            <span>Veritas liberabit vos.</span>
+            <small className="hello-section__source">——<strong>John 8:32</strong></small>
+          </div>
         </section>
         {chapters.map((chapter, index) => (
           <ChapterSection key={chapter.id} chapter={chapter} index={index} onOpen={onOpenChapter} />

@@ -63,7 +63,7 @@ test('hello interlude, viewport-triggered swim and five SVG frames per fish', ()
   const journey = read('view/OceanJourney.tsx');
   const chapters = JSON.parse(read('data/chapters.json'));
   assert.match(journey, /className="hello-section"/);
-  assert.match(journey, /<span>Hello<\/span>/);
+  assert.match(journey, /Veritas liberabit vos\./);
   assert.match(hero, /href="#hello"/);
   assert.match(section, /IntersectionObserver/);
   assert.match(section, /frameMs/);
@@ -72,7 +72,7 @@ test('hello interlude, viewport-triggered swim and five SVG frames per fish', ()
   assert.deepEqual(chapters.map(c => c.id), ['about','projects','shark','experience']);
   assert.equal(chapters[1].image, '/fish/peppermint-angelfish.svg');
   assert.equal(chapters[1].title, 'Projects & Experience');
-  assert.equal(chapters[1].items.length, 6);
+  assert.equal(chapters[1].items.length, 7);
   const folders = ['lionfish','peppermint-angelfish','opah','shark'];
   for (const folder of folders) for (let frame=0;frame<5;frame++) {
     assert.ok(statSync(join(root,'public/fish/frames',folder,`${frame}.svg`)).size > 1000);

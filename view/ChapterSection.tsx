@@ -88,7 +88,7 @@ export default function ChapterSection({ chapter, index, onOpen }: Props) {
       )}
       {chapter.id === 'projects' && <span className="chapter-section__label" aria-hidden="true">Experience</span>}
       {chapter.id === 'shark' && <span className="chapter-section__label" aria-hidden="true">Arts</span>}
-      {chapter.id === 'experience' && <span className="chapter-section__label" aria-hidden="true">Interests</span>}
+      {chapter.id === 'experience' && <span className="chapter-section__label" aria-hidden="true">Miscellaneous</span>}
     </section>
   );
 }

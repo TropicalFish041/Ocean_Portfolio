@@ -101,7 +101,8 @@
       "title": "[ComiCup 31] Artist Alley Booth & Merch",
       "date": "05/18/2025",
       "type": "image",
-      "src": "/art/image-08.JPG"
+      "src": "/art/image-08-display.jpg",
+      "originalSrc": "/art/image-08.JPG"
     },
     {
       "id": "image-12",
@@ -149,7 +150,7 @@
       "title": "[Your Turn to Die / Kanna] Discontinuous Days — Fan Artbook Illustration 01",
       "date": "01/01/2025",
       "type": "image",
-      "src": "/art/image-11.png"
+      "src": "/art/image-11.JPG"
     },
     {
       "id": "image-15",
@@ -184,7 +185,16 @@
       "type": "image",
       "src": "/art/image-17.JPG"
     },
-   {
+    {
+      "id": "video-06",
+      "year": 2023,
+      "title": "[Frieren: Beyond Journey's End | Himmel × Frieren] 30 Seconds, an Eternity of Love",
+      "date": "11/18/2023",
+      "type": "video",
+      "src": "/art/video-06.mp4",
+      "poster": "/art/posters/video-06.jpg"
+    },
+    {
       "id": "image-22",
       "year": 2023,
       "title": "Random Doodles",
@@ -201,23 +211,23 @@
       "src": "/art/image-16.JPG"
     },
     {
-      "id": "video-06",
+      "id": "image-19",
       "year": 2023,
-      "title": "[Frieren: Beyond Journey's End | Himmel × Frieren] 30 Seconds, an Eternity of Love",
-      "date": "11/18/2023",
-      "type": "video",
-      "src": "/art/video-06.mp4",
-      "poster": "/art/posters/video-06.jpg"
+      "title": "Personal Artwork — Commission",
+      "date": "04/07/2023",
+      "type": "image",
+      "src": "/art/image-19.PNG"
     },
-   {
+    {
       "id": "image-21",
       "year": 2023,
       "title": "[Metamorphosis / Saki Yoshida] Fan Art",
       "date": "01/24/2023",
       "type": "image",
-      "src": "/art/image-21.JPG"
+      "src": "/art/image-21.JPG",
+      "contentWarning": "Graphic Violence & Gore"
     },
-   {
+    {
       "id": "image-20",
       "year": 2022,
       "title": "Personal Artwork — Commission",
@@ -225,15 +235,7 @@
       "type": "image",
       "src": "/art/image-20.JPG"
     },
-   {
-      "id": "image-19",
-      "year": 2022,
-      "title": "Personal Artwork — Commission",
-      "date": "04/07/2023",
-      "type": "image",
-      "src": "/art/image-19.JPG"
-    },
-   {
+    {
       "id": "image-18",
       "year": 2022,
       "title": "[Puella Magi Madoka Magica / Homura Akemi] Fan Art",

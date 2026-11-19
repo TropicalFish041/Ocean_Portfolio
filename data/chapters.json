@@ -1,5 +1,5 @@
 [
- {
+  {
     "id": "about",
     "image": "/fish/lionfish.svg",
     "fishName": "Lionfish",
@@ -90,15 +90,11 @@
     "id": "experience",
     "image": "/fish/opah.svg",
     "fishName": "Opah",
-    "title": "xxx",
+    "title": "Miscellaneous",
     "items": [
       {
-        "title": "xxx",
-        "text": "xxx"
-      },
-      {
-        "title": "xxx",
-        "text": "xxx"
+        "title": "Film & Video Game Favorites",
+        "text": "Two personal charts of my all-time film and video game favourites, made on November 4, 2025."
       }
     ]
   }
