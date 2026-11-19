@@ -2,7 +2,7 @@
   "id": "contact",
   "image": "",
   "fishName": "",
-  "title": "Contact me",
+  "title": "Contact",
   "items": [
     {
       "title": "Email",
@@ -11,10 +11,6 @@
     {
       "title": "Github",
       "text": "@TropicalFish041"
-    },
-    {
-      "title": "Bilibili",
-      "text": "@ARDEO041"
     },
     {
       "title": "CV",

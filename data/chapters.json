@@ -1,45 +1,45 @@
 [
-  {
+ {
     "id": "about",
     "image": "/fish/lionfish.svg",
     "fishName": "Lionfish",
     "title": "About Me",
     "items": [
       {
-        "title": "Hello, I’m Ruoshui.",
-        "text": "I’m a Computer Science student at the University of Toronto. I’m drawn to problems built around structure, rules, and reasoning, whether that means understanding why an algorithm works, tracing a bug through a system, or figuring out the structure of a language."
+        "title": "Hello, I’m Ruoshui!",
+        "text": "I’m a second-year Computer Science Specialist at the University of Toronto. The problems that hook me are the ones that work on paper and fall apart in practice: a slow algorithm, a bug that only shows up when several systems meet, or an AI model that gets the right answer for the wrong reason."
       },
       {
         "title": "Education",
-        "text": "University of Toronto · B.Sc., Computer Science Specialist and Classics (Greek and Latin) Major · Expected June 2029 · cGPA 4.0/4.0."
+        "text": "I’m at the University of Toronto, working toward a B.Sc. in Computer Science (Specialist) with a Classics major in Greek and Latin. I’m expected to graduate in June 2029, with a cGPA of 4.0/4.0."
       },
       {
         "title": "What I’m Exploring",
-        "text": "I’m currently exploring theoretical and mathematically oriented computer science, especially algorithms, formal methods, and questions about how computational systems represent structure and rules."
+        "text": "Lately I keep coming back to one question: why do AI systems fail, and how do we make them faster, easier to test, and more trustworthy? I’m also curious about formal methods and verification, especially where they meet AI and real software."
       },
       {
-        "title": "Language & Computing",
-        "text": "Alongside computer science, I study Ancient Greek and Latin. That has led me to an interest in computational linguistics, low-resource and historical languages, and questions about morphology, syntax, and systematic reasoning in language models."
+        "title": "Language & Structure",
+        "text": "I study Ancient Greek and Latin alongside CS, and to me they feel like the same hobby: rules, exceptions, and working out how a complicated system fits together. It has also made me wonder whether language models actually learn grammatical structure, or mostly repeat patterns they have seen before."
+      },
+      {
+        "title": "Making Things",
+        "text": "Outside of class, I’m usually making something: VR games, interactive web projects, illustration, animation, video editing, even fan merchandise. I sold my own work at conventions from 2023 to 2025, and I still take illustration commissions online."
       },
       {
         "title": "Research",
-        "text": "I’m interested in learning how to turn broad technical interests into precise research questions, and I hope to pursue research-focused graduate study in computer science in the future."
-      },
-      {
-        "title": "Teaching",
-        "text": "At Kintore College, I regularly support peers and younger students with introductory programming and mathematics, especially proof strategies, problem decomposition, code tracing, and debugging."
+        "text": "I’m still figuring out exactly where I want to specialize, but I know I like problems where reasoning meets building and debugging real systems. I’d love to get research experience as an undergraduate, and eventually go on to a research-focused graduate degree in computer science."
       },
       {
         "title": "Award",
-        "text": "International Merit Admission Award, Faculty of Arts & Science · Recipient in 2025–26 and renewed for 2026–27."
+        "text": "International Merit Admission Award from the Faculty of Arts & Science, received in 2025–26 and renewed for 2026–27."
       },
       {
         "title": "Languages",
-        "text": "Mandarin (native) · English (fluent) · Ancient Greek and Latin (academic study)."
+        "text": "Mandarin is my first language, English is my fluent second, and I’m studying Ancient Greek and Latin."
       },
       {
-        "title": "Interests",
-        "text": "Algorithms · Theoretical computer science · Formal methods · Computational linguistics · Historical-language computing."
+        "title": "Current Interests",
+        "text": "ML systems · Reliable AI · AI evaluation · Formal methods · Algorithms · Language-model reasoning."
       }
     ]
   },
@@ -51,27 +51,31 @@
     "items": [
       {
         "title": "AACorn · Visual AAC Communication Board",
-        "text": "Leading a team building an accessible Java application for pictogram-based communication. I work on the communication logic and help coordinate the project’s architecture, integration, and development."
+        "text": "I’m leading a student team building AACorn, an accessible visual communication board in Java. I own the message-building logic and help keep architecture, integration, and development moving together."
       },
       {
         "title": "Bird Species Interaction Network",
-        "text": "Built and optimized the core weighted-graph algorithm in Python for a four-person project modelling seasonal bird co-occurrence from 6,000 real-world iNaturalist observations."
+        "text": "A four-person project that turned 6,000 iNaturalist observations into a graph of seasonal bird co-occurrence. I built the core weighted-graph algorithm in Python, then went back and reworked the graph construction to cut redundant species-pair comparisons, which made interactive analysis practical."
       },
       {
         "title": "Team Cobalt · VR Game",
-        "text": "Joined as Lead Developer / Technical Lead during the final development week, implementing and integrating core Unity/C# gameplay systems for a VR game exhibited at VRTO 2026."
+        "text": "I joined an OCAD student VR team in the last week of development and led implementation, integration, and debugging of the core Unity/C# gameplay systems. The finished game was exhibited at VRTO 2026."
+      },
+      {
+        "title": "Ocean Portfolio",
+        "text": "You’re looking at it. The concept and artwork are my own, built with Next.js, React, TypeScript, CSS, and SVG. I used AI-assisted coding throughout, but I read, debug, and test what it produces before anything goes in."
       },
       {
         "title": "Zhiyuan Robotics · Intern",
-        "text": "Supported robotics testing and validation in Shanghai through test-set preparation, output review, and documentation of discrepancies for engineering follow-up."
+        "text": "As a robotics testing and validation intern in Shanghai, I prepared test sets, reviewed system outputs, and documented the discrepancies I found so engineers could follow up."
       },
       {
-        "title": "Pattern Recognition Research",
-        "text": "Worked on PCA- and SVM-based face-recognition experiments using Python, OpenCV, scikit-learn, and NumPy, with a focus on preprocessing and feature extraction."
+        "title": "Pattern Recognition Project",
+        "text": "Before university, I tried PCA- and SVM-based face recognition in Python with OpenCV, scikit-learn, and NumPy, mostly working on preprocessing and feature extraction."
       },
       {
         "title": "Film Archive & Translation",
-        "text": "Translate and technically edit bilingual subtitles for historical and international films, including timing, encoding, and quality control for releases reaching more than 30,000 downloads."
+        "text": "I translate and technically edit bilingual subtitles for historical and international films, handling timing, encoding, and quality control. Some of the releases have reached more than 10,000 downloads."
       }
     ]
   },

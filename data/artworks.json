@@ -1,5 +1,5 @@
 {
-  "introduction": "A selection of my visual work from 2023 to 2026, including animation, illustration, fan comics, merchandise, commissions, and convention projects. The works below are arranged in reverse chronological order and represent only part of my archive. More work can be found on:",
+  "introduction": "A selection of my visual work from 2022 to 2026, including animation, illustration, fan comics, merchandise, commissions, and convention projects. The works below are arranged in reverse chronological order and represent only part of my archive. More work can be found on:",
   "links": [
     {
       "label": "Weibo@ARDEO041",
@@ -17,7 +17,8 @@
       "title": "[Re:Zero | Julius × Subaru] Gimme Love",
       "date": "09/05/2026",
       "type": "video",
-      "src": "/art/video-01.mp4"
+      "src": "/art/video-01.mp4",
+      "poster": "/art/posters/video-01.png"
     },
     {
       "id": "video-02",
@@ -25,7 +26,8 @@
       "title": "[Danganronpa V3 | Saiouma] Moonlight",
       "date": "07/22/2026",
       "type": "video",
-      "src": "/art/video-02.mp4"
+      "src": "/art/video-02.mp4",
+      "poster": "/art/posters/video-02.png"
     },
     {
       "id": "video-03",
@@ -33,7 +35,8 @@
       "title": "[Yuppie Psycho | Brian × TV Head] You Just Don't Get It",
       "date": "07/08/2026",
       "type": "video",
-      "src": "/art/video-03.mp4"
+      "src": "/art/video-03.mp4",
+      "poster": "/art/posters/video-03.jpg"
     },
     {
       "id": "image-02",
@@ -49,7 +52,8 @@
       "title": "[Re:Zero | Satella] Don't Leave Me in a Hell Without You",
       "date": "07/02/2026",
       "type": "video",
-      "src": "/art/video-04.mp4"
+      "src": "/art/video-04.mp4",
+      "poster": "/art/posters/video-04.jpg"
     },
     {
       "id": "image-03",
@@ -169,7 +173,8 @@
       "title": "[Delicious in Dungeon] THE BOILED EGG FELL!!!",
       "date": "04/07/2024",
       "type": "video",
-      "src": "/art/video-05.mp4"
+      "src": "/art/video-05.mp4",
+      "poster": "/art/posters/video-05.jpg"
     },
     {
       "id": "image-17",
@@ -178,6 +183,14 @@
       "date": "04/06/2024",
       "type": "image",
       "src": "/art/image-17.JPG"
+    },
+   {
+      "id": "image-22",
+      "year": 2023,
+      "title": "Random Doodles",
+      "date": "11/01/2023 - 08/31/2024",
+      "type": "image",
+      "src": "/art/image-22.JPG"
     },
     {
       "id": "image-16",
@@ -193,7 +206,40 @@
       "title": "[Frieren: Beyond Journey's End | Himmel × Frieren] 30 Seconds, an Eternity of Love",
       "date": "11/18/2023",
       "type": "video",
-      "src": "/art/video-06.mp4"
+      "src": "/art/video-06.mp4",
+      "poster": "/art/posters/video-06.jpg"
+    },
+   {
+      "id": "image-21",
+      "year": 2023,
+      "title": "[Metamorphosis / Saki Yoshida] Fan Art",
+      "date": "01/24/2023",
+      "type": "image",
+      "src": "/art/image-21.JPG"
+    },
+   {
+      "id": "image-20",
+      "year": 2022,
+      "title": "Personal Artwork — Commission",
+      "date": "12/10/2022",
+      "type": "image",
+      "src": "/art/image-20.JPG"
+    },
+   {
+      "id": "image-19",
+      "year": 2022,
+      "title": "Personal Artwork — Commission",
+      "date": "04/07/2023",
+      "type": "image",
+      "src": "/art/image-19.JPG"
+    },
+   {
+      "id": "image-18",
+      "year": 2022,
+      "title": "[Puella Magi Madoka Magica / Homura Akemi] Fan Art",
+      "date": "08/14/2022",
+      "type": "image",
+      "src": "/art/image-18.JPG"
     }
   ]
 }

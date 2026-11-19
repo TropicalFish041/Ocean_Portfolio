@@ -190,3 +190,14 @@ body .hero__scroll-cue span { font-weight: 900 !important; } /* Neco Black */
 @media (max-width: 700px) {
   .hello-section { min-height: 336px; }
 }
+
+/* About Me prompt: use the exact slow breathing cycle of the intro prompt. */
+body .chapter-section--about .chapter-section__explore > span {
+  display: inline-block;
+  font-weight: 900 !important; /* Neco Black */
+  transform-origin: center;
+  animation: entry-prompt-breathe 5.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  body .chapter-section--about .chapter-section__explore > span { animation: none !important; }
+}

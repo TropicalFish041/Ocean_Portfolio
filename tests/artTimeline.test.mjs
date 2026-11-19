@@ -33,3 +33,32 @@ test('Art modal keeps native video controls, lazy requests and optional archive 
   assert.match(dialog, /item.title === 'CV'/);
   assert.match(read('interface_adapter/ShowChapterPresenter.ts'), /id: chapter.id/);
 });
+
+test('every MP4 has a real, replaceable cover and the photo lightbox is keyboard accessible', () => {
+  const videoWorks = gallery.works.filter(work => work.type === 'video');
+  assert.equal(videoWorks.length, 6);
+  for (const work of videoWorks) {
+    assert.match(work.poster, /^\/art\/posters\/video-\d+\.jpg$/);
+    assert.ok(existsSync(join(root, 'public', work.poster.slice(1))), `Missing poster: ${work.poster}`);
+  }
+  const timeline = read('view/ArtTimeline.tsx');
+  assert.match(timeline, /poster=\{'poster' in work \? work\.poster : undefined\}/);
+  assert.match(timeline, /previewDialog/);
+  assert.match(timeline, /\.showModal\(\)/);
+  assert.match(timeline, /onCancel=\{event => \{ event\.preventDefault\(\); setPreview\(null\); \}\}/);
+  assert.match(timeline, /id === 'image-08' \? 'eager' : 'lazy'/);
+  assert.match(timeline, /Retry image/);
+});
+
+test('About Me prompt breathes at Neco Black; site music stops during artwork video playback', () => {
+  const css = read('app/svg-assets.css');
+  const music = read('view/BackgroundMusic.tsx');
+  assert.match(css, /\.chapter-section--about \.chapter-section__explore > span/);
+  assert.match(css, /font-weight: 900 !important/);
+  assert.match(css, /entry-prompt-breathe 5\.4s/);
+  assert.match(music, /document\.addEventListener\('play', onVideoPlay, true\)/);
+  assert.match(music, /document\.addEventListener\('pause', onVideoStop, true\)/);
+  assert.match(music, /document\.addEventListener\('ended', onVideoStop, true\)/);
+  assert.match(music, /audio!\.pause\(\)/);
+  assert.match(music, /resumeAfterVideo/);
+});

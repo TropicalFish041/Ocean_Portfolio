@@ -1,9 +1,55 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
 import gallery from '../data/artworks.json';
 import styles from './ArtTimeline.module.css';
+
+type Preview = { src: string; title: string };
+
+function ArtworkImage({ src, title, id, onZoom }: Preview & { id: string; onZoom: () => void }) {
+  const [failed, setFailed] = useState(false);
+  const [retry, setRetry] = useState(0);
+  return failed ? (
+    <div className={styles.imageFallback}>
+      <span>Image could not be displayed.</span>
+      <button type="button" onClick={() => { setRetry(value => value + 1); setFailed(false); }}>Retry image</button>
+      <a href={src} target="_blank" rel="noopener noreferrer">Open original file</a>
+    </div>
+  ) : (
+    <button className={styles.imageButton} type="button" onClick={onZoom}
+      aria-label={`Enlarge ${title}`}>
+      <img className={styles.media} src={retry ? `${src}?retry=${retry}` : src}
+        alt={title} loading={id === 'image-08' ? 'eager' : 'lazy'}
+        decoding="async" onError={() => setFailed(true)} />
+    </button>
+  );
+}
 
 /** Add, remove or reorder works in data/artworks.json; no component edits needed. */
 export default function ArtTimeline() {
   const years = [...new Set(gallery.works.map(work => work.year))].sort((a, b) => b - a);
+  const [preview, setPreview] = useState<Preview | null>(null);
+  const previewDialog = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = previewDialog.current;
+    if (!dialog) return;
+    if (preview && !dialog.open) dialog.showModal();
+    if (!preview && dialog.open) dialog.close();
+  }, [preview]);
+
+  // Unmounting Arts also stops its videos, e.g. when the dialog closes.
+  useEffect(() => () => {
+    document.querySelectorAll<HTMLVideoElement>('video[data-art-video]')
+      .forEach(video => video.pause());
+    window.dispatchEvent(new Event('ocean:gallery-closed'));
+  }, []);
+
+  const onVideoPlay = (current: HTMLVideoElement) => {
+    // Keep a single work's audio playing at a time.
+    document.querySelectorAll<HTMLVideoElement>('video[data-art-video]')
+      .forEach(video => { if (video !== current && !video.paused) video.pause(); });
+  };
 
   return (
     <div className={styles.timeline}>
@@ -26,11 +72,14 @@ export default function ArtTimeline() {
               <figure className={styles.work} key={work.id}>
                 {work.type === 'video' ? (
                   <video className={styles.media} controls playsInline preload="none"
-                    aria-label={work.title} src={work.src}>
+                    data-art-video="true" onPlay={event => onVideoPlay(event.currentTarget)}
+                    aria-label={work.title} poster={'poster' in work ? work.poster : undefined}
+                    src={work.src}>
                     Your browser does not support MP4 video.
                   </video>
                 ) : (
-                  <img className={styles.media} src={work.src} alt={work.title} loading="lazy" />
+                  <ArtworkImage id={work.id} src={work.src} title={work.title}
+                    onZoom={() => setPreview({ src: work.src, title: work.title })} />
                 )}
                 <figcaption className={styles.caption}>
                   <span className={styles.workTitle}>{work.title}</span>
@@ -41,6 +90,15 @@ export default function ArtTimeline() {
           </div>
         </section>
       ))}
+      <dialog ref={previewDialog} className={styles.zoomDialog}
+        aria-label={preview ? `Enlarged artwork: ${preview.title}` : 'Artwork preview'}
+        onCancel={event => { event.preventDefault(); setPreview(null); }}
+        onClose={() => setPreview(null)}
+        onClick={event => { if (event.target === event.currentTarget) setPreview(null); }}>
+        <button className={styles.zoomClose} type="button" onClick={() => setPreview(null)}
+          aria-label="Close enlarged artwork">×</button>
+        {preview && <img className={styles.zoomImage} src={preview.src} alt={preview.title} />}
+      </dialog>
     </div>
   );
 }
